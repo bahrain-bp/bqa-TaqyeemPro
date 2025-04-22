@@ -26,12 +26,21 @@
 .login-container {
     width: 300px;
     margin: 0 auto;
-    margin-top: 130px;
-    background-color: #c9c7c5ce;
+    margin-top: 100px;
+    background-color: #e6e6e6ce;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
     border: 1px solid #000000;
+}
+.login-container h2{
+    text-align: center;
+    color: #d72121;
+}
+
+.login-container p{
+    text-align: center;
+    font-size: 14px;
 }
 
 .login-form-group {
@@ -51,7 +60,8 @@
     border-radius: 10px;
 }
 
-.login-container button, .login-container a {
+.login-container button{
+    width: 100%;
     padding: 10px 20px;
     background-color: #d72121;
     color: #fff;
@@ -60,8 +70,38 @@
     cursor: pointer;
     text-decoration: none;
 }
+.login-container a{
+    text-decoration: none;
+    color: #d72121;
 
-.login-container button:hover,.login-container a:hover {
+}
+
+.login-container button:hover {
     background-color: #731515e4;
+}
+
+.login-container a:hover {
+    color: #731515e4;
+}
+
+.role-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.role-toggle label {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+    cursor: pointer;
+}
+
+.role-toggle input[type="radio"] {
+    margin-right: 6px;
+    accent-color: #d72121; 
 }
 

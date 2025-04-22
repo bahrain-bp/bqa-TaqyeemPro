@@ -19,6 +19,17 @@
     text-align: center;
    
 }
+.signup-container h2{
+    text-align: center;
+    color: #d72121;
+}
+
+.signup-container p{
+    text-align: center;
+    font-size: 14px;
+}
+
+
 .signup-header a{
     text-decoration: none;
 }
@@ -27,7 +38,7 @@
     margin: 0 auto ;
     margin-top: 75px;
     padding: 20px 40px;
-    background-color: #c9c7c5ce;
+    background-color: #e6e6e6ce;
     border-radius: 15px;
     border: 1px solid #000000;
     box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
@@ -54,7 +65,7 @@
     border-radius: 10px;
 }
 
-.signup-container button,.signup-container a {
+.signup-container button{
     width: 100%;
     padding: 10px;
     background-color: #d72121;
@@ -67,9 +78,18 @@
     text-decoration: none;
 }
 
-.signup-container button:hover,.signup-container a:hover {
+.signup-container a{
+    text-decoration: none;
+    color: #d72121;
+}
+
+.signup-container button:hover{
     background-color: #731515e4;
 }
+.signup-container a:hover {
+    color: #731515e4;
+}
+
 
 
 

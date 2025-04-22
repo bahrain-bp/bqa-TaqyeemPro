@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     // Replace YOUR_API_GATEWAY_URL with the actual API Gateway URL
-    fetch("YOUR_API_GATEWAY_URL")
+    fetch("https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod")
       .then((res) => res.json())
       .then((data) => setMessage(data.message))
       .catch((err) => console.error("Error fetching data:", err));

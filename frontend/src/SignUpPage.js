@@ -38,7 +38,8 @@ const SignUpPage = () => {
     </header>
 
     <div className="signup-container">
-      <h2>Sign Up</h2>
+      <h2>Join TaqyeemPro</h2>
+      <p>Create your account now to get started</p>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
@@ -47,19 +48,6 @@ const SignUpPage = () => {
             name="name"
             placeholder="Write your name"
             value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            name="username"
-            pattern=".{6,12}"
-            placeholder="Username length must be from 6 to 12"
-            value={formData.username}
             onChange={handleChange}
             required
           />
@@ -104,8 +92,8 @@ const SignUpPage = () => {
 
 
         <button type="submit">Sign Up</button>
-        <p>have an account?</p>
-        <Link to="/login" style={{ fontSize: 'small' }}>Login</Link> 
+        <p>have an account?<Link to="/login">  Login</Link> </p>
+        
       </form>
     </div>
  </>
