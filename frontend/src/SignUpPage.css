@@ -90,6 +90,25 @@
     color: #731515e4;
 }
 
+.signup-role-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
 
+.signup-role-toggle label {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000;
+    cursor: pointer;
+}
+
+.signup-role-toggle input[type="radio"] {
+    margin-right: 6px;
+    accent-color: #d72121; 
+}
 
 

@@ -12,8 +12,7 @@ const SignUpPage = () => {
     password: '',
     address: '',
   });
-
-
+const [role, setRole] = useState('Student');
 
   const handleChange = (e) => {
     setFormData({
@@ -40,6 +39,27 @@ const SignUpPage = () => {
     <div className="signup-container">
       <h2>Join TaqyeemPro</h2>
       <p>Create your account now to get started</p>
+      
+      <div className="signup-role-toggle">
+          <label>
+            <input
+              type="radio"
+              value="Student"
+              checked={role === 'Student'}
+              onChange={() => setRole('Student')}
+            />
+            Student
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="Moderator"
+              checked={role === 'Moderator'}
+              onChange={() => setRole('Moderator')}
+            />
+            Moderator
+          </label>
+        </div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
