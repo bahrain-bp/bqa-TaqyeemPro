@@ -2,6 +2,8 @@
 
 const cdk = require('aws-cdk-lib');
 const { TaqyeemProStack } = require('../lib/taqyeem_pro-stack');
+const { TaqyeemProStacktest } = require('../lib/taqyeem_pro-stack_test');
+
 
 const app = new cdk.App();
 new TaqyeemProStack(app, 'TaqyeemProStack', {
@@ -18,4 +20,8 @@ new TaqyeemProStack(app, 'TaqyeemProStack', {
   // env: { account: '123456789012', region: 'us-east-1' },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+});
+
+new TaqyeemProStacktest(app, 'TaqyeemProStacktest', {
+  
 });
