@@ -1,11 +1,16 @@
 import "./App.css";
 import { Button, Stack } from "@chakra-ui/react"
+import NonUserRoutes from "./routes/NonUserRoutes";
+import StudentRoutes from "./routes/StudentRoutes";
+import ModeratorRoutes from "./routes/ModeratorRoutes";
 
 function App() {
 
   return (
     <>
-      <h1>Hello World</h1>
+      <NonUserRoutes/>
+      {/* <StudentRoutes/> */}
+      {/* <ModeratorRoutes/> */}
     </>
   );
 }

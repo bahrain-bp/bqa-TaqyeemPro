@@ -1,7 +1,16 @@
 import React from 'react'
+import StudentNavBar from './StudentNavBar'
+import { Outlet } from 'react-router-dom'
+import Footer from './Footer'
 
 export default function StudentLayout() {
   return (
-    <div>StudentLayout</div>
+    <div>
+      <StudentNavBar/>
+      <div>
+        <Outlet/>
+      </div>
+      {/* <Footer/> */}
+    </div>
   )
 }
