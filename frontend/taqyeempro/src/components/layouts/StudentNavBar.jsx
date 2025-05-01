@@ -5,13 +5,24 @@ import {
   HStack,
   Link,
   Button,
-  Text,
   CloseButton,
   Drawer,
   Portal,
   VStack,
+  Image
 } from "@chakra-ui/react";
-import { FaBars, FaBell } from "react-icons/fa";
+import {
+  FaBars,
+  FaBell,
+} from "react-icons/fa";
+import {
+  AiOutlineBook,
+  AiOutlineInfoCircle,
+  AiOutlinePhone,
+  AiOutlineUser,
+  AiOutlineLogout,
+  AiOutlineDashboard,
+} from "react-icons/ai";
 
 export default function StudentNavBar() {
   return (
@@ -60,8 +71,28 @@ export default function StudentNavBar() {
                     </Drawer.Header>
                     <Drawer.Body>
                       <VStack>
-                        <Button w={"full"} variant="plain" textAlign={"left"}>Cancel</Button>
-                        <Button w={"full"} variant="outlined">Save</Button>
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          whiteSpace="normal"
+                          maxW="100%"
+                          h="100%"
+                          py="3"
+                        >
+                          🔔 You have a new Notification!
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          whiteSpace="normal"
+                          maxW="100%"
+                          h="100%"
+                          py="3"
+                        >
+                          🔔 You have a new Notification!
+                        </Button>
                       </VStack>
                     </Drawer.Body>
                     <Drawer.CloseTrigger asChild>
@@ -101,12 +132,78 @@ export default function StudentNavBar() {
                 <Drawer.Positioner>
                   <Drawer.Content>
                     <Drawer.Header>
-                      <Drawer.Title>Menu</Drawer.Title>
+                      <Drawer.Title></Drawer.Title>
                     </Drawer.Header>
                     <Drawer.Body>
-                      <VStack>
-                        <Button w={"full"}>Cancel</Button>
-                        <Button w={"full"}>Save</Button>
+                      <VStack align="stretch" spacing={2}>
+                      <Image src="/BQA-Logo.png" alt="BQA Logo" mx={"auto"} boxSize={"28"} mb={4} />
+                      <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <AiOutlineDashboard size={20} />
+                          Dashboard
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <AiOutlineBook size={20} />
+                          My Exams
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <AiOutlineInfoCircle size={20} />
+                          About Us
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <AiOutlinePhone size={20} /> Contact Us
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                          as="a"
+                          href="/account"
+                        >
+                          <AiOutlineUser size={20} />
+                          Account
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          colorPalette="red"
+                          w="full"
+                        >
+                          <AiOutlineLogout size={20} />
+                          Logout
+                        </Button>
                       </VStack>
                     </Drawer.Body>
                     <Drawer.CloseTrigger asChild>

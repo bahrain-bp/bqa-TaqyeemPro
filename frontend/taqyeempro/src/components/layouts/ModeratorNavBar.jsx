@@ -1,6 +1,27 @@
 import React from "react";
-import { Box, Flex, HStack, Link, Button, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Link,
+  Button,
+  CloseButton,
+  Drawer,
+  Portal,
+  VStack,
+  Image,
+} from "@chakra-ui/react";
 import { FaBars, FaBell } from "react-icons/fa";
+import {
+  AiOutlineBook,
+  AiOutlineInfoCircle,
+  AiOutlinePhone,
+  AiOutlineUser,
+  AiOutlineLogout,
+  AiOutlineDashboard,
+} from "react-icons/ai";
+import { RiBookShelfLine } from "react-icons/ri";
+import { FiUpload } from "react-icons/fi";
 
 export default function ModeratorNavBar() {
   return (
@@ -29,23 +50,165 @@ export default function ModeratorNavBar() {
 
           {/* Right Side: Login Button */}
           <HStack>
-            <Button 
-              variant="plain"
-              color="black"
-              _hover={{ bg: "gray.200" }}
-              borderRadius={"full"}>
-              <FaBell />
-            </Button>
-            <Button
-              colorPalette="red"
-              variant="solid"
-              color="white"
-              _hover={{ bg: "black", color: "white" }}
-              fontSize="lg"
-              boxShadow={"lg"}
-            >
-              <FaBars />
-            </Button>
+            <Drawer.Root>
+              <Drawer.Trigger asChild>
+                <Button
+                  variant="plain"
+                  color="black"
+                  _hover={{ bg: "gray.200" }}
+                  borderRadius={"full"}
+                >
+                  <FaBell />
+                </Button>
+              </Drawer.Trigger>
+              <Portal>
+                <Drawer.Backdrop />
+                <Drawer.Positioner>
+                  <Drawer.Content>
+                    <Drawer.Header>
+                      <Drawer.Title>Notifications</Drawer.Title>
+                    </Drawer.Header>
+                    <Drawer.Body>
+                      <VStack>
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          whiteSpace="normal"
+                          maxW="100%"
+                          h="100%"
+                          py="3"
+                        >
+                          🔔 You have a new Notification!
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          whiteSpace="normal"
+                          maxW="100%"
+                          h="100%"
+                          py="3"
+                        >
+                          🔔 You have a new Notification!
+                        </Button>
+                      </VStack>
+                    </Drawer.Body>
+                    <Drawer.CloseTrigger asChild>
+                      <CloseButton size="sm" />
+                    </Drawer.CloseTrigger>
+                  </Drawer.Content>
+                </Drawer.Positioner>
+              </Portal>
+            </Drawer.Root>
+
+            <Drawer.Root>
+              <Drawer.Trigger asChild>
+                <Button
+                  colorPalette="red"
+                  variant="solid"
+                  color="white"
+                  _hover={{ bg: "black", color: "white" }}
+                  fontSize="lg"
+                  boxShadow={"lg"}
+                >
+                  <FaBars />
+                </Button>
+              </Drawer.Trigger>
+              <Portal>
+                <Drawer.Backdrop />
+                <Drawer.Positioner>
+                  <Drawer.Content>
+                    <Drawer.Header>
+                      <Drawer.Title></Drawer.Title>
+                    </Drawer.Header>
+                    <Drawer.Body>
+                      <VStack align="stretch" spacing={2}>
+                        <Image
+                          src="/BQA-Logo.png"
+                          alt="BQA Logo"
+                          mx={"auto"}
+                          boxSize={"28"}
+                          mb={4}
+                        />
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                          as="a"
+                          href="/"
+                        >
+                          <AiOutlineDashboard size={20} />
+                          Dashboard
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <AiOutlineBook size={20} />
+                          Reports
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <RiBookShelfLine size={20} />
+                          Exams
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                        >
+                          <FiUpload size={20} /> Upload Sepecifications
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                          as="a"
+                          href="/account"
+                        >
+                          <AiOutlineUser size={20} />
+                          Account
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          colorPalette="red"
+                          w="full"
+                        >
+                          <AiOutlineLogout size={20} />
+                          Logout
+                        </Button>
+                      </VStack>
+                    </Drawer.Body>
+                    <Drawer.CloseTrigger asChild>
+                      <CloseButton size="sm" />
+                    </Drawer.CloseTrigger>
+                  </Drawer.Content>
+                </Drawer.Positioner>
+              </Portal>
+            </Drawer.Root>
           </HStack>
         </Flex>
       </Box>
