@@ -7,7 +7,7 @@ export default function StudentRoutes() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<StudentLayout />}>
+        <Route path="/" element={<StudentLayout />}>  
           <Route index element={<StudentDashboard />} />
         </Route>
       </Routes>
