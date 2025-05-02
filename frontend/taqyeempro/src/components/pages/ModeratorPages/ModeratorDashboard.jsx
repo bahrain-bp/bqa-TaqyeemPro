@@ -62,7 +62,7 @@ export default function ModeratorDashboard() {
   return (
     <Box p={6}>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} columnGap={5} rowGap={5}>
-        <VStack colSpan={{ base: 1, md: 1 }} spacing={5}>
+        <VStack colSpan={{ base: 1, md: 1 }} rowGap={5}>
           {/* Total Exams Box */}
           <Box
             bg="white"
@@ -136,12 +136,12 @@ export default function ModeratorDashboard() {
         </Box>
         <SimpleGrid
           my={5}
-          textAlign="center" rowGap={5} columnGap={5}> 
+          textAlign="center" rowGap={5}> 
           <Button w={"full"} h={"full"} fontWeight={"bold"} fontSize={"lg"} variant={"subtle"} colorPalette={"red"}>
             Upload Specefications
           </Button>
-          <Button w={"full"} h={"full"} fontWeight={"bold"} fontSize={"lg"}  variant={"subtle"} colorPalette={"blue"}>
-            Generated Exam Questions
+          <Button w={"full"} h={"full"} fontWeight={"bold"} fontSize={"lg"}  variant={"subtle"} colorPalette={"blue"} as={"a"} href="generated-questions">
+            Generated Questions
           </Button>
         </SimpleGrid>
       </SimpleGrid>
