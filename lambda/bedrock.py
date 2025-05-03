@@ -2,7 +2,14 @@ import boto3
 import json
 
 def lambda_bedrock(event, context):
-    input_data = "generate 3 simple math questions for grade 6 in arabic"
+    input_data = (
+        "You are an expert Arabic math question generator. "
+        "Generate 5 math multiple-choice questions for Grade 9. "
+        "\n\nInstructions:\n"
+        "- Write questions in Arabic.\n"
+        "- Each question must have 4 choices (أ - ب - ج - د).\n"
+        "- Indicate the correct answer clearly.\n"
+    )
 
     bedrock_runtime = boto3.client('bedrock-runtime', region_name='us-east-1')
 
