@@ -57,8 +57,12 @@ def lambda_bedrock(event, context):
 
         return {
             "statusCode": 200,
-            "body": json.dumps({"output": output})
+            "headers": {
+                "Content-Type": "text/plain"
+            },
+            "body": output  
         }
+
 
     except Exception as e:
         return {
