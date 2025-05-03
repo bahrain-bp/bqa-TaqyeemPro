@@ -8,13 +8,17 @@ import {
   Status,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { LuArrowBigRight, LuArrowRight } from "react-icons/lu";
 import { MdEdit } from "react-icons/md";
+import EditQuestion from "./EditQuestion";
 
 export default function QuestionsList() {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+
   return (
     <Box maxW="6xl" mx="auto" mt={12} px={4}>
+      <EditQuestion isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />{" "}
       {/* heading */}
       <Flex justify="space-between" align="center" mb={7} gap={4} wrap="wrap">
         <Text fontSize="2xl" fontWeight="bold" color="gray.800">
@@ -24,7 +28,6 @@ export default function QuestionsList() {
           22nd of April 2025
         </Text>
       </Flex>
-
       {/* Content */}
       <Stack gap={3}>
         {/* question 1 */}
@@ -36,6 +39,7 @@ export default function QuestionsList() {
           p={6}
           py={8}
           _hover={{ bg: "gray.50", cursor: "pointer" }}
+          onClick={() => setIsEditOpen(true)}
         >
           <Flex align="center" justify="space-between">
             <Text fontWeight="bold" fontSize="lg" color="gray.700">
@@ -67,6 +71,7 @@ export default function QuestionsList() {
           p={6}
           py={8}
           _hover={{ bg: "gray.50", cursor: "pointer" }}
+          onClick={() => setIsEditOpen(true)}
         >
           <Flex align="center" justify="space-between">
             <Text fontWeight="bold" fontSize="lg" color="gray.700">
@@ -83,7 +88,8 @@ export default function QuestionsList() {
           <Text whiteSpace="pre-line" p={5} pl={16}>
             34×89\frac{3}
             {4} \times \frac{8}
-            {9}43​×98​ D: x = -16{"\n"}✅ Answer:23\frac{2}{3}32​
+            {9}43​×98​ D: x = -16{"\n"}✅ Answer:23\frac{2}
+            {3}32​
           </Text>
         </Box>
       </Stack>

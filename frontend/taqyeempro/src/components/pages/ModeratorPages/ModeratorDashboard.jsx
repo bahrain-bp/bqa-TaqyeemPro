@@ -1,12 +1,7 @@
 import React from "react";
 import {
   Box,
-  HStack,
-  Icon,
-  Stat,
-  Text,
   VStack,
-  Flex,
   Heading,
   SimpleGrid,
   Button,
@@ -22,6 +17,7 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
+import UploadSpecifications from "./UploadSpecifications";
 
 // Register chart elements
 ChartJS.register(
@@ -134,13 +130,19 @@ export default function ModeratorDashboard() {
             <Bar data={barData} height={150} />
           </Box>
         </Box>
-        <SimpleGrid
-          my={5}
-          textAlign="center" rowGap={5}> 
-          <Button w={"full"} h={"full"} fontWeight={"bold"} fontSize={"lg"} variant={"subtle"} colorPalette={"red"}>
-            Upload Specefications
-          </Button>
-          <Button w={"full"} h={"full"} fontWeight={"bold"} fontSize={"lg"}  variant={"subtle"} colorPalette={"blue"} as={"a"} href="generated-questions">
+        <SimpleGrid my={5} textAlign="center" rowGap={5}>
+          <UploadSpecifications />
+
+          <Button
+            w={"full"}
+            h={"full"}
+            fontWeight={"bold"}
+            fontSize={"lg"}
+            variant={"subtle"}
+            colorPalette={"blue"}
+            as={"a"}
+            href="generated-questions"
+          >
             Generated Questions
           </Button>
         </SimpleGrid>
