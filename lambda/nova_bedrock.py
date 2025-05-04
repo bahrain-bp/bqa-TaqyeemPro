@@ -5,22 +5,37 @@ import os
 
 def lambda_bedrock(event, context):
     try:
-        # Read the local PDF file (placed in the same Lambda deployment package)
-        pdf_path = "G12 Mathematical Skills Test Specifications 2024.pdf"
-        doc = fitz.open(pdf_path)
 
-        # Extract all text from the PDF
+        # Initialize S3 client
+        s3 = boto3.client('s3')
+        
+        # S3 bucket and file details
+        bucket_name = "testingbedrockuploadpdf"
+        file_key = "G9 Mathematics Test Specifications 2024.pdf"
+
+        # Get PDF from S3
+        response = s3.get_object(Bucket=bucket_name, Key=file_key)
+        pdf_content = response['Body'].read()
+
+        # Process PDF from bytes
+        doc = fitz.open(stream=pdf_content, filetype="pdf")
+
+        # Extract text
         extracted_text = ""
         for page in doc:
             extracted_text += page.get_text()
-
         doc.close()
 
         # Prepare prompt for Nova based on extracted text
         prompt = (
-            "استنادًا إلى المواصفات التالية، أنشئ 5 أسئلة اختيار من متعدد في الرياضيات للصف الثاني عشر:\n\n"
-            f"{extracted_text}\n\n"
-            "كل سؤال يجب أن يحتوي على 4 خيارات (أ، ب، ج، د)، وحدد الإجابة الصحيحة بوضوح."
+            "أنت خبير في توليد أسئلة الرياضيات باللغة العربية، استخدم مواصفات اختبار الرياضيات للصف التاسع ونماذج الأسئلة التالية لتوليد 5 أسئلة جديدة (اختيار متعدد)، حافظ على نفس التنسيق ومستوى الصعوبة،\n"
+            "مواصفات الاختبار ونماذج الأسئلة:\n"
+            f"{extracted_text.strip()}\n\n"
+            "التعليمات:\n"
+            "- اكتب الأسئلة باللغة العربية.\n"
+            "- يجب أن يحتوي كل سؤال على 4 خيارات (أ - ب - ج - د).\n"
+            "- حدد الإجابة الصحيحة بوضوح.\n"
+            "- طابق المهارات والبنية الموضحة في الأمثلة الأصلية."
         )
 
         # Call Nova Pro model on Bedrock
