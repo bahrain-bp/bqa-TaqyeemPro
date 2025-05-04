@@ -2,7 +2,7 @@ import React from 'react'
 import StudentNavBar from './StudentNavBar'
 import { Outlet } from 'react-router-dom'
 import Footer from './Footer'
-import StudentDashboard from '../pages/StudentDashboard'
+import StudentDashboard from '../pages/StudentPages/StudentDashboard'
 
 
 export default function StudentLayout() {
@@ -10,7 +10,7 @@ export default function StudentLayout() {
     <div>
       <StudentNavBar/>
       <div>
-        {/* <Outlet/> */}
+        <Outlet/>
       </div>
       <Footer/>
     </div>

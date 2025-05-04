@@ -9,7 +9,7 @@ export default function NonUserNavBar() {
         bg="white"
         borderRadius="md"
         p={4}
-        position="fixed"
+        position="relative"
         top="20px"
         left="50%"
         transform="translateX(-50%)"
@@ -67,6 +67,8 @@ export default function NonUserNavBar() {
 
           {/* Right Side: Login Button */}
           <Button
+            as={Link}
+            href="/login"
             colorPalette="red"
             variant="solid"
             color="white"
