@@ -78,7 +78,6 @@ def lambda_bedrock(event, context):
             "body": output  
         }
 
-
     except Exception as e:
         return {
             "statusCode": 500,
