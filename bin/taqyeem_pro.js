@@ -2,6 +2,7 @@
 
 const cdk = require('aws-cdk-lib');
 const { TaqyeemProStack } = require('../lib/taqyeem_pro-stack');
+const { DynamodbStack } = require('../lib/DynamodbStack');
 
 const app = new cdk.App();
 new TaqyeemProStack(app, 'TaqyeemProStack', {
@@ -19,3 +20,5 @@ new TaqyeemProStack(app, 'TaqyeemProStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+new DynamodbStack(app, 'DynamodbStack');
