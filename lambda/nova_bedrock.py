@@ -1,97 +1,98 @@
-# import fitz  # PyMuPDF
-# import boto3
-# import json
-# import os
+import fitz  # PyMuPDF
+import boto3
+import json
+import os
 
-# def lambda_bedrock(event, context):
-#     try:
+def lambda_bedrock(event, context):
+    try:
 
-#         # Initialize S3 client
-#         s3 = boto3.client('s3')
+        # Initialize S3 client
+        s3 = boto3.client('s3')
         
-#         # S3 bucket and file details
-#         bucket_name = "testingbedrockuploadpdf"
-#         file_key = "G" + str(grade) + "-" + subject + ".pdf"
+        # S3 bucket and file details
+        bucket_name = "testingbedrockuploadpdf"
+        file_key = "G9-Math.pdf"
 
-#         quesions = 10
-#         mcq = 5
-#         tf = 3
-#         short = 2
-#         grade = 9
-#         subject = "math"
+        #file_key = "G" + str(grade) + "-" + subject + ".pdf"
+        #file_key = f"G{str(grade)}-{subject}.pdf"
 
-#         # Get PDF from S3
-#         response = s3.get_object(Bucket=bucket_name, Key=file_key)
-#         pdf_content = response['Body'].read()
+        total_questions = 10
+        mcq = 5
+        tf = 3
+        short = 2
 
-#         # Process PDF from bytes
-#         doc = fitz.open(stream=pdf_content, filetype="pdf")
+        grade = 9
+        subject = "Math"
 
-#         # Extract text
-#         extracted_text = ""
-#         for page in doc:
-#             extracted_text += page.get_text()
-#         doc.close()
+        # Get PDF from S3
+        response = s3.get_object(Bucket=bucket_name, Key=file_key)
+        pdf_content = response['Body'].read()
 
-#         # Prepare prompt for Nova based on extracted text
-#         prompt = (
-#         "You are an expert at generating " + subject + " questions.\n"
-#         "Use the Test Specifications and the following sample questions to generate a new questions.\n"
-#         "Maintain the same format and difficulty level\n"
-#         "Test Specifications and Sample Questions:\n"
-#         f"{extracted_text.strip()}\n\n"
-#         "Instructions:\n"
-#         "- Write the questions in Arabic.\n"
-#         "- Each question must have 4 options.\n"
-#         "- Match the skills and structure shown in the original examples."
-#         "- Ignore the questions that needs visuals to answer (text only).\n"
-#         "- Use LateX for the question format."
-#         "- The output should countain only this in csv format.\n"
-#         "- grade, subject, questionType(mcq-t\f), questionText, options(45-20-21), answer.\n"
-#         )
+        # Process PDF from bytes
+        doc = fitz.open(stream=pdf_content, filetype="pdf")
 
-#         # Call Nova Pro model on Bedrock
-#         bedrock_runtime = boto3.client("bedrock-runtime", region_name="us-east-1")
+        # Extract text
+        extracted_text = ""
+        for page in doc:
+            extracted_text += page.get_text()
+        doc.close()
 
-#         body = {
-#             "messages": [
-#                 {
-#                     "role": "user",
-#                     "content": [{"text": prompt}]
-#                 }
-#             ],
-#             "inferenceConfig": {
-#                 "max_new_tokens": 1000
-#             }
-#         }
+        prompt = (
+             f"أنت خبير في إنشاء أسئلة لمادة {subject}.\n"
+             f"بناءً على المواصفات والأسئلة المرفقة، أنشئ أسئلة جديدة بنفس الصيغة والصعوبة.\n"
+             f"{extracted_text.strip()}\n\n"
+             "التعليمات:\n"
+             f"- أنشئ {total_questions} أسئلة ({mcq} اختيار من متعدد، {tf} صح وخطأ، {short} إجابة قصيرة).\n"
+             "- الصيغة تكون CSV فقط تحتوي على الأعمدة التالية:\n"
+             "subject_grade,questionId,subject,questionText,questionType,answerText,mark,approved,"
+             "option1,option2,option3,option4\n"
+             "- تأكد أن تكون كل القيم متوافقة مع التنسيق، واستخدم 'TRUE' أو 'FALSE' في approved.\n"
+             "- لا تُدخل أسئلة تعتمد على صور.\n"
+             "- استخدم LaTeX حيثما كان مناسباً."
+         )
 
-#         response = bedrock_runtime.invoke_model(
-#             modelId="amazon.nova-pro-v1:0",
-#             contentType="application/json",
-#             accept="application/json",
-#             body=json.dumps(body)
-#         )
+        # Call Nova Pro model on Bedrock
+        bedrock_runtime = boto3.client("bedrock-runtime", region_name="us-east-1")
 
-#         response_body = json.loads(response['body'].read())
+        body = {
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [{"text": prompt}]
+                }
+            ],
+            "inferenceConfig": {
+                "max_new_tokens": 1000
+            }
+        }
 
-#         # Parse output text
-#         output = (
-#             response_body.get("output", {})
-#             .get("message", {})
-#             .get("content", [{}])[0]
-#             .get("text", "No text found")
-#         )
+        response = bedrock_runtime.invoke_model(
+            modelId="amazon.nova-pro-v1:0",
+            contentType="application/json",
+            accept="application/json",
+            body=json.dumps(body)
+        )
 
-#         return {
-#             "statusCode": 200,
-#             "headers": {
-#                 "Content-Type": "text/plain"
-#             },
-#             "body": output  
-#         }
+        response_body = json.loads(response['body'].read())
 
-#     except Exception as e:
-#         return {
-#             "statusCode": 500,
-#             "body": json.dumps({"error": str(e)})
-#         }
+        # Parse output text
+        output = (
+            response_body.get("output", {})
+            .get("message", {})
+            .get("content", [{}])[0]
+            .get("text", "No text found")
+        )
+
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "text/plain"
+            },
+            "body": output  
+        }
+
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }
