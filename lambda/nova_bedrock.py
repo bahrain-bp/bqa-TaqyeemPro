@@ -44,8 +44,7 @@ def lambda_bedrock(event, context):
              "التعليمات:\n"
              f"- أنشئ {total_questions} أسئلة ({mcq} اختيار من متعدد، {tf} صح وخطأ، {short} إجابة قصيرة).\n"
              "- الصيغة تكون CSV فقط تحتوي على الأعمدة التالية:\n"
-             "subject_grade,questionId,subject,questionText,questionType,answerText,mark,approved,"
-             "option1,option2,option3,option4\n"
+             "subject_grade(math_9),questionId(Q1),answerText,approved(true),grade(9),mark,answerText,subject(math)"
              "- تأكد أن تكون كل القيم متوافقة مع التنسيق، واستخدم 'TRUE' أو 'FALSE' في approved.\n"
              "- لا تُدخل أسئلة تعتمد على صور.\n"
              "- استخدم LaTeX حيثما كان مناسباً."
@@ -53,6 +52,8 @@ def lambda_bedrock(event, context):
 
         # Call Nova Pro model on Bedrock
         bedrock_runtime = boto3.client("bedrock-runtime", region_name="us-east-1")
+
+        lambda_client = boto3.client('lambda')
 
         body = {
             "messages": [
@@ -81,6 +82,28 @@ def lambda_bedrock(event, context):
             .get("message", {})
             .get("content", [{}])[0]
             .get("text", "No text found")
+        )
+
+        # Parse output text
+        output_text = (
+            response_body.get("output", {})
+            .get("message", {})
+            .get("content", [{}])[0]
+            .get("text", "No text found")
+        )
+
+        csv_start = output_text.find('```csv')
+        if csv_start != -1:
+            csv_start = output_text.find('\n', csv_start) + 1
+            csv_end = output_text.find('```', csv_start)
+            clean_csv = output_text[csv_start:csv_end].strip()
+        else:
+            clean_csv = output_text  # Fallback if no markdown
+            
+        lambda_client.invoke(
+            FunctionName='ExamQuestionsWriter',
+            InvocationType='Event',
+            Payload=json.dumps({'body': clean_csv})
         )
 
         return {
