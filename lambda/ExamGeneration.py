@@ -1,85 +1,97 @@
 import json
 import boto3
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('ExamQuestions')
 
 def handler(event, context):
     try:
-        body = json.loads(event['body'])
-        
-        # Validation: required fields
+        # Parse JSON body if coming from API Gateway
+        if 'body' in event:
+            raw_input = json.loads(event['body'])
+        else:
+            raw_input = event
+
+        questions = parse_questions(raw_input.get('questions', []))
+
+        if not isinstance(questions, list):
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'message': '"questions" must be a list of question objects'})
+            }
+
         required_fields = [
             'subject_grade', 'questionId', 'subject', 'grade',
             'questionText', 'questionType', 'answerText', 'mark', 'approved'
         ]
 
-        missing_fields = [f for f in required_fields if f not in body]
-        if missing_fields:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'message': f'Missing fields: {", ".join(missing_fields)}'})
-            }
+        inserted_count = 0
 
-        # Validate and cast grade (must be integer)
-        if not isinstance(body['grade'], int):
-            try:
-                body['grade'] = int(body['grade'])
-            except (ValueError, TypeError):
+        for q in questions:
+            # Check required fields
+            missing_fields = [f for f in required_fields if f not in q]
+            if missing_fields:
                 return {
                     'statusCode': 400,
-                    'body': json.dumps({'message': '"grade" must be an integer'})
+                    'body': json.dumps({'message': f'Missing fields: {", ".join(missing_fields)} in question {q}'})
                 }
 
-        # Validate and cast mark (can be int or float)
-        if not isinstance(body['mark'], (int, float)):
             try:
-                body['mark'] = float(body['mark'])
-            except (ValueError, TypeError):
+                if not isinstance(q['grade'], (int, str)):
+                    raise ValueError('"grade" must be an integer or string number')
+                q['grade'] = int(q['grade'])
+
+                if not isinstance(q['mark'], (int, float, str)):
+                    raise ValueError('"mark" must be a number')
+                try:
+                    q['mark'] = Decimal(str(q['mark']))  # ensures always Decimal
+                except (InvalidOperation, ValueError, TypeError):
+                    raise ValueError('"mark" must be a valid decimal number')
+
+                if isinstance(q['approved'], str):
+                    if q['approved'].lower() == 'true':
+                        q['approved'] = True
+                    elif q['approved'].lower() == 'false':
+                        q['approved'] = False
+                    else:
+                        raise ValueError('"approved" must be true or false')
+                elif not isinstance(q['approved'], bool):
+                    raise ValueError('"approved" must be a boolean')
+
+            except ValueError as e:
                 return {
                     'statusCode': 400,
-                    'body': json.dumps({'message': '"mark" must be a number'})
+                    'body': json.dumps({'message': str(e)})
                 }
 
-        # Validate and cast approved (must be boolean)
-        if not isinstance(body['approved'], bool):
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'message': 'Invalid type: "approved" must be a boolean'})
-            }
-
-        # Prepare item
-        question_item = {
-            'subject_grade': body['subject_grade'],
-            'questionId': body['questionId'],
-            'subject': body['subject'],
-            'grade': body['grade'],
-            'questionText': body['questionText'],
-            'questionType': body['questionType'],
-            'answerText': body['answerText'],
-            'mark': body['mark'],
-            'approved': (body['approved'])
-        }
-
-        table.put_item(Item=question_item)
+            # Insert after validation
+            table.put_item(Item=q)
+            inserted_count += 1
 
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': 'Question inserted successfully'})
+            'body': json.dumps({'message': f'{inserted_count} questions inserted successfully'})
+        }
+
+    except ValueError as e:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'message': str(e)})
         }
 
     except Exception as e:
-        print("Error inserting item:", e)
-
+        print("Unexpected error inserting questions:", e)
         return {
             'statusCode': 500,
-            'body': json.dumps({'message': 'Failed to insert question', 'error': str(e)})
+            'body': json.dumps({'message': 'Failed to insert questions', 'error': str(e)})
         }
 
-
-
-
-
-
-
-
+# Safe parser
+def parse_questions(input_data):
+    try:
+        if isinstance(input_data, str):
+            return json.loads(input_data)
+        return input_data
+    except Exception as e:
+        raise ValueError(f'Invalid JSON for questions: {str(e)}')
