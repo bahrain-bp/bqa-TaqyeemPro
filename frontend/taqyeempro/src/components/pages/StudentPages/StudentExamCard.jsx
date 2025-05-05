@@ -1,80 +1,211 @@
-import React from 'react';
-import { Flex, Text, Box, Image } from '@chakra-ui/react';
+  import { Box, Text, Button, Flex, Image } from '@chakra-ui/react';
+  import { Link } from 'react-router-dom';
+  
+  export default function StudentExamCard () {
+    return (
+      <Box bg="white" minH="100vh" px={{ base: 8, lg: 24 }}>
+        {/* Header */}
 
-const StudentExamCard = ({ level, grade, bgColor, image, quizStatus, date }) => {
-  return (
-    <Box position="relative">
-      {/* Header */}
-      <Flex justify="space-between" px="96px" py="16px">
-        <Text 
-          fontFamily="'Newsreader', sans-serif" 
-          fontSize="64px" 
-          lineHeight="120%"
-          letterSpacing="-0.02em"
+
+        {/* Page Heading */}
+        <Flex 
+          mt={12} 
+          mb={8} 
+          borderBottom="2px solid #E6E6E6" 
+          pb={4}
         >
-          My Exams
-        </Text>
-        <Text fontSize="20px" color="#000000" alignSelf="flex-end">
-          3 items
-        </Text>
-      </Flex>
+          <Text 
+            fontFamily="'Newsreader', sans-serif"
+            color="black" 
+            fontSize={{ base: '4xl', md: '6xl' }} 
+            lineHeight="shorter"
+          >
+            My Exams
+          </Text>
+          <Text 
+            ml="auto" 
+            fontSize={{ base: 'xl', md: '2xl' }} 
+            color="#426B1F"
+          >
+            3 items
+          </Text>
+        </Flex>
 
-      {/* Exam Card */}
-      <Box
-        position="absolute"
-        left="96px"
-        right="666px"
-        height="159px"
-        top={date}
-        background="#FAFAF5"
-        border="2px solid #E6E6E6"
-        borderRadius="24px"
-      >
-        <Text position="absolute" left="184px" top="24px" fontFamily="Inter" fontWeight="600" fontSize="20px">
-          Level - 9 {level}
-        </Text>
-
-        <Text position="absolute" right="24px" top="24px" fontFamily="Inter" fontWeight="600" fontSize="20px" textAlign="right">
-          Grade: 30/30 {grade}
-        </Text>
-
-        <Box
-          position="absolute"
-          width="199px"
-          height="40px"
-          left="184px"
-          bottom="24px"
-          background= "#2DFF02"
-          border="2px solid rgba(0,0,0,0.06)"
-          borderRadius="20px"
-        />
-
-        <Text
-          position="absolute"
-          left="234px"
-          top="calc(50% + 35px - 10.5px)"
-          fontFamily="Inter"
-          fontWeight="600"
-          fontSize="16px"
-          display="flex"
-          alignItems="center"
-          marginLeft= "25px"
+        {/* Main Content */}
+        <Flex 
+          mt={12} 
+          gap={{ base: 8, md: 16 }}
+          flexWrap={{ base: 'wrap', md: 'nowrap' }}
         >
-          OPEN {quizStatus}
-        </Text>
+          {/* Exam Cards */}
+          <Box 
+            w={{ base: 'full', md: '70%' }} 
+            maxW="1200px"
+          >
+            <ExamCard 
+              title="MATHS LEVEL-1" 
+              grade="30/30" 
+              date="14/4/2025" 
+              status="completed"
+              imageSrc="/l1.png"
+            />
+            <ExamCard 
+              title="MATHS LEVEL-2" 
+              grade="0/30" 
+              date="22/7/2025" 
+              status="invalid"
+              imageSrc="/l2.png"
+            />
+            <ExamCard 
+              title="MATHS LEVEL-3" 
+              grade="--/30" 
+              date="13/12/2025" 
+              status="open"
+              imageSrc="/l3.png"
+            />
+          </Box>
 
-        <Image
-          src='image1.png'
-          alt=""
-          position="absolute"
-          width="140px"
-          height="121px"
-          left="10px"
-          top="19px"
-        />
+          {/* Summary Card */}
+          <Box 
+            w={{ base: 'full', md: '30%' }} 
+            maxW="400px" 
+            bg="#FAFAF5" 
+            p={8} 
+            borderRadius="lg"
+            boxShadow="md"
+          >
+            <Text 
+              fontWeight="bold" 
+              color="black" 
+              fontSize="xl" 
+              mb={4}
+            >
+              Student Performance:
+            </Text>
+
+            <Flex 
+              direction="column" 
+              gap={2} 
+              mb={8}
+              color="black" 
+
+            >
+              <PerformanceItem label="Completed:" value="1" />
+              <PerformanceItem label="Not Valid:" value="1" />
+              <PerformanceItem label="Open Now:" value="1" />
+            </Flex>
+
+            <Flex 
+              justify="space-between" 
+              mb={8}
+            >
+              <Text 
+                fontWeight="bold" 
+                color="black" 
+                fontSize="lg"
+              >
+                Performance ratio:
+              </Text>
+              <Text 
+                fontWeight="bold" 
+                fontSize="lg" 
+                color="#426B1F"
+              >
+                43%
+              </Text>
+            </Flex>
+
+            <Button 
+              bg="#426B1F" 
+              color="white" 
+              w="full" 
+              h="12" 
+              _hover={{ bg: "#3A5C19" }}
+            >
+              OPEN EXAM →
+            </Button>
+          </Box>
+        </Flex>
       </Box>
-    </Box>
-  );
-};
+    );
+  };
 
-export default StudentExamCard;
+  const ExamCard = ({ title, grade, date, status }) => {
+    return (
+      <Box 
+        bg="white" 
+        p={8} 
+        borderRadius="lg" 
+        mb={8}
+        boxShadow="md"
+      >
+        <Flex 
+          align="center" 
+          gap={8}
+        >
+
+
+          <Box>
+            <Text 
+              fontWeight="bold" 
+              color="black" 
+              fontSize="xl"
+            >
+              {title}
+            </Text>
+            <Text 
+            color="black" 
+            mb={2}
+            >
+              DATE: {date}
+            </Text>
+            <Text 
+              fontWeight="bold" 
+              color="black" 
+              fontSize="lg"
+            >
+              Grade: {grade}
+            </Text>
+          </Box>
+        </Flex>
+
+        <Button
+          as={status === 'open' ? Link : undefined}
+          to={status === 'open' ? '/StudentExamPage' : undefined}
+          mt={4}
+          w="full"
+          h="10"
+          color="white"
+          borderRadius="full"
+          bg={
+            status === 'completed' ? '#2DFF02' : 
+            status === 'invalid' ? '#FF0202' : 
+            '#E4F5E1'
+          }
+          _hover={{
+            bg:
+              status === 'completed' ? '#22CC00' : 
+              status === 'invalid' ? '#CC0000' : 
+              '#D0F0D0'
+          }}
+        >
+          {status === 'completed' ? 'COMPLETED' : 
+          status === 'invalid' ? 'NOT VALID' : 
+          'OPEN NOW'}
+        </Button>
+        
+      </Box>
+    );
+  };
+
+  const PerformanceItem = ({ label, value }) => {
+    return (
+      <Flex 
+        justify="space-between" 
+        align="center"
+      >
+        <Text>{label}</Text>
+        <Text>{value}</Text>
+      </Flex>
+    );
+  };
