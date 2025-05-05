@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function Login() { 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" px={6}>
       <Box p={10} rounded="xl" w={{ base: "100%", sm: "400px" }}>

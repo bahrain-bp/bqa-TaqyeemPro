@@ -19,6 +19,7 @@ import {
   AiOutlineUser,
   AiOutlineLogout,
   AiOutlineDashboard,
+  AiOutlineOrderedList,
 } from "react-icons/ai";
 import { RiBookShelfLine } from "react-icons/ri";
 import { FiUpload } from "react-icons/fi";
@@ -143,7 +144,18 @@ export default function ModeratorNavBar() {
                           <AiOutlineDashboard size={20} />
                           Dashboard
                         </Button>
-
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                          as="a"
+                          href="/generated-questions"
+                        >
+                          <AiOutlineOrderedList size={20} />
+                          Generated Questions
+                        </Button>
                         <Button
                           variant="ghost"
                           justifyContent="flex-start"
@@ -164,16 +176,6 @@ export default function ModeratorNavBar() {
                         >
                           <RiBookShelfLine size={20} />
                           Exams
-                        </Button>
-
-                        <Button
-                          variant="ghost"
-                          justifyContent="flex-start"
-                          textAlign="left"
-                          fontWeight="bold"
-                          w="full"
-                        >
-                          <FiUpload size={20} /> Upload Sepecifications
                         </Button>
 
                         <Button

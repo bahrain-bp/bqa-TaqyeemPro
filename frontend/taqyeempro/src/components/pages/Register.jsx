@@ -19,7 +19,7 @@ export default function Register() {
         <Heading
           mb={4}
           size="6xl"
-          fontWeight={"bold"}
+          fontWeight={"bold"} 
           textAlign="center"
           color="gray.800"
         >
