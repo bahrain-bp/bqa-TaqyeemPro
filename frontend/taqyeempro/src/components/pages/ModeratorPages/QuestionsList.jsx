@@ -43,7 +43,7 @@ export default function QuestionsList() {
       <Stack gap={4}>
         {questions.map((q, idx) => (
           <Box
-            key={q.QuestionID}
+            key={q.questionID}
             borderWidth="1px"
             borderRadius="md"
             p={6}
@@ -53,7 +53,7 @@ export default function QuestionsList() {
           >
             <Flex justify="space-between" mb={2}>
               <Text fontWeight="bold" fontSize="lg">
-                Q{idx + 1}. {q.QuestionText} ({q.QuestionType})
+                Q{idx + 1}. {q.questionText} ({q.questionType})
               </Text>
               <Flex gap={3} align="center">
                 <Text
@@ -61,17 +61,17 @@ export default function QuestionsList() {
                   px={3}
                   py={1}
                   borderRadius="md"
-                  bg={q.Approved ? "green.100" : "red.100"}
-                  color={q.Approved ? "green.700" : "red.700"}
+                  bg={q.approved ? "green.100" : "red.100"}
+                  color={q.approved ? "green.700" : "red.700"}
                 >
-                  {q.Approved ? "Approved" : "Denied"}
+                  {q.approved ? "Approved" : "Denied"}
                 </Text>
                 <Icon as={MdEdit} boxSize={5} color="gray.600" />
               </Flex>
             </Flex>
-            <Text pl={4}>✅ Answer: {q.AnswerText}</Text>
+            <Text pl={4}>✅ Answer: {q.answerText}</Text>
             <Text pl={4} mt={1} fontSize="sm" color="gray.600">
-              Marks: {q.Mark}
+              Marks: {q.mark}
             </Text>
           </Box>
         ))}
