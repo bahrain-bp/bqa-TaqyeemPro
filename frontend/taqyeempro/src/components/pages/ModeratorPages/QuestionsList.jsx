@@ -8,13 +8,24 @@ import {
   Status,
   Text,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LuArrowBigRight, LuArrowRight } from "react-icons/lu";
 import { MdEdit } from "react-icons/md";
 import EditQuestion from "./EditQuestion";
 
 export default function QuestionsList() {
   const [isEditOpen, setIsEditOpen] = useState(false);
+
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/view-question"
+    )
+      .then((res) => res.json())
+      .then((data) => setQuestions(data))
+      .catch((err) => console.error("Error fetching questions:", err));
+  }, []);
 
   return (
     <Box maxW="6xl" mx="auto" mt={12} px={4}>
@@ -29,69 +40,41 @@ export default function QuestionsList() {
         </Text>
       </Flex>
       {/* Content */}
-      <Stack gap={3}>
-        {/* question 1 */}
-        <Box
-          bg="white"
-          borderWidth="1px"
-          borderRadius="md"
-          boxShadow="sm"
-          p={6}
-          py={8}
-          _hover={{ bg: "gray.50", cursor: "pointer" }}
-          onClick={() => setIsEditOpen(true)}
-        >
-          <Flex align="center" justify="space-between">
-            <Text fontWeight="bold" fontSize="lg" color="gray.700">
-              Q1. Solve for x (MultipeChoice): 3(x−2)=2(x+5)3(x - 2) = 2(x + 5)
-            </Text>
-            <Flex align="center" gap={4}>
-              <Status.Root size={"lg"} width="100px" colorPalette="green">
-                <Status.Indicator />
-                Approved
-              </Status.Root>
-              <Icon as={MdEdit} boxSize={6} color="gray.700" />
+      <Stack gap={4}>
+        {questions.map((q, idx) => (
+          <Box
+            key={q.QuestionID}
+            borderWidth="1px"
+            borderRadius="md"
+            p={6}
+            bg="white"
+            _hover={{ bg: "gray.50", cursor: "pointer" }}
+            onClick={() => setIsEditOpen(true)}
+          >
+            <Flex justify="space-between" mb={2}>
+              <Text fontWeight="bold" fontSize="lg">
+                Q{idx + 1}. {q.QuestionText} ({q.QuestionType})
+              </Text>
+              <Flex gap={3} align="center">
+                <Text
+                  fontSize="sm"
+                  px={3}
+                  py={1}
+                  borderRadius="md"
+                  bg={q.Approved ? "green.100" : "red.100"}
+                  color={q.Approved ? "green.700" : "red.700"}
+                >
+                  {q.Approved ? "Approved" : "Denied"}
+                </Text>
+                <Icon as={MdEdit} boxSize={5} color="gray.600" />
+              </Flex>
             </Flex>
-          </Flex>
-          <Text whiteSpace="pre-line" p={5} pl={16}>
-            Options:{"\n"}
-            A: x = 16{"\n"}
-            B: x = 11{"\n"}
-            C: x = -11{"\n"}
-            D: x = -16{"\n"}✅ Answer: B: x = 11
-          </Text>
-        </Box>
-
-        {/* question 2 */}
-        <Box
-          bg="white"
-          borderWidth="1px"
-          borderRadius="md"
-          boxShadow="sm"
-          p={6}
-          py={8}
-          _hover={{ bg: "gray.50", cursor: "pointer" }}
-          onClick={() => setIsEditOpen(true)}
-        >
-          <Flex align="center" justify="space-between">
-            <Text fontWeight="bold" fontSize="lg" color="gray.700">
-              Q2. Simplify (Short Answer Number):
+            <Text pl={4}>✅ Answer: {q.AnswerText}</Text>
+            <Text pl={4} mt={1} fontSize="sm" color="gray.600">
+              Marks: {q.Mark}
             </Text>
-            <Flex align="center" gap={4}>
-              <Status.Root size={"lg"} width="100px" colorPalette="red">
-                <Status.Indicator />
-                Denied
-              </Status.Root>
-              <Icon as={MdEdit} boxSize={6} color="gray.700" />
-            </Flex>
-          </Flex>
-          <Text whiteSpace="pre-line" p={5} pl={16}>
-            34×89\frac{3}
-            {4} \times \frac{8}
-            {9}43​×98​ D: x = -16{"\n"}✅ Answer:23\frac{2}
-            {3}32​
-          </Text>
-        </Box>
+          </Box>
+        ))}
       </Stack>
     </Box>
   );
