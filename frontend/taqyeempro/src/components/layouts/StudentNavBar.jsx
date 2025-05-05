@@ -110,6 +110,8 @@ export default function StudentNavBar() {
               _hover={{ bg: "black", color: "white" }}
               fontSize="md"
               boxShadow={"lg"}
+              as="a"
+              href="/StudentExamCard"
             >
               Start Exam
             </Button>
