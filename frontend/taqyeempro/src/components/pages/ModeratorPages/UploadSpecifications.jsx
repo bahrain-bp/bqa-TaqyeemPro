@@ -52,6 +52,10 @@ export default function UploadSpecifications() {
                   </p>
                   <Stack gap="4">
                     <Field.Root>
+                      <Field.Label>Title</Field.Label>
+                      <Input type="Text" placeholder="Title" />
+                    </Field.Root>
+                    <Field.Root>
                       <Field.Label>Upload File</Field.Label>
                       <FileUpload.Root
                         maxW="xl"
