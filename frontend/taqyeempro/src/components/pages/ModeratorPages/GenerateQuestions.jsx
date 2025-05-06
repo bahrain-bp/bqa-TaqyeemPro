@@ -24,20 +24,6 @@ import {
 import { LuUpload } from "react-icons/lu";
 
 export default function GenerateQuestions() {
-  const subjects = createListCollection({
-    items: [
-      { label: "Maths", value: "math" },
-      { label: "Arabic", value: "arabic" },
-    ],
-  });
-
-  const grades = createListCollection({
-    items: [
-      { label: "Grade 9", value: "9" },
-      { label: "Grade 12", value: "12" },
-    ],
-  });
-
   const specifications = createListCollection({
     items: [
       { label: "File 2", value: "2" },
@@ -80,54 +66,6 @@ export default function GenerateQuestions() {
                   </p>
                   <Stack gap="4">
                     <Field.Root>
-                      <Select.Root collection={subjects} size="sm" width="full">
-                        <Select.HiddenSelect />
-                        <Select.Label mt={5}>Subject</Select.Label>
-                        <Select.Control bg={"white"}>
-                          <Select.Trigger>
-                            <Select.ValueText placeholder="Select Subject" />
-                          </Select.Trigger>
-                          <Select.IndicatorGroup>
-                            <Select.Indicator />
-                          </Select.IndicatorGroup>
-                        </Select.Control>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {subjects.items.map((subjects) => (
-                              <Select.Item item={subjects} key={subjects.value}>
-                                {subjects.label}
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Select.Root>
-                    </Field.Root>
-                    <Field.Root>
-                      <Select.Root collection={grades} size="sm" width="full">
-                        <Select.HiddenSelect />
-                        <Select.Label>Grade</Select.Label>
-                        <Select.Control bg={"white"}>
-                          <Select.Trigger>
-                            <Select.ValueText placeholder="Select Grade" />
-                          </Select.Trigger>
-                          <Select.IndicatorGroup>
-                            <Select.Indicator />
-                          </Select.IndicatorGroup>
-                        </Select.Control>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {grades.items.map((grades) => (
-                              <Select.Item item={grades} key={grades.value}>
-                                {grades.label}
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Select.Root>
-                    </Field.Root>
-                    <Field.Root>
                       <Select.Root
                         collection={specifications}
                         size="sm"
@@ -160,7 +98,10 @@ export default function GenerateQuestions() {
                     </Field.Root>
                     <Field.Root>
                       <Field.Label mt={5}>Number of Questions</Field.Label>
-                      <InputGroup startElement="Multiple Choice:" startElementProps={{color:"black"}}>
+                      <InputGroup
+                        startElement="Multiple Choice:"
+                        startElementProps={{ color: "black" }}
+                      >
                         <Group attached w={"full"}>
                           <Input
                             type="number"
@@ -173,7 +114,10 @@ export default function GenerateQuestions() {
                           />
                         </Group>
                       </InputGroup>
-                      <InputGroup startElement="True or False:" startElementProps={{color:"black"}}>
+                      <InputGroup
+                        startElement="True or False:"
+                        startElementProps={{ color: "black" }}
+                      >
                         <Group attached w={"full"}>
                           <Input
                             type="number"
@@ -186,7 +130,10 @@ export default function GenerateQuestions() {
                           />
                         </Group>
                       </InputGroup>
-                      <InputGroup startElement="Short Answer:" startElementProps={{color:"black"}}>
+                      <InputGroup
+                        startElement="Short Answer:"
+                        startElementProps={{ color: "black" }}
+                      >
                         <Group attached w={"full"}>
                           <Input
                             type="number"
