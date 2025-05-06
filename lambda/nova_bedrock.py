@@ -1,28 +1,75 @@
 import fitz  # PyMuPDF
 import boto3
 import json
-import os
+import json
+import boto3
+import re
+from decimal import Decimal
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('ExamQuestions')
+
 
 def lambda_bedrock(event, context):
     try:
+        # Parse input from API Gateway
+        try:
+            # Get parameters from request body
+            request_body = json.loads(event.get('body', '{}'))
+            
+            # grade = int(request_body.get('grade', 0))
+            # subject = request_body.get('subject', '').strip()
+            # mcq = int(request_body.get('mcq', 0))
+            # tf = int(request_body.get('tf', 0))
+            # short = int(request_body.get('short', 0))
+            
+            grade = 9
+            subject = "Math"
+            mcq = 4
+            tf = 4
+            short = 2
+            
+        except json.JSONDecodeError:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"error": "Invalid JSON format in request body"})
+            }
+        except ValueError as e:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"error": f"Invalid parameter type: {str(e)}"})
+            }
+
+        # Validate required parameters
+        validation_errors = []
+        if not subject:
+            validation_errors.append("Subject is required")
+        if grade < 1 or grade > 12:
+            validation_errors.append("Grade must be between 1 and 12")
+        if mcq < 0 or tf < 0 or short < 0:
+            validation_errors.append("Question counts cannot be negative")
+
+        if validation_errors:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"errors": validation_errors})
+            }
+
+        total_questions = mcq + tf + short
+        if total_questions <= 0:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"error": "At least one question type must have a positive count"})
+            }
 
         # Initialize S3 client
         s3 = boto3.client('s3')
         
         # S3 bucket and file details
-        bucket_name = "testingbedrockuploadpdf"
-        file_key = "G9-Math.pdf"
-
-        #file_key = "G" + str(grade) + "-" + subject + ".pdf"
+        bucket_name = "taqyeemprostack-curriculumdocsbucketb1075275-nawzlsopip18"
+        file_key = "G"+str(grade)+"-"+subject+".pdf"
+        #file_key = "G9-Math.pdf" #must taken from event
         #file_key = f"G{str(grade)}-{subject}.pdf"
-
-        total_questions = 10
-        mcq = 5
-        tf = 3
-        short = 2
-
-        grade = 9
-        subject = "Math"
 
         # Get PDF from S3
         response = s3.get_object(Bucket=bucket_name, Key=file_key)
@@ -38,17 +85,18 @@ def lambda_bedrock(event, context):
         doc.close()
 
         prompt = (
-             f"أنت خبير في إنشاء أسئلة لمادة {subject}.\n"
-             f"بناءً على المواصفات والأسئلة المرفقة، أنشئ أسئلة جديدة بنفس الصيغة والصعوبة.\n"
-             f"{extracted_text.strip()}\n\n"
-             "التعليمات:\n"
-             f"- أنشئ {total_questions} أسئلة ({mcq} اختيار من متعدد، {tf} صح وخطأ، {short} إجابة قصيرة).\n"
-             "- الصيغة تكون CSV فقط تحتوي على الأعمدة التالية:\n"
-             "subject_grade(math_9),questionId(Q1),answerText,approved(true),grade(9),mark,answerText,subject(math)"
-             "- تأكد أن تكون كل القيم متوافقة مع التنسيق، واستخدم 'TRUE' أو 'FALSE' في approved.\n"
-             "- لا تُدخل أسئلة تعتمد على صور.\n"
-             "- استخدم LaTeX حيثما كان مناسباً."
-         )
+            f"You are an expert in generating questions for the subject {subject}.\n"
+            f"Based on the specifications and sample questions, create new questions with the same format and difficulty level.\n"
+            f"{extracted_text.strip()}\n\n"
+            "Instructions:\n"
+            "Write the questions in English unless the subject is Arabic.\n"
+            f"- Generate {total_questions} questions ({mcq} multiple choice, {tf} true/false, {short} short answer).\n"
+            "- The format should be JSON only and must include the following fields:\n"
+            "questionText, questionType (MCQ, T/F, Short answer), answerText (right answer), option1 (for MCQ), option2 (for MCQ), option3 (for MCQ), option4 (for MCQ)\n"
+            "- Ensure all values are properly formatted.\n"
+            "- Do not include any questions that rely on images.\n"
+            #- Use LaTeX where appropriate for equations only."
+        )
 
         # Call Nova Pro model on Bedrock
         bedrock_runtime = boto3.client("bedrock-runtime", region_name="us-east-1")
@@ -83,36 +131,68 @@ def lambda_bedrock(event, context):
             .get("content", [{}])[0]
             .get("text", "No text found")
         )
+        
+        cleaned_output = re.sub(r"^```json\s*|\s*```$", "", output.strip(), flags=re.IGNORECASE)
 
-        # Parse output text
-        output_text = (
-            response_body.get("output", {})
-            .get("message", {})
-            .get("content", [{}])[0]
-            .get("text", "No text found")
-        )
-
-        csv_start = output_text.find('```csv')
-        if csv_start != -1:
-            csv_start = output_text.find('\n', csv_start) + 1
-            csv_end = output_text.find('```', csv_start)
-            clean_csv = output_text[csv_start:csv_end].strip()
-        else:
-            clean_csv = output_text  # Fallback if no markdown
+        final = json.loads(cleaned_output)
+        
+        # json_string = output.replace('json', '').strip()  
+        
+        # cleaned_json = json_string.strip()
+        
+        # cleaned_loads = json.loads(cleaned_json)
+        
+        # print("cleaned_loads: ",cleaned_loads) 
+        
+        # إدخال الأسئلة في DynamoDB
+        question_id = 1
+        inserted_count = 0
+        for q in final:
+            item = {
+                "questionId": f"Q{question_id}",
+                "subject_grade": f"{subject}_{grade}",
+                "subject": subject,
+                "grade": grade,
+                "questionText": q["questionText"],
+                "questionType": q["questionType"],
+                "answerText": q["answerText"],
+                "mark": Decimal("1"),
+                "approved": False
+            }
             
-        lambda_client.invoke(
-            FunctionName='ExamQuestionsWriter',
-            InvocationType='Event',
-            Payload=json.dumps({'body': clean_csv})
-        )
+            # Try to get pre-formed options list first
+            if q["questionType"] == "MCQ":
+                options = []
+                
+                # Collect options in order
+                for i in range(1, 5):
+                    opt_key = f"option{i}"
+                    if opt_key in q:
+                        options.append(q[opt_key])
+                
+                # Ensure exactly 4 options
+                if len(options) != 4:
+                    options = ["Missing option"] * 4
+                
+                # Store as comma-separated string
+                item["options"] = ", ".join(options)
+            
+            table.put_item(Item=item)
+            question_id += 1
+            inserted_count += 1
 
         return {
             "statusCode": 200,
-            "headers": {
-                "Content-Type": "text/plain"
-            },
-            "body": output  
+            "body": json.dumps({"message": f"{inserted_count} questions inserted successfully."})
         }
+
+        # return {
+        #     "statusCode": 200,
+        #     "headers": {
+        #         "Content-Type": "text/plain"
+        #     },
+        #     "body": final
+        # }
 
     except Exception as e:
         return {

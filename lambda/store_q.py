@@ -16,7 +16,7 @@
 #             csv_data = csv_data.get('body', '')
             
 #         reader = csv.DictReader(StringIO(csv_data))
-        
+#         print('before insert: ',csv_data)
 #         for row in reader:
 #             item = {
 #                 'subject_grade': row['subject_grade'],
@@ -29,7 +29,7 @@
 #                 'questionText': row['questionText'],
 #                 'subject': row['subject'],
 #             }
-
+#             print('after insert: ',item)
 #             table.put_item(Item=item)
         
 #         return {
