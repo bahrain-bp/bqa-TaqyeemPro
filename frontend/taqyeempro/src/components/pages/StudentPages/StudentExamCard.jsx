@@ -13,19 +13,24 @@
           mb={8} 
           borderBottom="2px solid #E6E6E6" 
           pb={4}
+          alignItems="center"
         >
           <Text 
-            fontFamily="'Newsreader', sans-serif"
+            fontFamily="'YourPreferredFont'"
             color="black" 
-            fontSize={{ base: '4xl', md: '6xl' }} 
+            fontSize={{ base: '5xl', md: '7xl' }} 
             lineHeight="shorter"
+            mr={1}
           >
             My Exams
           </Text>
           <Text 
-            ml="auto" 
-            fontSize={{ base: 'xl', md: '2xl' }} 
-            color="#426B1F"
+            fontFamily="'YourPreferredFont'"
+            fontSize={{ base: '1xl', md: '3xl' }} 
+            color="black"
+            paddingLeft={11}
+            paddingTop={18}
+            whiteSpace="nowrap"
           >
             3 items
           </Text>
@@ -43,21 +48,21 @@
             maxW="1200px"
           >
             <ExamCard 
-              title="MATHS LEVEL-1" 
+              title="Arabic for Grade 12" 
               grade="30/30" 
               date="14/4/2025" 
               status="completed"
               imageSrc="/l1.png"
             />
             <ExamCard 
-              title="MATHS LEVEL-2" 
+              title="Science for Grade 3" 
               grade="0/30" 
               date="22/7/2025" 
               status="invalid"
               imageSrc="/l2.png"
             />
             <ExamCard 
-              title="MATHS LEVEL-3" 
+              title="Maths for Grade 9" 
               grade="--/30" 
               date="13/12/2025" 
               status="open"

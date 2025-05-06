@@ -27,12 +27,12 @@ import {
           pb={4}
         >
           <Text 
-            fontFamily="'Newsreader', sans-serif" 
+            fontFamily="'YourPreferredFont'"
             fontSize={{ base: '4xl', md: '6xl' }} 
             color="black"
             lineHeight="shorter"
           >
-            MATHS L1
+            Maths for Grade 9
           </Text>
           <Text 
             ml="auto" 
@@ -45,6 +45,7 @@ import {
   
         {/* Timer Chips */}
         <Flex 
+          paddingTop={20}
           justify="flex-end" 
           mt={-8} 
           mb={8}
@@ -224,7 +225,7 @@ import {
                 mb={4}
                 color="black"
               >
-                MATHS L1
+                Maths for Grade 9
               </Text>
   
               <Stack 
@@ -274,6 +275,8 @@ import {
                 h="12" 
                 _hover={{ bg: "#3A5C19" }}
                 rightIcon={<Icon boxSize={4} path="M9 12H15" />}
+                as="a"
+                href="/StudentConfirmationPage"
               >
                 SUBMIT EXAM
               </Button>
