@@ -38,6 +38,15 @@ def handler(event, context):
                 }
 
             try:
+                # Optional 'options' field validation
+                if 'options' in q:
+                    if not isinstance(q['options'], list):
+                        raise ValueError('"options" must be a list if provided')
+                    if len(q['options']) not in [2, 3, 4]:
+                        raise ValueError('"options" must have either 2 or 3 or 4 items')
+                else:
+                    q['options'] = []  # Default to empty list if not provided
+
                 if not isinstance(q['grade'], (int, str)):
                     raise ValueError('"grade" must be an integer or string number')
                 q['grade'] = int(q['grade'])
