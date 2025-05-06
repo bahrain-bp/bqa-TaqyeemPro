@@ -9,11 +9,15 @@ import {
     VStack, 
     Icon 
   } from '@chakra-ui/react';
-  
+//   import StudentPopupMessages from './StudentPopupMessages';
+
   export default function StudentQuitPage() {
     return (
+
+        
       <Box bg="white" minH="100vh" px={{ base: 8, lg: 24 }}>
         {/* Header */}
+
 
   
         {/* Page Heading */}
@@ -57,6 +61,12 @@ import {
               borderRadius="lg" 
               boxShadow="md"
             >
+
+                {/* <StudentPopupMessages
+                type="success"
+                message="Account created successfully!"
+                onClose={() => setShow(false)}
+                /> */}
               <Text 
                 fontWeight="bold" 
                 fontSize={{ base: '3xl', md: '6xl' }} 

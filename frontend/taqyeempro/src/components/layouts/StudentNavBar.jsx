@@ -145,6 +145,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/"
                         >
                           <AiOutlineDashboard size={20} />
                           Dashboard
@@ -156,6 +158,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/StudentExamCard"
                         >
                           <AiOutlineBook size={20} />
                           My Exams

@@ -1,6 +1,6 @@
   import { Box, Text, Button, Flex, Image } from '@chakra-ui/react';
   import { Link } from 'react-router-dom';
-  
+
   export default function StudentExamCard () {
     return (
       <Box bg="white" minH="100vh" px={{ base: 8, lg: 24 }}>
@@ -75,7 +75,7 @@
             w={{ base: 'full', md: '30%' }} 
             maxW="400px" 
             bg="#FAFAF5" 
-            p={8} 
+            p={58} 
             borderRadius="lg"
             boxShadow="md"
           >
@@ -175,12 +175,13 @@
         </Flex>
 
         <Button
+          color="black"
+          
           as={status === 'open' ? Link : undefined}
           to={status === 'open' ? '/StudentExamPage' : undefined}
           mt={4}
           w="full"
           h="10"
-          color="white"
           borderRadius="full"
           bg={
             status === 'completed' ? '#2DFF02' : 
@@ -194,6 +195,7 @@
               '#D0F0D0'
           }}
         >
+           
           {status === 'completed' ? 'COMPLETED' : 
           status === 'invalid' ? 'NOT VALID' : 
           'OPEN NOW'}
