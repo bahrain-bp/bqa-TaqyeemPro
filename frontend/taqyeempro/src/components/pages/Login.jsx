@@ -9,10 +9,12 @@ import {
   HStack,
   Separator,
   Link as ChakraLink,
+  RadioGroup,
+  Stack,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-export default function Login() { 
+export default function Login() {
   return (
     <Box display="flex" alignItems="center" justifyContent="center" px={6}>
       <Box p={10} rounded="xl" w={{ base: "100%", sm: "400px" }}>
@@ -30,6 +32,21 @@ export default function Login() {
         </Text>
 
         <VStack spacing={4}>
+          <RadioGroup.Root pb={5} defaultValue="student">
+            <HStack gap="6">
+              <RadioGroup.Item value="student" >
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Student</RadioGroup.ItemText>
+              </RadioGroup.Item>
+              <RadioGroup.Item value="moderator">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Moderator</RadioGroup.ItemText>
+              </RadioGroup.Item>
+              
+            </HStack>
+          </RadioGroup.Root>
           <Input
             placeholder="Email"
             type="email"
@@ -55,8 +72,10 @@ export default function Login() {
 
         {/* OR Separator */}
         <HStack m={5}>
-          <Separator flex="1"  size={"lg"} />
-          <Text flexShrink="0" fontWeight={"semibold"}>OR</Text>
+          <Separator flex="1" size={"lg"} />
+          <Text flexShrink="0" fontWeight={"semibold"}>
+            OR
+          </Text>
           <Separator flex="1" size={"lg"} />
         </HStack>
 

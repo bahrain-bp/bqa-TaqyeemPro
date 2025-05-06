@@ -24,12 +24,14 @@ export default function QuestionsList() {
     fetch("https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/view-question")
       .then((res) => res.json())
       .then((data) => {
+        console.log(res)
         setQuestions(data);
+        console.log(data)
         if (!isNaN(gradeNumber)) {
           const filtered = data.filter(q => Number(q.grade) === Number(gradeNumber));
           setFilteredQuestions(filtered);
         } else {
-          setFilteredQuestions(data); // fallback to all
+          setFilteredQuestions(data); 
         }
       })
       .catch((err) => console.error("Error fetching questions:", err));
