@@ -48,18 +48,20 @@ export default function NonUserNavBar() {
               Home
             </Link>
             <Link
-              href="/about"
               fontSize="lg"
               _hover={{ textDecoration: "underline" }}
               ml={6}
+              as="a"
+              href="/AboutUsPage"
             >
               About Us
             </Link>
             <Link
-              href="/contact"
               fontSize="lg"
               _hover={{ textDecoration: "underline" }}
               ml={6}
+              as="a"
+              href="/ContactUsPage"
             >
               Contact Us
             </Link>

@@ -41,18 +41,20 @@ export default function Footer() {
             Home
           </Link>
           <Link
-            href="/about"
             fontSize="lg"
             mx={10} 
             _hover={{ textDecoration: "underline" }}
+            as="a"
+            href="/AboutUsPage"
           >
             About Us
           </Link>
           <Link
-            href="/contact"
             fontSize="lg"
             mx={10} 
             _hover={{ textDecoration: "underline" }}
+            as="a"
+            href="/ContactUsPage"
           >
             Contact Us
           </Link>
