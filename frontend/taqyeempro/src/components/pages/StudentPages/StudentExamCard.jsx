@@ -126,6 +126,8 @@
               w="full" 
               h="12" 
               _hover={{ bg: "#3A5C19" }}
+              as="a"
+              href="/StudentExamPage"
             >
               OPEN EXAM →
             </Button>

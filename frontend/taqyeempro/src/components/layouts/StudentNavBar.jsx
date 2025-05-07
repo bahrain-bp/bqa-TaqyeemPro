@@ -171,6 +171,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/AboutUsPage"
                         >
                           <AiOutlineInfoCircle size={20} />
                           About Us

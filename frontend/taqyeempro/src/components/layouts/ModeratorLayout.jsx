@@ -10,7 +10,7 @@ export default function ModeratorLayout() {
       <div>
         <Outlet />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }

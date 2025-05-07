@@ -41,7 +41,7 @@ export default function ExamPage() {
   useEffect(() => {
     if (timeLeft === 0) {
       // Replace with your submission logic
-      window.location.href = "/StudentConfirmationPage"; // Or use React Router's navigate()
+      window.location.href = "/StudentQuitPage"; // Or use React Router's navigate()
     }
   }, [timeLeft]);
 
@@ -89,7 +89,7 @@ export default function ExamPage() {
               QUESTION 6:
             </Text>
 
-            <Box bg="#FAFAF5" p={8} borderRadius="lg" mb={8}>
+            <Box bg="#FAFAF5" p={8} borderRadius="lg" mb={8} >
               <Text
                 fontSize="4xl"
                 color="black"
@@ -100,11 +100,75 @@ export default function ExamPage() {
               />
             </Box>
 
-            <HStack spacing={8} justifyContent="center">
-              <AnswerButton value="2" />
-              <AnswerButton value="43" />
-              <AnswerButton value="21" />
-              <AnswerButton value="0" />
+            <HStack spacing={8} justifyContent="center" color="black" >
+                <Button
+                  bg="white"
+                  border="1px solid #C2C2C2"
+                  borderRadius="lg"
+                  px={8}
+                  py={4}
+                  _hover={{ bg: "#E4F5E1" }}
+                >
+                  <Text 
+                    fontWeight="bold" 
+                    fontSize="4xl" 
+                    color="black" // ✅ Add this line
+                  >
+                    4
+                  </Text>
+                </Button>
+
+                <Button
+                  bg="white"
+                  border="1px solid #C2C2C2"
+                  borderRadius="lg"
+                  px={8}
+                  py={4}
+                  _hover={{ bg: "#E4F5E1" }}
+                >
+                  <Text 
+                    fontWeight="bold" 
+                    fontSize="4xl" 
+                    color="black" // ✅ Add this line
+                  >
+                    1
+                  </Text>
+                </Button>
+
+                <Button
+                  bg="white"
+                  border="1px solid #C2C2C2"
+                  borderRadius="lg"
+                  px={8}
+                  py={4}
+                  _hover={{ bg: "#E4F5E1" }}
+                >
+                  <Text 
+                    fontWeight="bold" 
+                    fontSize="4xl" 
+                    color="black" // ✅ Add this line
+                  >
+                    2
+                  </Text>
+                </Button>
+
+                <Button
+                  bg="white"
+                  border="1px solid #C2C2C2"
+                  borderRadius="lg"
+                  px={8}
+                  py={4}
+                  _hover={{ bg: "#E4F5E1" }}
+                >
+                  <Text 
+                    fontWeight="bold" 
+                    fontSize="4xl" 
+                    color="black" // ✅ Add this line
+                  >
+                    21
+                  </Text>
+                </Button>
+
             </HStack>
           </Box>
 

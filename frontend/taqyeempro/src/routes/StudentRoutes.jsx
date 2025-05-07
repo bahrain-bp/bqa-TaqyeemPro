@@ -11,6 +11,7 @@ import StudentQuitPage from "@/components/pages/StudentPages/StudentQuitPage";
 
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import AboutUsPage from "@/components/pages/AboutUsPage";
 
 export default function StudentRoutes() {
   return (
@@ -23,6 +24,7 @@ export default function StudentRoutes() {
           <Route path="/StudentConfirmationPage" element={<StudentConfirmationPage />} />
           <Route path="/StudentQuitPage" element={<StudentQuitPage />} />
           <Route path="account" element={<Account />} />
+          <Route path="AboutUsPage" element={<AboutUsPage />} />
           <Route path="*" element={<NotFound/>} />
         </Route>
       </Routes>

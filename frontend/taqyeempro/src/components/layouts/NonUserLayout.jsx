@@ -10,7 +10,7 @@ export default function NonUserLayout() {
       <div>
         <Outlet />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }
