@@ -8,9 +8,9 @@ function App() {
 
   return (
     <>
-        {/* <NonUserRoutes/> */}
-      <StudentRoutes/>
-      {/* <ModeratorRoutes/> */}
+      {/* <NonUserRoutes/> */}
+      {/* <StudentRoutes/> */}
+      <ModeratorRoutes/>
     </>
   );
 }

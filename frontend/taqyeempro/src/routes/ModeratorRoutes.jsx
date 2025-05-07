@@ -15,7 +15,7 @@ export default function ModeratorRoutes() {
           <Route index element={<ModeratorDashboard />} />
           <Route path="account" element={<Account />} />
           <Route path="generated-questions" element={<GeneratedQuestions />} />
-          <Route path="generated-questions/:id" element={<QuestionsList />} />
+          <Route path="generated-questions/:gradeId" element={<QuestionsList />} />
           <Route path="*" element={<NotFound/>} />
         </Route>
       </Routes>

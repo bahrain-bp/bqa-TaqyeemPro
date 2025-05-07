@@ -16,10 +16,25 @@ import {
   FileUpload,
   Icon,
   Box,
+  createListCollection,
+  Select,
 } from "@chakra-ui/react";
 import { LuUpload } from "react-icons/lu";
 
 export default function UploadSpecifications() {
+  const subjects = createListCollection({
+    items: [
+      { label: "Maths", value: "math" },
+      { label: "Arabic", value: "arabic" },
+    ],
+  });
+
+  const grades = createListCollection({
+    items: [
+      { label: "Grade 9", value: "9" },
+      { label: "Grade 12", value: "12" },
+    ],
+  });
   return (
     <VStack alignItems="start">
       <Dialog.Root>
@@ -42,26 +57,70 @@ export default function UploadSpecifications() {
               <Dialog.Header>
                 <Dialog.Title>Upload Specifications</Dialog.Title>
               </Dialog.Header>
-              <Dialog.Body pb="8">
+              <Dialog.Body>
                 <DataList.Root orientation="horizontal">
                   <p>
-                    This will upload the specifications for the AI to generate
-                    the requested number of questions. Please note that the
-                    process may take some time, and you will be notified once it
-                    is complete. The generated questions will be available on
-                    the "Generated Questions" page for you to review.
+                    This will upload the specifications for you to use when
+                    generating exam questions. Please note that to actually
+                    generate the exam questions, you must complete the 'Generate
+                    Questions' form.
                   </p>
                   <Stack gap="4">
                     <Field.Root>
-                      <Field.Label>Title</Field.Label>
-                      <Input placeholder="Title" />
+                      <Select.Root collection={subjects} size="sm" width="full" mt={3}>
+                        <Select.HiddenSelect />
+                        <Select.Label>Subject</Select.Label>
+                        <Select.Control bg={"white"}>
+                          <Select.Trigger>
+                            <Select.ValueText placeholder="Select Subject" />
+                          </Select.Trigger>
+                          <Select.IndicatorGroup>
+                            <Select.Indicator />
+                          </Select.IndicatorGroup>
+                        </Select.Control>
+                        <Select.Positioner>
+                          <Select.Content>
+                            {subjects.items.map((subjects) => (
+                              <Select.Item item={subjects} key={subjects.value}>
+                                {subjects.label}
+                                <Select.ItemIndicator />
+                              </Select.Item>
+                            ))}
+                          </Select.Content>
+                        </Select.Positioner>
+                      </Select.Root>
+                    </Field.Root>
+                    <Field.Root>
+                      <Select.Root collection={grades} size="sm" width="full" mb={5}>
+                        <Select.HiddenSelect />
+                        <Select.Label>Grade</Select.Label>
+                        <Select.Control bg={"white"}>
+                          <Select.Trigger>
+                            <Select.ValueText placeholder="Select Grade" />
+                          </Select.Trigger>
+                          <Select.IndicatorGroup>
+                            <Select.Indicator />
+                          </Select.IndicatorGroup>
+                        </Select.Control>
+                        <Select.Positioner>
+                          <Select.Content>
+                            {grades.items.map((grades) => (
+                              <Select.Item item={grades} key={grades.value}>
+                                {grades.label}
+                                <Select.ItemIndicator />
+                              </Select.Item>
+                            ))}
+                          </Select.Content>
+                        </Select.Positioner>
+                      </Select.Root>
                     </Field.Root>
                     <Field.Root>
                       <Field.Label>Upload File</Field.Label>
                       <FileUpload.Root
                         maxW="xl"
                         alignItems="stretch"
-                        maxFiles={10}
+                        maxFiles={1}
+                        accept={".pdf"}
                       >
                         <FileUpload.HiddenInput />
                         <FileUpload.Dropzone>
@@ -70,15 +129,11 @@ export default function UploadSpecifications() {
                           </Icon>
                           <FileUpload.DropzoneContent>
                             <Box>Drag and drop files here</Box>
-                            <Box color="fg.muted">.png, .jpg up to 5MB</Box>
+                            <Box color="fg.muted">.pdf, .docx up to 20MB</Box>
                           </FileUpload.DropzoneContent>
                         </FileUpload.Dropzone>
                         <FileUpload.List />
                       </FileUpload.Root>
-                    </Field.Root>
-                    <Field.Root>
-                      <Field.Label>Number of Questions</Field.Label>
-                      <Input placeholder="ex. 10, 20, 50" />
                     </Field.Root>
                   </Stack>
                 </DataList.Root>
