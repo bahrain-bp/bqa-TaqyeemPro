@@ -6,6 +6,7 @@ import StudentExamCard from "@/components/pages/StudentPages/StudentExamCard";
 import StudentExamPage from "@/components/pages/StudentPages/StudentExamPage";
 import StudentConfirmationPage from "@/components/pages/StudentPages/StudentConfirmationPage";
 import StudentQuitPage from "@/components/pages/StudentPages/StudentQuitPage";
+import ContactUsPage from "@/components/pages/ContactUsPage";
 
 
 
@@ -25,6 +26,7 @@ export default function StudentRoutes() {
           <Route path="/StudentQuitPage" element={<StudentQuitPage />} />
           <Route path="account" element={<Account />} />
           <Route path="AboutUsPage" element={<AboutUsPage />} />
+          <Route path="ContactUsPage" element={<ContactUsPage />} />
           <Route path="*" element={<NotFound/>} />
         </Route>
       </Routes>

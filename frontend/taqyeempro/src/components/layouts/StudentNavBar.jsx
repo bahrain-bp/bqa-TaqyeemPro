@@ -184,6 +184,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/ContactUsPage"
                         >
                           <AiOutlinePhone size={20} /> Contact Us
                         </Button>

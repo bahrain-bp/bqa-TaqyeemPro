@@ -18,7 +18,7 @@ export default function AboutUsPage() {
       <Box mt={12} maxW="container.md" mx="auto">
         <Heading 
           textAlign="center" 
-          fontSize={{ base: "4xl", md: "5xl" }} 
+          fontSize={{ base: "4xl", md: "6xl" }} 
           mb={8}
           padding={111}
         >
