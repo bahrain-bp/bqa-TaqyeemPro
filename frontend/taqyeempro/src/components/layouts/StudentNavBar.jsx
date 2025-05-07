@@ -110,6 +110,8 @@ export default function StudentNavBar() {
               _hover={{ bg: "black", color: "white" }}
               fontSize="md"
               boxShadow={"lg"}
+              as="a"
+              href="/StudentExamCard"
             >
               Start Exam
             </Button>
@@ -143,6 +145,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/"
                         >
                           <AiOutlineDashboard size={20} />
                           Dashboard
@@ -154,6 +158,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/StudentExamCard"
                         >
                           <AiOutlineBook size={20} />
                           My Exams

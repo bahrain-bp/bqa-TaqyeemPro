@@ -12,7 +12,7 @@ export default function StudentLayout() {
       <div>
         <Outlet/>
       </div>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   )
 }
