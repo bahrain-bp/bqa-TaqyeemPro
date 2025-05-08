@@ -1,4 +1,6 @@
 import fitz  # PyMuPDF
+import random
+import string
 import boto3
 import json
 import json
@@ -25,6 +27,8 @@ def lambda_bedrock(event, context):
             
             grade = 9
             subject = "Math"
+            language = "English"
+
             mcq = 4
             tf = 4
             short = 2
@@ -66,7 +70,7 @@ def lambda_bedrock(event, context):
         s3 = boto3.client('s3')
         
         # S3 bucket and file details
-        bucket_name = "taqyeemprostack-curriculumdocsbucketb1075275-nawzlsopip18"
+        bucket_name = "taqyeemprostack-curriculumdocsbucketb1075275-dfuvkyudisit"
         file_key = "G"+str(grade)+"-"+subject+".pdf"
         #file_key = "G9-Math.pdf" #must taken from event
         #file_key = f"G{str(grade)}-{subject}.pdf"
@@ -85,17 +89,77 @@ def lambda_bedrock(event, context):
         doc.close()
 
         prompt = (
-            f"You are an expert in generating questions for the subject {subject}.\n"
-            f"Based on the specifications and sample questions, create new questions with the same format and difficulty level.\n"
+            f"You are a specialized question generation system for {subject}, strictly adhering to provided test specifications "
+            "and mirroring the patterns in sample questions.\n\n"
+
+            f"Generate {total_questions} original questions that perfectly match these requirements:\n\n"
+
+            "Specifications:\n"
+            "1. Content Requirements:\n"
+            f"   - Language: {language}\n"
+            "   - All specified skills must be represented in every question type\n"
+            "   - Question Types: Maintain exact ratio of MCQs/T/F/Short Answer from specifications\n"
+            "   - Difficulty: Align with difficulty level\n\n"
+
+            "2. Technical Requirements:\n"
+            "   - Strictly text-based (no images/diagrams)\n"
+            "   - LaTeX equations ONLY for formulas\n"
+            "   - Avoid opinion-based/ambiguous questions\n"
+            "   - Prevent duplicate concepts with existing questions\n\n"
+
+            "Format Requirements:\n"
+            "1. JSON Structure:\n"
+            "[{{\n"
+            "  \"questionText\": \"Clear question stem...\",\n"
+            "  \"latexEquation\": \"\\frac{{a}}{{b}}\",\n"
+            "  \"skillType\": \"Exact skill from specifications\",\n"
+            "  \"questionType\": \"MCQ/T/F/Short answer\",\n"
+            "  \"answerText\": \"Unambiguous correct answer\",\n"
+            "  \"options\": {{\n"
+            "    \"A\": \"...\", \"B\": \"...\", \"C\": \"...\", \"D\": \"...\"\n"
+            "  }}\n"
+            "}}]\n"
+            "```\n\n"
+
+            "2. Field Rules:\n"
+            "   - For T/F: options {{\"A\": \"True\", \"B\": \"False\"}}\n"
+            "   - Short Answers: \"options\" = empty object\n"
+            "   - MCQs: Exactly 4 distinct plausible options\n"
+            "   - answerText: Must EXACTLY match correct option text\n\n"
+
+            "Validation Checks:\n"
+            "1. Ensure:\n"
+            "   - coverage of all specified skills\n"
+            "   - Correct question type distribution\n"
+            "   - No markdown/LaTeX outside equations\n"
+            "   - Valid JSON escaping (\ for LaTeX)\n"
+            "   - Trimmed whitespace in all fields\n\n"
+
+            "Output Instructions:\n"
+            "1. Generate ONLY raw JSON - no commentary\n"
+            "2. Validate against schema before returning\n"
+            "3. Maintain consistent difficulty curve\n"
+            "4. Ensure JSON is COMPLETE and WELL-FORMED. Do NOT truncate the output. Finish all arrays and objects.\n\n"
+
+            "Examples:\n"
+            "[\n"
+            "  {{\n"
+            "    \"questionText\": \"Clear question stem...\",\n"
+            "    \"latexEquation\": \"\\frac{{a}}{{b}} (if required)\",\n"
+            "    \"skillType\": \"Exact skill from specifications\",\n"
+            "    \"questionType\": \"MCQ\",\n"
+            "    \"answerText\": \"MCQ content...\",\n"
+            "    \"options\": {{\n"
+            "      \"A\": \"MCQ content...\",\n"
+            "      \"B\": \"...\",\n"
+            "      \"C\": \"...\",\n"
+            "      \"D\": \"...\"\n"
+            "    }}\n"
+            "  }}\n"
+            "]\n\n"
+
+            "The test specifications Content:\n"
             f"{extracted_text.strip()}\n\n"
-            "Instructions:\n"
-            "Write the questions in English unless the subject is Arabic.\n"
-            f"- Generate {total_questions} questions ({mcq} multiple choice, {tf} true/false, {short} short answer).\n"
-            "- The format should be JSON only and must include the following fields:\n"
-            "questionText, questionType (MCQ, T/F, Short answer), answerText (right answer), option1 (for MCQ), option2 (for MCQ), option3 (for MCQ), option4 (for MCQ)\n"
-            "- Ensure all values are properly formatted.\n"
-            "- Do not include any questions that rely on images.\n"
-            #- Use LaTeX where appropriate for equations only."
         )
 
         # Call Nova Pro model on Bedrock
@@ -135,6 +199,7 @@ def lambda_bedrock(event, context):
         cleaned_output = re.sub(r"^```json\s*|\s*```$", "", output.strip(), flags=re.IGNORECASE)
 
         final = json.loads(cleaned_output)
+
         
         # json_string = output.replace('json', '').strip()  
         
@@ -145,11 +210,12 @@ def lambda_bedrock(event, context):
         # print("cleaned_loads: ",cleaned_loads) 
         
         # إدخال الأسئلة في DynamoDB
+        key = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
         question_id = 1
         inserted_count = 0
         for q in final:
             item = {
-                "questionId": f"Q{question_id}",
+                "questionId": f"{key}_Q{question_id}",
                 "subject_grade": f"{subject}_{grade}",
                 "subject": subject,
                 "grade": grade,
@@ -183,8 +249,11 @@ def lambda_bedrock(event, context):
 
         return {
             "statusCode": 200,
-            "body": json.dumps({"message": f"{inserted_count} questions inserted successfully."})
-        }
+            "body": json.dumps({
+                "message": f"{inserted_count} questions generated and stored successfully.",
+                "sample_question": final}
+                )
+            }
 
         # return {
         #     "statusCode": 200,
