@@ -19,7 +19,7 @@ def lambda_bedrock(event, context):
             
             grade = int(request_body.get('grade', 0))
             subject = request_body.get('subject', '').strip()
-            language = request_body.get('subject', '').strip()
+            language = request_body.get('language', '').strip()
 
             mcq = int(request_body.get('mcq', 0))
             tf = int(request_body.get('tf', 0))
@@ -92,11 +92,11 @@ def lambda_bedrock(event, context):
             f"You are a specialized question generation system for {subject}, strictly adhering to provided test specifications "
             "and mirroring the patterns in sample questions.\n\n"
 
-            f"Generate {total_questions} original questions that perfectly match these requirements:\n\n"
+            f"Generate {mcq} multiple choice, {tf} true/false, {short} short answer questions, total of {total_questions} original questions that perfectly match these requirements:\n\n"
 
             "Specifications:\n"
             "1. Content Requirements:\n"
-            f"   - Language: {language}\n"
+            f"   - Language of questions must be: {language}\n"
             "   - All specified skills must be represented in every question type\n"
             "   - Question Types: Maintain exact ratio of MCQs/T/F/Short Answer from specifications\n"
             "   - Difficulty: Align with difficulty level\n\n"
@@ -246,6 +246,7 @@ def lambda_bedrock(event, context):
             item = {
                 "QuestionId": f"{key}_Q{question_id}",
                 "Subject_grade": f"{subject}_{grade}",
+                "language": language,
                 "subject": subject,
                 "grade": grade,
                 "questionText": q["questionText"],
