@@ -1,4 +1,3 @@
-// UploadSpecifications.jsx
 import {
   Avatar,
   Badge,

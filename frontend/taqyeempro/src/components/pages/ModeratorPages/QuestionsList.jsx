@@ -4,6 +4,7 @@ import {
   Text,
   Stack,
   Icon,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
@@ -14,27 +15,30 @@ export default function QuestionsList() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [loading, setLoading] = useState(true); // State to handle loading
 
-  const { gradeId } = useParams(); 
-
+  const { gradeId } = useParams();
   const gradeNumber = parseInt(gradeId?.replace("m", ""));
 
   useEffect(() => {
-    console.log(gradeId)
+    console.log(gradeId);
     fetch("https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/view-question")
       .then((res) => res.json())
       .then((data) => {
         setQuestions(data);
         if (!isNaN(gradeNumber)) {
-          const filtered = data.filter(q => Number(q.grade) === Number(gradeNumber));
+          const filtered = data.filter((q) => Number(q.grade) === Number(gradeNumber));
           setFilteredQuestions(filtered);
         } else {
           setFilteredQuestions(data); // fallback to all
         }
+        setLoading(false); // Set loading to false once data is fetched
       })
-      .catch((err) => console.error("Error fetching questions:", err));
+      .catch((err) => {
+        console.error("Error fetching questions:", err);
+        setLoading(false); // Set loading to false even if there's an error
+      });
   }, [gradeNumber]);
-  
 
   return (
     <Box maxW="6xl" mx="auto" mt={12} px={4} pb={12}>
@@ -45,7 +49,11 @@ export default function QuestionsList() {
         </Text>
       </Flex>
       <Stack gap={4}>
-        {filteredQuestions.length === 0 ? (
+        {loading ? ( // Show spinner while loading
+          <Flex justify="center" align="center" w="100%" h="200px">
+            <Spinner size="xl" />
+          </Flex>
+        ) : filteredQuestions.length === 0 ? ( // Show message if no questions found
           <Text>No questions found for Grade {gradeNumber}.</Text>
         ) : (
           filteredQuestions.map((q, idx) => (

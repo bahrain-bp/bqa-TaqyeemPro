@@ -1,0 +1,1022 @@
+[
+  {
+    "id": 1,
+    "name": "Ahmad Al-Umran Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 2,
+    "name": "Ahmad Al-Fateh Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 3,
+    "name": "Asma That Alnetaqain Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 4,
+    "name": "Aminah Bint Wahab Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 5,
+    "name": "Omaima Bint Al Noaman Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 6,
+    "name": "Ibn Al-Nafees Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 7,
+    "name": "Ibn Rushd Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 8,
+    "name": "Ibn Sina Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 9,
+    "name": "Ibn Tufail Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 10,
+    "name": "Abu Bakr Al-Siddeeq Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 11,
+    "name": "Abusaiba Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 12,
+    "name": "Abufiras Alhamadani Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 13,
+    "name": "Osama Bin Zaid Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 14,
+    "name": "Al-Andalus Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 15,
+    "name": "Al Estiqlal Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 16,
+    "name": "Al-Imam Al-Tabary Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 17,
+    "name": "Al-Imam Al-Gazali Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 18,
+    "name": "Al-imam Ali Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 19,
+    "name": "Al-Imam Malik Bin Anas Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 20,
+    "name": "Bahrain Vocational Secondary",
+    "type": "government"
+  },
+  {
+    "id": 21,
+    "name": "Al-Budaiyya Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 22,
+    "name": "Al-Budaiya Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 23,
+    "name": "Al-Busaiteen Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 24,
+    "name": "Al-Busaiteen Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 25,
+    "name": "BUSAITEEN INTERMEDIATE GIRLS",
+    "type": "government"
+  },
+  {
+    "id": 26,
+    "name": "Al-Busaiteen Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 27,
+    "name": "Al-Belad Al-Qadeem Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 28,
+    "name": "Al-Belad Al-Qadeem Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 29,
+    "name": "Al-Tadamon Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 30,
+    "name": "Al Ta'awon Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 31,
+    "name": "Al-Jabiriyia Secondary Technical Boys",
+    "type": "government"
+  },
+  {
+    "id": 32,
+    "name": "Al-Jazeera Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 33,
+    "name": "Al-Jasra Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 34,
+    "name": "Al-Hidd Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 35,
+    "name": "Al-Hidd Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 36,
+    "name": "Al-Hidd Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 37,
+    "name": "Al-Hidd Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 38,
+    "name": "Al-Hunaineya Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 39,
+    "name": "Al-Khaleej Al-Arabi Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 40,
+    "name": "Al-Khamis Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 41,
+    "name": "Al-Khansa Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 42,
+    "name": "Al-khawarizmi Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 43,
+    "name": "Al-Duraz Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 44,
+    "name": "Al-Duraz Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 45,
+    "name": "Al-Duraz Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 46,
+    "name": "Al-Dair Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 47,
+    "name": "Al-Dair Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 48,
+    "name": "Al-Daih Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 49,
+    "name": "Al-Razi Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 50,
+    "name": "Al-Rasheed Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 51,
+    "name": "Al-Riffa Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 52,
+    "name": "East Riffa Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 53,
+    "name": "East Riffa Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 54,
+    "name": "East Riffa Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 55,
+    "name": "East Riffa Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 56,
+    "name": "West Riffa Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 57,
+    "name": "West Rifaa Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 58,
+    "name": "West Riffa Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 59,
+    "name": "West Rifaa Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 60,
+    "name": "Al-Rawdha Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 61,
+    "name": "Al-Rawdha Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 62,
+    "name": "Al-Zallaq Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 63,
+    "name": "AlZallaq Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 64,
+    "name": "Al-Salam Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 65,
+    "name": "Al-Sanabis Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 66,
+    "name": "Al-Sanabis Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 67,
+    "name": "Al-Sanabis Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 68,
+    "name": "Al-Sehlah Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 69,
+    "name": "Al-Sehlah Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 70,
+    "name": "Al-Shorooq Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 71,
+    "name": "Sh. Abdul Aziz Bin Mohammed Al khalifa Sec. Boys",
+    "type": "government"
+  },
+  {
+    "id": 72,
+    "name": "Sh. Abdulla Bin Isa Al-Khalifa",
+    "type": "government"
+  },
+  {
+    "id": 73,
+    "name": "Sh. Isa Bin Ali Al-Khalifa Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 74,
+    "name": "Sh. Mohamed Bin Isa Al-Khalifa Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 75,
+    "name": "SHAIKHA MOZA BINT HAMAD AL KHALIFA PRIMARY GIRLS",
+    "type": "government"
+  },
+  {
+    "id": 76,
+    "name": "SHAIKHA MOZA BINT HAMAD AL KHALIFA INTERMEDIATE GIRLS",
+    "type": "government"
+  },
+  {
+    "id": 77,
+    "name": "SHAIKHA MOZA BINT HAMAD AL KHALIFA SECONDARY GIRLS",
+    "type": "government"
+  },
+  {
+    "id": 78,
+    "name": "Al-Safa Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 79,
+    "name": "Al-Orouba Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 80,
+    "name": "Al-Alaa Alhadhrami Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 81,
+    "name": "Al Ahad Al zaher Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 82,
+    "name": "Al Fateh Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 83,
+    "name": "Al-Farabi Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 84,
+    "name": "Al-Qadsiah Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 85,
+    "name": "Al-Qudes Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 86,
+    "name": "Al-Gudaibia Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 87,
+    "name": "Al-Qayrawan Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 88,
+    "name": "MALKIYA PRIMARY INTERMEDIATEGIRLS",
+    "type": "government"
+  },
+  {
+    "id": 89,
+    "name": "Al-Mutanabbi Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 90,
+    "name": "Al-Muharraq Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 91,
+    "name": "Muharraq Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 92,
+    "name": "Al-Muharraq Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 93,
+    "name": "Almustaqbal Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 94,
+    "name": "Al Marefa Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 95,
+    "name": "Religious Institute",
+    "type": "government"
+  },
+  {
+    "id": 96,
+    "name": "Primary Religious Institute",
+    "type": "government"
+  },
+  {
+    "id": 97,
+    "name": "Al-Jaafari Religious Institute",
+    "type": "government"
+  },
+  {
+    "id": 98,
+    "name": "Al-Monthir Bin Sawa Al-tamimi Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 99,
+    "name": "Al-Manhal Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 100,
+    "name": "NATIONAL CHARTER INTERMEDIATE BOYS",
+    "type": "government"
+  },
+  {
+    "id": 101,
+    "name": "Al-Nabeeh Saleh Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 102,
+    "name": "Al-Nuzha Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 103,
+    "name": "Al-Noaim Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 104,
+    "name": "Al-Noor Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 105,
+    "name": "Al-nowaidrat Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 106,
+    "name": "Al Hedayah Al Khalifiya Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 107,
+    "name": "Al Wadi Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 108,
+    "name": "Al Wafaa Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 109,
+    "name": "Al-Yarmook Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 110,
+    "name": "Um Alhassam Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 111,
+    "name": "Um Al-Qura Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 112,
+    "name": "Um Ayman Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 113,
+    "name": "Um Salama Intermediate Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 114,
+    "name": "Um Kalthoom Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 115,
+    "name": "Awal Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 116,
+    "name": "Badr Al-kobra Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 117,
+    "name": "Balqees Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 118,
+    "name": "Buri Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 119,
+    "name": "Buri Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 120,
+    "name": "Bait Al-Hekmah Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 121,
+    "name": "Tubli Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 122,
+    "name": "Tubli Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 123,
+    "name": "Jaber Bin Hayian Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 124,
+    "name": "Jidhafs Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 125,
+    "name": "Jidhafs Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 126,
+    "name": "Jidhafs Secondary Technical Boys",
+    "type": "government"
+  },
+  {
+    "id": 127,
+    "name": "Jidhafs Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 128,
+    "name": "Jaw Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 129,
+    "name": "Hassan Bin Thabit Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 130,
+    "name": "Hiteen Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 131,
+    "name": "Hafsa Um Almoumineen Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 132,
+    "name": "Halima Al-Saadeyya Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 133,
+    "name": "Khalid Bin Alwaleed Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 134,
+    "name": "Khadija Al-Kubra Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 135,
+    "name": "Khawlah Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 136,
+    "name": "Ghazi Al Gusaybi Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 137,
+    "name": "Rabiaa Al-Adaweyia Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 138,
+    "name": "Ruqaya Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 139,
+    "name": "Zannoobia Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 140,
+    "name": "Zainab Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 141,
+    "name": "Saar Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 142,
+    "name": "Sar Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 143,
+    "name": "Saar Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 144,
+    "name": "Safrah Primary Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 145,
+    "name": "Safra Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 146,
+    "name": "Saba Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 147,
+    "name": "Sitra Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 148,
+    "name": "Sitra Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 149,
+    "name": "Sitra Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 150,
+    "name": "Sitra Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 151,
+    "name": "Saad Bin Abi-Waqqas Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 152,
+    "name": "Sakeena Bint Al-Hussain Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 153,
+    "name": "Salmabad Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 154,
+    "name": "Samaheej Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 155,
+    "name": "Sh. Mohd Bin Khalifa al-khalifa Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 156,
+    "name": "Sumayia Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 157,
+    "name": "Sanad Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 158,
+    "name": "Sanad Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 159,
+    "name": "Shahrakkan Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 160,
+    "name": "Safeyia Bint Abdulmuttalib Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 161,
+    "name": "Salahuddeen AlayyoubiPrimary Boys",
+    "type": "government"
+  },
+  {
+    "id": 162,
+    "name": "Tareq Bin Zeyad Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 163,
+    "name": "Tulaitela Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 164,
+    "name": "Aisha Umm Al-Moemeneen Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 165,
+    "name": "AAli Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 166,
+    "name": "AAli Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 167,
+    "name": "Aali Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 168,
+    "name": "AAli Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 169,
+    "name": "Abdul Rahman Al-Dakhel Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 170,
+    "name": "Abdul Rahman Al-Nassir Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 171,
+    "name": "Othman Bin Affan Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 172,
+    "name": "Arad Primary Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 173,
+    "name": "Arad Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 174,
+    "name": "Arad Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 175,
+    "name": "Arad Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 176,
+    "name": "Askar Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 177,
+    "name": "Uqba Bin Nefea Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 178,
+    "name": "Ammar Bin Yaser Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 179,
+    "name": "Omar Bin Abdul Aziz Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 180,
+    "name": "Ain Jaloot Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 181,
+    "name": "Gharnata Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 182,
+    "name": "Fatima Bint Asad Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 183,
+    "name": "Fatima Bint Alkhattab Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 184,
+    "name": "Qurtoba Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 185,
+    "name": "Qalali Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 186,
+    "name": "Karrana Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 187,
+    "name": "Karzakan Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 188,
+    "name": "Hamad Town Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 189,
+    "name": "Hamad Town Primary Boys",
+    "type": "government"
+  },
+  {
+    "id": 190,
+    "name": "Hamad Town Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 191,
+    "name": "Hamad Town Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 192,
+    "name": "Hamad Town Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 193,
+    "name": "Hamad Town Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 194,
+    "name": "Isa town primary & intermediate boys school",
+    "type": "government"
+  },
+  {
+    "id": 195,
+    "name": "Isa Town Intermediate Girls",
+    "type": "government"
+  },
+  {
+    "id": 196,
+    "name": "Isa Town Intermediate Boys",
+    "type": "government"
+  },
+  {
+    "id": 197,
+    "name": "Isa Town Secondary Girls",
+    "type": "government"
+  },
+  {
+    "id": 198,
+    "name": "Isa Town Secondary Boys",
+    "type": "government"
+  },
+  {
+    "id": 199,
+    "name": "Mariam Bint Omran Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 200,
+    "name": "Sh.Khalifa Bin Salman Institute Of Technology",
+    "type": "government"
+  },
+  {
+    "id": 201,
+    "name": "Nasiba Bint Kaab Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 202,
+    "name": "Hajer Primary Girls",
+    "type": "government"
+  },
+  {
+    "id": 203,
+    "name": "Wadi alsail primary & intermediate boys school",
+    "type": "government"
+  },
+  {
+    "id": 204,
+    "name": "Yathreb Intermediate Girls",
+    "type": "government"
+  }
+]

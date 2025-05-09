@@ -25,7 +25,7 @@ export default function GeneratedQuestions() {
           >
             <Flex align="center" justify="space-between">
               <Text fontWeight="bold" fontSize="lg" color="gray.700">
-                Maths for grade 9
+                Maths for Grade 9
               </Text>
               <Flex align="center" gap={4}>
                 <LuArrowRight />
@@ -47,7 +47,7 @@ export default function GeneratedQuestions() {
           >
             <Flex align="center" justify="space-between">
               <Text fontWeight="bold" fontSize="lg" color="gray.700">
-                Maths for grade 12
+                Maths for Grade 12
               </Text>
               <Flex align="center" gap={4}>
                 <LuArrowRight />
@@ -55,6 +55,7 @@ export default function GeneratedQuestions() {
             </Flex>
           </Box>
         </Link>
+        
       </Stack>
     </Box>
   );
