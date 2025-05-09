@@ -17,19 +17,21 @@ def lambda_bedrock(event, context):
             # Get parameters from request body
             request_body = json.loads(event.get('body', '{}'))
             
-            # grade = int(request_body.get('grade', 0))
-            # subject = request_body.get('subject', '').strip()
-            # mcq = int(request_body.get('mcq', 0))
-            # tf = int(request_body.get('tf', 0))
-            # short = int(request_body.get('short', 0))
-            
-            grade = 12
-            subject = "Math"
-            language = "English"
+            grade = int(request_body.get('grade', 0))
+            subject = request_body.get('subject', '').strip()
+            language = request_body.get('subject', '').strip()
 
-            mcq = 2
-            tf = 2
-            short = 2
+            mcq = int(request_body.get('mcq', 0))
+            tf = int(request_body.get('tf', 0))
+            short = int(request_body.get('short', 0))
+            
+            # grade = 12
+            # subject = "Math"
+            # language = "English"
+
+            # mcq = 2
+            # tf = 2
+            # short = 2
             
         except json.JSONDecodeError:
             return {
