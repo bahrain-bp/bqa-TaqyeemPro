@@ -1,8 +1,6 @@
 import fitz  # PyMuPDF
 import random
 import string
-import boto3
-import json
 import json
 import boto3
 import re
@@ -25,12 +23,12 @@ def lambda_bedrock(event, context):
             # tf = int(request_body.get('tf', 0))
             # short = int(request_body.get('short', 0))
             
-            grade = 9
+            grade = 12
             subject = "Math"
             language = "English"
 
-            mcq = 4
-            tf = 4
+            mcq = 2
+            tf = 2
             short = 2
             
         except json.JSONDecodeError:
@@ -103,16 +101,16 @@ def lambda_bedrock(event, context):
 
             "2. Technical Requirements:\n"
             "   - Strictly text-based (no images/diagrams)\n"
-            "   - LaTeX equations ONLY for formulas\n"
+            #   - LaTeX equations ONLY for formulas\n"
             "   - Avoid opinion-based/ambiguous questions\n"
-            "   - Exclude the questionText from the equations\n"
+            "   - Avoid the questions thats rely on images, graphs or charts\n"
             "   - Prevent duplicate concepts with existing questions\n\n"
 
             "Format Requirements:\n"
             "1. JSON Structure:\n"
             "[{{\n"
             "  \"questionText\": \"Clear question...no equations here only text\",\n"
-            "  \"latexEquation\": \"\\\\frac{{a}}{{b}}\",\n"
+            #  \"latexEquation\": \"\\\\frac{{a}}{{b}}\",\n"
             "  \"equation\": \"a/b\",\n"
             "  \"skillType\": \"skill from specifications\",\n"
             "  \"questionType\": \"MCQ/T/F/Short answer\",\n"
@@ -136,7 +134,7 @@ def lambda_bedrock(event, context):
             "   - coverage of all specified skills\n"
             "   - Correct question type distribution\n"
             "   - No markdown/LaTeX outside equations\n"
-            "   - Valid JSON escaping (\\\\ for LaTeX)\n"
+            #   - Valid JSON escaping (\\\\ for LaTeX)\n"
             "   - Trimmed whitespace in all fields\n\n"
 
             "Output Instructions:\n"
@@ -179,7 +177,7 @@ def lambda_bedrock(event, context):
                 }
             ],
             "inferenceConfig": {
-                "max_new_tokens": 1000
+                "max_new_tokens": 2000
             }
         }
 
@@ -202,15 +200,30 @@ def lambda_bedrock(event, context):
         
         # fixxxx = re.sub(r'(?<!\\)\\(?![\\ntr"])', r'\\\\', s, output.strip(), flags=re.IGNORECASE)
         
+        # cleaned_output = re.sub(r"^```json\s*|\s*```$", "", output.strip(), flags=re.IGNORECASE)
+        
         cleaned_output = re.sub(r'^```json|```$', '', output.strip(), flags=re.IGNORECASE | re.MULTILINE)
-        cleaned_output1 = cleaned_output.strip()
+        cleaned_output = cleaned_output.strip()
 
-        final = json.loads(cleaned_output1)
-        # print("print: ",cleaned_output)
-        
-        # final = json.loads(cleaned_output)
-        
-        # print("printttttt: ", final)
+        # try:
+        final = json.loads(cleaned_output)
+        # except json.JSONDecodeError as e:
+        #     try:
+        #         # Attempt basic repairs
+        #         if not cleaned_output.endswith(']') and cleaned_output.startswith('['):
+        #             cleaned_output += ']'
+        #         elif not cleaned_output.endswith('}') and cleaned_output.startswith('{'):
+        #             cleaned_output += '}'
+        #         # Remove trailing commas
+        #         cleaned_output = re.sub(r',\s*(?=[]}])', '', cleaned_output)
+        #         final = json.loads(cleaned_output)
+        #     except json.JSONDecodeError:
+        #         raise RuntimeError(f"Invalid JSON format from model: {str(e)}")
+                
+        # print("vfetbtrgn: ",cleaned_output)
+                
+        # print(" . . . ., ", final)
+
         
         # json_string = output.replace('json', '').strip()  
         
@@ -220,12 +233,14 @@ def lambda_bedrock(event, context):
         
         # print("cleaned_loads: ",cleaned_loads) 
         
-        # إدخال الأسئلة في DynamoDB
+
+        # Insert questions into DynamoDB
         key = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
         question_id = 1
         inserted_count = 0
+        
         for q in final:
-            q["equation"] = q.get("equation", "").replace('\\', '\\\\')            
+            # Create base item
             item = {
                 "QuestionId": f"{key}_Q{question_id}",
                 "Subject_grade": f"{subject}_{grade}",
@@ -236,36 +251,47 @@ def lambda_bedrock(event, context):
                 "answerText": q["answerText"],
                 "mark": Decimal("1"),
                 "approved": False,
-                
                 "skillType": q["skillType"],
-                "latexEquation": q["latexEquation"],
-                "equation": q["equation"],
-                "option1": q["option1"],
-                "option2": q["option2"],
-                "option3": q["option3"],
-                "option4": q["option4"]
+                "equation": q.get("equation", "").replace('\\', '\\\\')
             }
-            
-            # Try to get pre-formed options list first
-            # if q["questionType"] == "MCQ":
-            #     options = []
-                
-            #     # Collect options in order
-            #     for i in range(1, 5):
-            #         opt_key = f"option{i}"
-            #         if opt_key in q:
-            #             options.append(q[opt_key])
-                
-            #     # Ensure exactly 4 options
-            #     if len(options) != 4:
-            #         options = ["Missing option"] * 4
-                
-            #     # Store as comma-separated string
-            #     item["options"] = ", ".join(options)
-            
+
+            # Handle options based on question type
+            question_type = q["questionType"].lower()
+            if question_type == "mcq":
+                item.update({
+                    "option1": q.get("option1", ""),
+                    "option2": q.get("option2", ""),
+                    "option3": q.get("option3", ""),
+                    "option4": q.get("option4", "")
+                })
+            elif question_type == "t/f":
+                item.update({
+                    "option1": q.get("option1", "True"),
+                    "option2": q.get("option2", "False")
+                })
+            # Short answers get no options
+
+            # Put item in DynamoDB
             table.put_item(Item=item)
             question_id += 1
             inserted_count += 1
+
+        #     # Try to get pre-formed options list first
+        #     # if q["QuestionType"] == "MCQ":
+        #     #     options = []
+                
+        #     #     # Collect options in order
+        #     #     for i in range(1, 5):
+        #     #         opt_key = f"option{i}"
+        #     #         if opt_key in q:
+        #     #             options.append(q[opt_key])
+                
+        #     #     # Ensure exactly 4 options
+        #     #     if len(options) != 4:
+        #     #         options = ["Missing option"] * 4
+                
+        #     #     # Store as comma-separated string
+        #     #     item["options"] = ", ".join(options)
 
         return {
             "statusCode": 200,
