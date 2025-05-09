@@ -9,7 +9,7 @@ import re
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ExamQuestions')
+table = dynamodb.Table('ExamQuestionsTesting')
 
 
 def lambda_bedrock(event, context):
@@ -105,21 +105,25 @@ def lambda_bedrock(event, context):
             "   - Strictly text-based (no images/diagrams)\n"
             "   - LaTeX equations ONLY for formulas\n"
             "   - Avoid opinion-based/ambiguous questions\n"
+            "   - Exclude the questionText from the equations\n"
             "   - Prevent duplicate concepts with existing questions\n\n"
 
             "Format Requirements:\n"
             "1. JSON Structure:\n"
             "[{{\n"
-            "  \"questionText\": \"Clear question stem...\",\n"
-            "  \"latexEquation\": \"\\frac{{a}}{{b}}\",\n"
-            "  \"skillType\": \"Exact skill from specifications\",\n"
+            "  \"questionText\": \"Clear question...no equations here only text\",\n"
+            "  \"latexEquation\": \"\\\\frac{{a}}{{b}}\",\n"
+            "  \"equation\": \"a/b\",\n"
+            "  \"skillType\": \"skill from specifications\",\n"
             "  \"questionType\": \"MCQ/T/F/Short answer\",\n"
             "  \"answerText\": \"Unambiguous correct answer\",\n"
-            "  \"options\": {{\n"
-            "    \"A\": \"...\", \"B\": \"...\", \"C\": \"...\", \"D\": \"...\"\n"
+            "  \"option1\": \"op1\",\n"
+            "  \"option2\": \"op2\",\n"
+            "  \"option3\": \"op3\",\n"
+            "  \"option4\": \"op4\",\n"
             "  }}\n"
             "}}]\n"
-            "```\n\n"
+            "\n\n"
 
             "2. Field Rules:\n"
             "   - For T/F: options {{\"A\": \"True\", \"B\": \"False\"}}\n"
@@ -132,7 +136,7 @@ def lambda_bedrock(event, context):
             "   - coverage of all specified skills\n"
             "   - Correct question type distribution\n"
             "   - No markdown/LaTeX outside equations\n"
-            "   - Valid JSON escaping (\ for LaTeX)\n"
+            "   - Valid JSON escaping (\\\\ for LaTeX)\n"
             "   - Trimmed whitespace in all fields\n\n"
 
             "Output Instructions:\n"
@@ -141,22 +145,22 @@ def lambda_bedrock(event, context):
             "3. Maintain consistent difficulty curve\n"
             "4. Ensure JSON is COMPLETE and WELL-FORMED. Do NOT truncate the output. Finish all arrays and objects.\n\n"
 
-            "Examples:\n"
-            "[\n"
-            "  {{\n"
-            "    \"questionText\": \"Clear question stem...\",\n"
-            "    \"latexEquation\": \"\\frac{{a}}{{b}} (if required)\",\n"
-            "    \"skillType\": \"Exact skill from specifications\",\n"
-            "    \"questionType\": \"MCQ\",\n"
-            "    \"answerText\": \"MCQ content...\",\n"
-            "    \"options\": {{\n"
-            "      \"A\": \"MCQ content...\",\n"
-            "      \"B\": \"...\",\n"
-            "      \"C\": \"...\",\n"
-            "      \"D\": \"...\"\n"
-            "    }}\n"
-            "  }}\n"
-            "]\n\n"
+            # "Examples:\n"
+            # "[\n"
+            # "  {{\n"
+            # "    \"questionText\": \"Clear question stem...\",\n"
+            # "    \"latexEquation\": \"\\\\frac{{a}}{{b}} (if required)\",\n"
+            # "    \"skillType\": \"Exact skill from specifications\",\n"
+            # "    \"questionType\": \"MCQ\",\n"
+            # "    \"answerText\": \"MCQ content...\",\n"
+            # "    \"options\": {{\n"
+            # "      \"A\": \"MCQ content...\",\n"
+            # "      \"B\": \"...\",\n"
+            # "      \"C\": \"...\",\n"
+            # "      \"D\": \"...\"\n"
+            # "    }}\n"
+            # "  }}\n"
+            # "]\n\n"
 
             "The test specifications Content:\n"
             f"{extracted_text.strip()}\n\n"
@@ -196,10 +200,17 @@ def lambda_bedrock(event, context):
             .get("text", "No text found")
         )
         
-        cleaned_output = re.sub(r"^```json\s*|\s*```$", "", output.strip(), flags=re.IGNORECASE)
+        # fixxxx = re.sub(r'(?<!\\)\\(?![\\ntr"])', r'\\\\', s, output.strip(), flags=re.IGNORECASE)
+        
+        cleaned_output = re.sub(r'^```json|```$', '', output.strip(), flags=re.IGNORECASE | re.MULTILINE)
+        cleaned_output1 = cleaned_output.strip()
 
-        final = json.loads(cleaned_output)
-
+        final = json.loads(cleaned_output1)
+        # print("print: ",cleaned_output)
+        
+        # final = json.loads(cleaned_output)
+        
+        # print("printttttt: ", final)
         
         # json_string = output.replace('json', '').strip()  
         
@@ -214,34 +225,43 @@ def lambda_bedrock(event, context):
         question_id = 1
         inserted_count = 0
         for q in final:
+            q["equation"] = q.get("equation", "").replace('\\', '\\\\')            
             item = {
-                "questionId": f"{key}_Q{question_id}",
-                "subject_grade": f"{subject}_{grade}",
+                "QuestionId": f"{key}_Q{question_id}",
+                "Subject_grade": f"{subject}_{grade}",
                 "subject": subject,
                 "grade": grade,
                 "questionText": q["questionText"],
                 "questionType": q["questionType"],
                 "answerText": q["answerText"],
                 "mark": Decimal("1"),
-                "approved": False
+                "approved": False,
+                
+                "skillType": q["skillType"],
+                "latexEquation": q["latexEquation"],
+                "equation": q["equation"],
+                "option1": q["option1"],
+                "option2": q["option2"],
+                "option3": q["option3"],
+                "option4": q["option4"]
             }
             
             # Try to get pre-formed options list first
-            if q["questionType"] == "MCQ":
-                options = []
+            # if q["questionType"] == "MCQ":
+            #     options = []
                 
-                # Collect options in order
-                for i in range(1, 5):
-                    opt_key = f"option{i}"
-                    if opt_key in q:
-                        options.append(q[opt_key])
+            #     # Collect options in order
+            #     for i in range(1, 5):
+            #         opt_key = f"option{i}"
+            #         if opt_key in q:
+            #             options.append(q[opt_key])
                 
-                # Ensure exactly 4 options
-                if len(options) != 4:
-                    options = ["Missing option"] * 4
+            #     # Ensure exactly 4 options
+            #     if len(options) != 4:
+            #         options = ["Missing option"] * 4
                 
-                # Store as comma-separated string
-                item["options"] = ", ".join(options)
+            #     # Store as comma-separated string
+            #     item["options"] = ", ".join(options)
             
             table.put_item(Item=item)
             question_id += 1
