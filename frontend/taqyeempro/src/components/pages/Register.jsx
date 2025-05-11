@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -9,17 +9,24 @@ import {
   HStack,
   Separator,
   Link as ChakraLink,
+  RadioGroup,
+  createListCollection,
+  Select,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import StudentRegister from "../registeration-forms/StudentRegister";
+import ModeratorRegister from "../registeration-forms/ModeratorRegister";
 
 export default function Register() {
+  const [selectedRole, setSelectedRole] = useState("student");
+
   return (
     <Box display="flex" alignItems="center" justifyContent="center" px={6}>
       <Box p={10} rounded="xl" w={{ base: "100%", sm: "500px" }}>
         <Heading
           mb={4}
           size="6xl"
-          fontWeight={"bold"} 
+          fontWeight={"bold"}
           textAlign="center"
           color="gray.800"
         >
@@ -31,53 +38,29 @@ export default function Register() {
 
         {/* Register Form */}
         <VStack spacing={4}>
-          {/* First Name and Last Name */}
-          <HStack spacing={4} w="full">
-            <Input placeholder="First Name" size="lg" background={"white"} />
-            <Input placeholder="Last Name" size="lg" background={"white"} />
-          </HStack>
-
-          {/* Date of Birth */}
-          <Input
-            placeholder="Date of Birth"
-            size="lg"
-            type="date"
-            background={"white"}
-          />
-
-          {/* Grade */}
-          <Input placeholder="Grade" size="lg" background={"white"} />
-
-          {/* School Name */}
-          <Input placeholder="School Name" size="lg" background={"white"} />
-
-          {/* Email */}
-          <Input
-            placeholder="Email"
-            type="email"
-            size="lg"
-            background={"white"}
-          />
-
-          {/* Password */}
-          <Input
-            placeholder="Password"
-            type="password"
-            size="lg"
-            background={"white"}
-          />
-
-          {/* Register Button */}
-          <Button
-            bg="red.500"
-            color="white"
-            size="lg"
-            w="full"
-            _hover={{ bg: "black" }}
+          <RadioGroup.Root
+            pb={5}
+            defaultValue="student"
+            onChange={(value) => setSelectedRole(value.target.defaultValue)}
+            value={selectedRole}
           >
-            Register
-          </Button>
+            <HStack gap="6">
+              <RadioGroup.Item value="student">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Student</RadioGroup.ItemText>
+              </RadioGroup.Item>
+              <RadioGroup.Item value="moderator">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Moderator</RadioGroup.ItemText>
+              </RadioGroup.Item>
+            </HStack>
+          </RadioGroup.Root>
         </VStack>
+
+        {/* Render form based on the selected role */}
+        {selectedRole == "student" ? <StudentRegister/> : <ModeratorRegister/>}
 
         {/* OR Separator */}
         <HStack m={5}>

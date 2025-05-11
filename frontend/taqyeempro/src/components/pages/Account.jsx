@@ -12,7 +12,7 @@ import {
 
 export default function Account() {
   return (
-    <Box bg="gray.50" p={8}>
+    <Box p={8} maxW={"5xl"} mx={"auto"}>
       {/* Header */}
       <Box 
         bg="white" 
@@ -56,12 +56,6 @@ export default function Account() {
       >
         <Flex justify="space-between" mb={4}>
           <Text fontWeight="bold" fontSize="lg">Personal Information</Text>
-          <Button 
-            size="sm" 
-            colorScheme="orange" 
-          >
-            Edit
-          </Button>
         </Flex>
 
         <Grid 
@@ -89,6 +83,10 @@ export default function Account() {
             <Text>Phone Number</Text>
             <Text fontWeight="bold">(+973) 33928495</Text>
           </GridItem>
+          <GridItem>
+            <Text>Grade</Text>
+            <Text fontWeight="bold">9</Text>
+          </GridItem>
 
         </Grid>
       </Box>
@@ -104,12 +102,6 @@ export default function Account() {
       >
         <Flex justify="space-between" mb={4}>
           <Text fontWeight="bold" fontSize="lg">Address</Text>
-          <Button 
-            size="sm" 
-            colorScheme="gray" 
-          >
-            Edit
-          </Button>
         </Flex>
 
         <Grid 
