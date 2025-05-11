@@ -7,32 +7,45 @@ import re
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ExamQuestionsTesting')
+table = dynamodb.Table('ExamQuestionsTestingg')
 
 
 def lambda_bedrock(event, context):
     try:
+
         # Parse input from API Gateway
         try:
             # Get parameters from request body
-            request_body = json.loads(event.get('body', '{}'))
-            
+            # request_body = json.loads(event.get('body', '{}'))
+            request_body = event
+
             grade = int(request_body.get('grade', 0))
             subject = request_body.get('subject', '').strip()
             language = request_body.get('language', '').strip()
+            file_key = request_body.get('file_key', '').strip()
+            quesions = int(request_body.get('quesions', 0))
 
-            mcq = int(request_body.get('mcq', 0))
-            tf = int(request_body.get('tf', 0))
-            short = int(request_body.get('short', 0))
+
+            # mcq = int(request_body.get('mcq', 0))
+            # tf = int(request_body.get('tf', 0))
+            # short = int(request_body.get('short', 0))
             
             # grade = 12
             # subject = "Math"
             # language = "English"
 
-            # mcq = 2
-            # tf = 2
-            # short = 2
-            
+            mcq = int(quesions/3)
+            tf = int(quesions/3)
+            short = int(quesions/3)
+
+
+            total_int = int(mcq + tf + short)
+            remaning = int(quesions - total_int)
+
+            if remaning > 0 :
+                mcq += remaning
+
+
         except json.JSONDecodeError:
             return {
                 "statusCode": 400,
@@ -59,8 +72,9 @@ def lambda_bedrock(event, context):
                 "body": json.dumps({"errors": validation_errors})
             }
 
-        total_questions = mcq + tf + short
-        if total_questions <= 0:
+        # total_questions = int(quesions)
+        #total_questions = mcq + tf + short
+        if quesions <= 0:
             return {
                 "statusCode": 400,
                 "body": json.dumps({"error": "At least one question type must have a positive count"})
@@ -71,7 +85,7 @@ def lambda_bedrock(event, context):
         
         # S3 bucket and file details
         bucket_name = "taqyeemprostack-curriculumdocsbucketb1075275-dfuvkyudisit"
-        file_key = "G"+str(grade)+"-"+subject+".pdf"
+        #file_key = "G"+str(grade)+"-"+subject+".pdf"
         #file_key = "G9-Math.pdf" #must taken from event
         #file_key = f"G{str(grade)}-{subject}.pdf"
 
@@ -92,7 +106,7 @@ def lambda_bedrock(event, context):
             f"You are a specialized question generation system for {subject}, strictly adhering to provided test specifications "
             "and mirroring the patterns in sample questions.\n\n"
 
-            f"Generate {mcq} multiple choice, {tf} true/false, {short} short answer questions, total of {total_questions} original questions that perfectly match these requirements:\n\n"
+            f"Generate {mcq} multiple choice, {tf} true/false, {short} short answer questions, total of {quesions} original questions that perfectly match these requirements:\n\n"
 
             "Specifications:\n"
             "1. Content Requirements:\n"
@@ -179,7 +193,7 @@ def lambda_bedrock(event, context):
                 }
             ],
             "inferenceConfig": {
-                "max_new_tokens": 2000
+                "max_new_tokens": 5000
             }
         }
 
@@ -238,7 +252,7 @@ def lambda_bedrock(event, context):
 
         # Insert questions into DynamoDB
         key = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-        question_id = 1
+        question_id = 100
         inserted_count = 0
         
         for q in final:
@@ -279,22 +293,22 @@ def lambda_bedrock(event, context):
             question_id += 1
             inserted_count += 1
 
-        #     # Try to get pre-formed options list first
-        #     # if q["QuestionType"] == "MCQ":
-        #     #     options = []
+            # Try to get pre-formed options list first
+            # if q["QuestionType"] == "MCQ":
+            #     options = []
                 
-        #     #     # Collect options in order
-        #     #     for i in range(1, 5):
-        #     #         opt_key = f"option{i}"
-        #     #         if opt_key in q:
-        #     #             options.append(q[opt_key])
+            #     # Collect options in order
+            #     for i in range(1, 5):
+            #         opt_key = f"option{i}"
+            #         if opt_key in q:
+            #             options.append(q[opt_key])
                 
-        #     #     # Ensure exactly 4 options
-        #     #     if len(options) != 4:
-        #     #         options = ["Missing option"] * 4
+            #     # Ensure exactly 4 options
+            #     if len(options) != 4:
+            #         options = ["Missing option"] * 4
                 
-        #     #     # Store as comma-separated string
-        #     #     item["options"] = ", ".join(options)
+            #     # Store as comma-separated string
+            #     item["options"] = ", ".join(options)
 
         return {
             "statusCode": 200,
