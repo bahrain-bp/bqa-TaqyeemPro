@@ -19,9 +19,6 @@ import ModeratorRegister from "../registeration-forms/ModeratorRegister";
 
 export default function Register() {
   const [selectedRole, setSelectedRole] = useState("student");
-  useEffect(() => {
-    console.log(selectedRole);
-  }, [selectedRole])
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center" px={6}>
