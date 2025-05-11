@@ -16,6 +16,7 @@
     "@fontsource/inter": "^5.2.5",
     "@fontsource/newsreader": "^5.2.7",
     "@tailwindcss/vite": "^4.1.4",
+    "better-react-mathjax": "^2.3.0",
     "chart.js": "^4.4.9",
     "framer-motion": "^12.10.1",
     "lucide-react": "^0.507.0",
