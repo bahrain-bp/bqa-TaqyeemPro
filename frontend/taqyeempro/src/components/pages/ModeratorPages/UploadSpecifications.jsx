@@ -68,7 +68,12 @@ export default function UploadSpecifications() {
     const subjectLabel = subject ? subject.value : "Subject";
     const gradeLabel = grade ? grade.value : "9";
     const fileExtension = file.name.split(".").pop();
-    const fileName = `G${gradeLabel}-${subjectLabel}.${fileExtension}`;
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = now.toLocaleString("default", { month: "long" });
+    const year = now.getFullYear();
+    const dateString = `${day}${month}${year}`;
+    const fileName = `G${gradeLabel}-${subjectLabel}-${dateString}.${fileExtension}`;
 
     setIsUploading(true);
 

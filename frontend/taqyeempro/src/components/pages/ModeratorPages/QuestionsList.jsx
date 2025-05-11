@@ -15,7 +15,7 @@ export default function QuestionsList() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [filteredQuestions, setFilteredQuestions] = useState([]);
-  const [loading, setLoading] = useState(true); // State to handle loading
+  const [loading, setLoading] = useState(true); 
 
   const { gradeId } = useParams();
   const gradeNumber = parseInt(gradeId?.replace("m", ""));
