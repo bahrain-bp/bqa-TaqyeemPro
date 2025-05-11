@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Box,
-  VStack,
-  Heading,
-  SimpleGrid,
-  Button,
-} from "@chakra-ui/react";
+import { Box, VStack, Heading, SimpleGrid, Button } from "@chakra-ui/react";
 import { LuDollarSign } from "react-icons/lu";
 import { Bar, Pie } from "react-chartjs-2";
 import {
@@ -18,6 +12,7 @@ import {
   BarElement,
 } from "chart.js";
 import UploadSpecifications from "./UploadSpecifications";
+import GenerateQuestions from "./GenerateQuestions";
 
 // Register chart elements
 ChartJS.register(
@@ -95,25 +90,14 @@ export default function ModeratorDashboard() {
             </Heading>
           </Box>
         </VStack>
+        <SimpleGrid textAlign="center" rowGap={5}>
+          <UploadSpecifications />
 
-        <Box
-          bg="white"
-          p={7}
-          rounded="md"
-          borderWidth="1px"
-          textAlign="center"
-          colSpan={{ base: 1, md: 3 }}
-        >
-          <Heading fontSize={24} fontWeight="bold" color="gray.600">
-            Submission Breakdown
-          </Heading>
-          <Box display="flex" justifyContent="center" height={"xs"} mt={4}>
-            <Pie data={pieData} />
-          </Box>
-        </Box>
+          <GenerateQuestions />
+        </SimpleGrid>
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} columnGap={5} rowGap={5}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} columnGap={5}>
         {/* Monthly Exams Bar Chart */}
         <Box
           bg="white"
@@ -130,22 +114,15 @@ export default function ModeratorDashboard() {
             <Bar data={barData} height={150} />
           </Box>
         </Box>
-        <SimpleGrid my={5} textAlign="center" rowGap={5}>
-          <UploadSpecifications />
-
-          <Button
-            w={"full"}
-            h={"full"}
-            fontWeight={"bold"}
-            fontSize={"lg"}
-            variant={"subtle"}
-            colorPalette={"blue"}
-            as={"a"}
-            href="generated-questions"
-          >
-            Generated Questions
-          </Button>
-        </SimpleGrid>
+        <Box bg="white" rounded="md" borderWidth="1px" textAlign="center" my={5}
+          p={7}>
+          <Heading fontSize={24} fontWeight="bold" color="gray.600">
+            Question Breakdown
+          </Heading>
+          <Box display="flex" justifyContent="center" height={"xs"} mt={4}>
+            <Pie data={pieData} />
+          </Box>
+        </Box>
       </SimpleGrid>
     </Box>
   );

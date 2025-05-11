@@ -4,6 +4,8 @@ const cdk = require('aws-cdk-lib');
 const { TaqyeemProStack } = require('../lib/taqyeem_pro-stack');
 const { DynamodbStack } = require('../lib/DynamodbStack');
 const { CognitoTaqyeemProStack } = require('../lib/cognito');
+const { TaqyeemProStacktest } = require('../lib/taqyeem_pro-stack_test');
+
 
 const app = new cdk.App();
 new TaqyeemProStack(app, 'TaqyeemProStack', {
@@ -24,5 +26,8 @@ new TaqyeemProStack(app, 'TaqyeemProStack', {
 
 new DynamodbStack(app, 'DynamodbStack');
 new CognitoTaqyeemProStack(app, 'CognitoTaqyeemProStack', {
+  
+});
+new TaqyeemProStacktest(app, 'TaqyeemProStacktest', {
   
 });

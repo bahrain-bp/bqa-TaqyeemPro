@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -9,14 +9,21 @@ import {
   HStack,
   Separator,
   Link as ChakraLink,
+  RadioGroup,
+  createListCollection,
+  Select,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { fetchAuthSession, signUp, confirmSignUp, signIn } from 'aws-amplify/auth';
 import { useState } from "react";
 import { useRegisterLogic } from '../../Logic/Register';
 
+import StudentRegister from "../registeration-forms/StudentRegister";
+import ModeratorRegister from "../registeration-forms/ModeratorRegister";
 
 export default function Register() {
+  const [selectedRole, setSelectedRole] = useState("student");
+
   const {
     step, message, code, formData,
     setCode, handleChange,
@@ -40,6 +47,25 @@ export default function Register() {
         </Text>
 
         <VStack spacing={4}>
+          <RadioGroup.Root
+            pb={5}
+            defaultValue="student"
+            onChange={(value) => setSelectedRole(value.target.defaultValue)}
+            value={selectedRole}
+          >
+            <HStack gap="6">
+              <RadioGroup.Item value="student">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Student</RadioGroup.ItemText>
+              </RadioGroup.Item>
+              <RadioGroup.Item value="moderator">
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>Moderator</RadioGroup.ItemText>
+              </RadioGroup.Item>
+            </HStack>
+          </RadioGroup.Root>
           {step === "signup" && (
             <>
               <HStack spacing={4} w="full">
@@ -113,6 +139,9 @@ export default function Register() {
             {message}
           </Text>
         )}
+
+        {/* Render form based on the selected role */}
+        {selectedRole == "student" ? <StudentRegister/> : <ModeratorRegister/>}
 
         {/* OR Separator */}
         <HStack m={5}>

@@ -60,7 +60,7 @@ export default function StudentDashboard() {
       {/* Welcome Header */}
       <Box mb={10} textAlign="center">
         <Heading as="h1" size="xl" color="blue.800">
-          Welcome, Ahmed
+          Welcome, Ebrahim
         </Heading>
         <Text fontSize="lg" color="gray.600">
           Track your exams and progress
