@@ -11,8 +11,18 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { fetchAuthSession, signUp, confirmSignUp, signIn } from 'aws-amplify/auth';
+import { useState } from "react";
+import { useRegisterLogic } from '../../Logic/Register';
+
 
 export default function Register() {
+  const {
+    step, message, code, formData,
+    setCode, handleChange,
+    signUpUser, confirmUser, signInUser
+  } = useRegisterLogic();
+  
   return (
     <Box display="flex" alignItems="center" justifyContent="center" px={6}>
       <Box p={10} rounded="xl" w={{ base: "100%", sm: "500px" }}>
@@ -29,55 +39,80 @@ export default function Register() {
           Create your Taqyeem Pro account
         </Text>
 
-        {/* Register Form */}
         <VStack spacing={4}>
-          {/* First Name and Last Name */}
-          <HStack spacing={4} w="full">
-            <Input placeholder="First Name" size="lg" background={"white"} />
-            <Input placeholder="Last Name" size="lg" background={"white"} />
-          </HStack>
+          {step === "signup" && (
+            <>
+              <HStack spacing={4} w="full">
+                <Input name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} size="lg" background={"white"} />
+                <Input name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} size="lg" background={"white"} />
+              </HStack>
 
-          {/* Date of Birth */}
-          <Input
-            placeholder="Date of Birth"
-            size="lg"
-            type="date"
-            background={"white"}
-          />
+              <Input name="dob" type="date" placeholder="Date of Birth" value={formData.dob} onChange={handleChange} size="lg" background={"white"} />
+              <Input name="gender" placeholder="Gender" value={formData.gender} onChange={handleChange} size="lg" background={"white"} />
+              <Input name="grade" placeholder="Grade" value={formData.grade} onChange={handleChange} size="lg" background={"white"} />
+              <Input name="school" placeholder="School Name" value={formData.school} onChange={handleChange} size="lg" background={"white"} />
+              <Input name="email" type="email" placeholder="Email" value={formData.email} onChange={handleChange} size="lg" background={"white"} />
+              <Input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} size="lg" background={"white"} />
 
-          {/* Grade */}
-          <Input placeholder="Grade" size="lg" background={"white"} />
+              <Button
+                bg="red.500"
+                color="white"
+                size="lg"
+                w="full"
+                _hover={{ bg: "black" }}
+                onClick={signUpUser}
+              >
+                Register
+              </Button>
+            </>
+          )}
 
-          {/* School Name */}
-          <Input placeholder="School Name" size="lg" background={"white"} />
+          {step === "confirm" && (
+            <>
+              <Input
+                name="code"
+                placeholder="Confirmation Code"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                size="lg"
+                background={"white"}
+              />
+              <Button
+                bg="blue.500"
+                color="white"
+                size="lg"
+                w="full"
+                _hover={{ bg: "black" }}
+                onClick={confirmUser}
+              >
+                Confirm
+              </Button>
+            </>
+          )}
 
-          {/* Email */}
-          <Input
-            placeholder="Email"
-            type="email"
-            size="lg"
-            background={"white"}
-          />
-
-          {/* Password */}
-          <Input
-            placeholder="Password"
-            type="password"
-            size="lg"
-            background={"white"}
-          />
-
-          {/* Register Button */}
-          <Button
-            bg="red.500"
-            color="white"
-            size="lg"
-            w="full"
-            _hover={{ bg: "black" }}
-          >
-            Register
-          </Button>
+          {step === "signin" && (
+            <>
+              <Input name="email" placeholder="Email" value={formData.email} onChange={handleChange} size="lg" background={"white"} />
+              <Input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleChange} size="lg" background={"white"} />
+              <Button
+                bg="green.500"
+                color="white"
+                size="lg"
+                w="full"
+                _hover={{ bg: "black" }}
+                onClick={signInUser}
+              >
+                Sign In
+              </Button>
+            </>
+          )}
         </VStack>
+
+        {message && (
+          <Text mt={4} textAlign="center" color="gray.700" fontWeight="medium">
+            {message}
+          </Text>
+        )}
 
         {/* OR Separator */}
         <HStack m={5}>
