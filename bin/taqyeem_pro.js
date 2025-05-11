@@ -2,7 +2,7 @@
 
 const cdk = require('aws-cdk-lib');
 const { TaqyeemProStack } = require('../lib/taqyeem_pro-stack');
-const { TaqyeemProStacktest } = require('../lib/taqyeem_pro-stack_test');
+const { TaqyeemPro_KB_Stacktest  } = require('../lib/KnowledgeBase_Test');
 
 
 const app = new cdk.App();
@@ -22,6 +22,6 @@ new TaqyeemProStack(app, 'TaqyeemProStack', {
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
-new TaqyeemProStacktest(app, 'TaqyeemProStacktest', {
+new TaqyeemPro_KB_Stacktest (app, 'TaqyeemPro_KB_Stacktest ', {
   
 });
