@@ -62,8 +62,8 @@ def lambda_bedrock(event, context):
         validation_errors = []
         if not subject:
             validation_errors.append("Subject is required")
-        if grade != 1 or grade != 12:
-            validation_errors.append("Grade must be 1 or 12")
+        # if grade != 9 or grade != 12:
+        #     validation_errors.append("Grade must be 9 or 12")
         if mcq < 0 or tf < 0 or short < 0:
             validation_errors.append("Question counts cannot be negative")
 
@@ -252,9 +252,8 @@ def lambda_bedrock(event, context):
 
         # Insert questions into DynamoDB
         key = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-        question_id = 100
+        question_id = 1
         inserted_count = 0
-        dateTime = datetime.datetime.now()
 
         for q in final:
             # Create base item
@@ -264,7 +263,7 @@ def lambda_bedrock(event, context):
                 "language": language,
                 "subject": subject,
                 "grade": grade,
-                "date & time": dateTime,
+                "date & time": datetime.datetime.utcnow().isoformat(),  # Added UTC timestamp
                 "questionText": q["questionText"],
                 "questionType": q["questionType"],
                 "answerText": q["answerText"],
