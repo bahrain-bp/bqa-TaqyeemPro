@@ -5,9 +5,10 @@ import json
 import boto3
 import re
 from decimal import Decimal
+import datetime
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ExamQuestionsTestingg')
+table = dynamodb.Table('ExamQuestions')
 
 
 def lambda_bedrock(event, context):
@@ -61,8 +62,8 @@ def lambda_bedrock(event, context):
         validation_errors = []
         if not subject:
             validation_errors.append("Subject is required")
-        if grade < 1 or grade > 12:
-            validation_errors.append("Grade must be between 1 and 12")
+        if grade != 1 or grade != 12:
+            validation_errors.append("Grade must be 1 or 12")
         if mcq < 0 or tf < 0 or short < 0:
             validation_errors.append("Question counts cannot be negative")
 
@@ -103,10 +104,9 @@ def lambda_bedrock(event, context):
         doc.close()
 
         prompt = (
-            f"You are a specialized question generation system for {subject}, strictly adhering to provided test specifications "
-            "and mirroring the patterns in sample questions.\n\n"
+            f"You are a specialized question generation system for {subject} subject,"
 
-            f"Generate {mcq} multiple choice, {tf} true/false, {short} short answer questions, total of {quesions} original questions that perfectly match these requirements:\n\n"
+            f"Generate {mcq} multiple choice, {tf} true/false, {short} short answer questions, total of {quesions} questions that perfectly match these requirements:\n\n"
 
             "Specifications:\n"
             "1. Content Requirements:\n"
@@ -118,9 +118,9 @@ def lambda_bedrock(event, context):
             "2. Technical Requirements:\n"
             "   - Strictly text-based (no images/diagrams)\n"
             #   - LaTeX equations ONLY for formulas\n"
-            "   - Avoid opinion-based/ambiguous questions\n"
+            #   - Avoid opinion-based/ambiguous questions\n"
             "   - Avoid the questions thats rely on images, graphs or charts\n"
-            "   - Prevent duplicate concepts with existing questions\n\n"
+            #   - Prevent duplicate concepts with existing questions\n\n"
 
             "Format Requirements:\n"
             "1. JSON Structure:\n"
@@ -156,8 +156,8 @@ def lambda_bedrock(event, context):
             "Output Instructions:\n"
             "1. Generate ONLY raw JSON - no commentary\n"
             "2. Validate against schema before returning\n"
-            "3. Maintain consistent difficulty curve\n"
-            "4. Ensure JSON is COMPLETE and WELL-FORMED. Do NOT truncate the output. Finish all arrays and objects.\n\n"
+            #3. Maintain consistent difficulty curve\n"
+            "3. Ensure JSON is COMPLETE and WELL-FORMED. Do NOT truncate the output. Finish all arrays and objects.\n\n"
 
             # "Examples:\n"
             # "[\n"
@@ -254,7 +254,8 @@ def lambda_bedrock(event, context):
         key = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
         question_id = 100
         inserted_count = 0
-        
+        dateTime = datetime.datetime.now()
+
         for q in final:
             # Create base item
             item = {
@@ -263,6 +264,7 @@ def lambda_bedrock(event, context):
                 "language": language,
                 "subject": subject,
                 "grade": grade,
+                "date & time": dateTime,
                 "questionText": q["questionText"],
                 "questionType": q["questionType"],
                 "answerText": q["answerText"],
