@@ -252,7 +252,7 @@ def lambda_bedrock(event, context):
 
         # Insert questions into DynamoDB
         key = ''.join(random.choices(string.ascii_letters + string.digits, k=5))
-        question_id = 1
+        question_id = 100
         inserted_count = 0
         
         for q in final:
