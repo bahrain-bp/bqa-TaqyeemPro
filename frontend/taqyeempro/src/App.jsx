@@ -10,7 +10,7 @@ function App() {
     <>
       <NonUserRoutes/>
       {/* <StudentRoutes/> */}
-      {/* <ModeratorRoutes/> */}
+      {/*<ModeratorRoutes/>*/}
     </>
   );
 }
