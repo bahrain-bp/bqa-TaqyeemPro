@@ -15,13 +15,19 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useRegisterLogic } from "../../Logic/Register";
 
-export default function ModeratorRegister() {
+export default function ModeratorRegister({ role }) {
+  const {
+    step, message, code,
+    setCode, signUpUser, confirmUser, signInUser,
+    setFormData, email, password
+  } = useRegisterLogic(role); // Use the passed role = 'moderator'
+
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -35,14 +41,6 @@ export default function ModeratorRegister() {
     },
   });
 
-  const genderValue = watch("gender");
-
-  const gradesList = createListCollection({
-    items: [
-      { label: "Grade 9", value: "G9" },
-      { label: "Grade 12", value: "G12" },
-    ],
-  });
   const genderList = createListCollection({
     items: [
       { label: "Male", value: "male" },
@@ -50,13 +48,15 @@ export default function ModeratorRegister() {
     ],
   });
 
-  const onSubmit = (data) => {
-    console.log("Submitted data:", data);
+  const handleSignupSubmit = (data) => {
+    setFormData(data);
+    signUpUser(data); // Send data to Cognito using the moderator pool
   };
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      {step === 'signup' && (
+        <form onSubmit={handleSubmit(handleSignupSubmit)}>
           <VStack spacing={4}>
             {/* First Name and Last Name */}
             <HStack spacing={4} w="full">
@@ -172,6 +172,39 @@ export default function ModeratorRegister() {
             </Button>
           </VStack>
         </form>
+      )}
+
+      {step === 'confirm' && (
+        <VStack spacing={4} w="full">
+          <Input
+            name="code"
+            placeholder="Confirmation Code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            size="lg"
+            bg="white"
+          />
+          <Button colorScheme="blue" w="full" onClick={confirmUser}>
+            Confirm
+          </Button>
+        </VStack>
+      )}
+
+      {step === 'signin' && (
+        <VStack spacing={4} w="full">
+          <Input name="email" value={email} readOnly bg="white" />
+          <Input name="password" type="password" value={password} readOnly bg="white" />
+          <Button colorScheme="green" w="full" onClick={signInUser}>
+            Sign In
+          </Button>
+        </VStack>
+      )}
+
+      {message && (
+        <Box mt={4} p={2} color="gray.700" textAlign="center">
+          {message}
+        </Box>
+      )}
       </Box>
   );
 }

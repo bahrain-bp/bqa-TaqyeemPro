@@ -1,41 +1,54 @@
 // src/logic/registerLogic.js
 import { useState } from 'react';
 import { signUp, confirmSignUp, signIn } from 'aws-amplify/auth';
+import { Amplify } from 'aws-amplify';
+import { getConfigByRole } from '../auth/amplifyConfig';
 
-export function useRegisterLogic() {
+export function useRegisterLogic(role) {
   const [step, setStep] = useState('signup');
   const [message, setMessage] = useState('');
   const [code, setCode] = useState('');
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    dob: "",
+    dateOfBirth: "",
     grade: "",
-    school: "",
+    schoolId: "",
     gender: "",
     email: "",
     password: "",
+    phoneNumber: "", // only used for moderator
   });
 
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const signUpUser = async () => {
+  const signUpUser = async (data) => {
     try {
+      Amplify.configure(getConfigByRole(role)); 
+
+      const userAttributes = {
+        given_name: data.firstName,
+        family_name: data.lastName,
+        gender: data.gender,
+        birthdate: data.dateOfBirth,
+        email: data.email,
+      };
+
+      // Add role-specific attributes
+      if (role === 'student') {
+        userAttributes['custom:grade'] = data.grade;
+        userAttributes['custom:school'] = data.schoolId;
+      } else if (role === 'moderator') {
+        userAttributes['phone_number'] = data.phoneNumber;
+      }
+
       await signUp({
-        username: formData.email,
-        password: formData.password,
+        username: data.email,
+        password: data.password,
         options: {
-          userAttributes: {
-            given_name: formData.firstName,
-            family_name: formData.lastName,
-            gender: formData.gender,
-            birthdate: formData.dob,
-            email: formData.email,
-            'custom:grade': formData.grade,
-            'custom:school': formData.school,
-          }
+          userAttributes,
         }
       });
       setMessage("Registered! Check your email.");
@@ -47,6 +60,7 @@ export function useRegisterLogic() {
 
   const confirmUser = async () => {
     try {
+      Amplify.configure(getConfigByRole(role));
       await confirmSignUp({
         username: formData.email,
         confirmationCode: code
@@ -60,11 +74,12 @@ export function useRegisterLogic() {
 
   const signInUser = async () => {
     try {
+      Amplify.configure(getConfigByRole(role));
       const user = await signIn({
         username: formData.email,
         password: formData.password
       });
-      setMessage(`Signed in as ${user.firstName}`);
+      setMessage(`Signed in as ${formData.firstName}`);
     } catch (err) {
       setMessage(`Sign in error: ${err.message}`);
     }
@@ -72,7 +87,7 @@ export function useRegisterLogic() {
 
   return {
     step, message, code, formData,
-    setCode, handleChange,
+    setCode, handleChange, setFormData,
     signUpUser, confirmUser, signInUser
   };
 }

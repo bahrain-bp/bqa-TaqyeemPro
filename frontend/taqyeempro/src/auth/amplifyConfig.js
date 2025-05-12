@@ -1,27 +1,31 @@
-export default {
-  Auth: {
-    Cognito: {
-      userPoolId: 'us-east-1_eEYD7dleP', // 🔁 Replace with your actual ID
-      userPoolClientId: '1lf029ea976mg4hkj0chlro4i', // 🔁 Replace with your actual App Client ID
-      loginWith: {
-        username: false, // ✅ Required
-        email: true,   // Optional
-        phone: false    // Optional
-      }
-    }
+export const getConfigByRole = (role) => {
+  if (role === 'student') {
+    return {
+      Auth: {
+        Cognito: {
+          userPoolId: 'us-east-1_47NVNWV8G', // Pool ID
+          userPoolClientId: '15ufc1evo8egl0heekd34r3kqn', // App Client ID
+          loginWith: {
+            username: false, // Optional
+            email: true,   // Required
+            phone: false    // Optional
+          }
+        },
+      },
+    };
   }
+
+  return {
+    Auth: {
+      Cognito: {
+        userPoolId: 'us-east-1_BbzxcR7Pb',
+        userPoolClientId: '6ep9c58fkorog0bf587dit7qpb',
+        loginWith: {
+          username: false,
+          email: true,
+          phone: false,
+        },
+      },
+    },
+  };  
 };
-
-
-// export default{
-//   region: 'us-east-1', // region
-//   userPoolId: 'us-east-1_eEYD7dleP', // only use the StudentUserPool I
-//   userPoolClientId: '1lf029ea976mg4hkj0chlro4i' // only the StudentUserPool App Client ID
-// };
-
-// import { configure } from 'aws-amplify/auth';
-// configure({
-//   region: 'us-east-1',
-//   userPoolId: 'us-east-1_eEYD7dleP',
-//   userPoolClientId: '1lf029ea976mg4hkj0chlro4i'
-// });
