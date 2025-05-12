@@ -20,6 +20,7 @@ import {
   AiOutlineLogout,
   AiOutlineDashboard,
   AiOutlineOrderedList,
+  AiOutlineUsergroupAdd,
 } from "react-icons/ai";
 import { RiBookShelfLine } from "react-icons/ri";
 import { FiUpload } from "react-icons/fi";
@@ -162,6 +163,8 @@ export default function ModeratorNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/reports"
                         >
                           <AiOutlineBook size={20} />
                           Reports
@@ -173,9 +176,24 @@ export default function ModeratorNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/exams"
                         >
                           <RiBookShelfLine size={20} />
                           Exams
+                        </Button>
+
+                        <Button
+                          variant="ghost"
+                          justifyContent="flex-start"
+                          textAlign="left"
+                          fontWeight="bold"
+                          w="full"
+                          as="a"
+                          href="/users"
+                        >
+                          <AiOutlineUsergroupAdd size={20} />
+                          Users
                         </Button>
 
                         <Button

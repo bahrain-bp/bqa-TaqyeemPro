@@ -22,7 +22,7 @@ import {
   Alert,
 } from "@chakra-ui/react";
 import { LuUpload } from "react-icons/lu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function UploadSpecifications() {
   const [isUploading, setIsUploading] = useState(false);
@@ -31,11 +31,24 @@ export default function UploadSpecifications() {
   const [error, setError] = useState("");
   const [alertStatus, setAlertStatus] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isDialogOpen) {
+      setSelectedSubject(null);
+      setSelectedGrade(null);
+      setError("");
+      setIsUploading(false);
+      setAlertStatus(null);
+      setAlertMessage("");
+    }
+  }, [isDialogOpen]);
 
   const subjects = createListCollection({
     items: [
       { label: "Maths", value: "Math" },
       { label: "Arabic", value: "Arabic" },
+      { label: "English", value: "English" },
     ],
   });
 
@@ -72,7 +85,13 @@ export default function UploadSpecifications() {
     const day = String(now.getDate()).padStart(2, "0");
     const month = now.toLocaleString("default", { month: "long" });
     const year = now.getFullYear();
-    const dateString = `${day}${month}${year}`;
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+
+    // Example format: 12May2025-143015
+    const dateString = `${day}${month}${year}-${hours}${minutes}${seconds}`;
+
     const fileName = `G${gradeLabel}-${subjectLabel}-${dateString}.${fileExtension}`;
 
     setIsUploading(true);
@@ -121,7 +140,10 @@ export default function UploadSpecifications() {
 
   return (
     <VStack alignItems="start">
-      <Dialog.Root>
+      <Dialog.Root
+        onOpenChange={setIsDialogOpen}
+        closeOnInteractOutside={false}
+      >
         <Dialog.Trigger asChild>
           <Button
             w={"full"}
@@ -303,7 +325,7 @@ export default function UploadSpecifications() {
                 </Button>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
-                <CloseButton size="sm" />
+                <CloseButton size="sm" onClick={() => setIsDialogOpen(false)} />
               </Dialog.CloseTrigger>
             </Dialog.Content>
           </Dialog.Positioner>

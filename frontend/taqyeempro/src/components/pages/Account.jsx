@@ -1,23 +1,26 @@
-import { 
-  Box, 
-  Text, 
-  Button, 
-  Flex, 
-  Image, 
-  Grid, 
-  GridItem, 
-  IconButton, 
-  Tooltip 
-} from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Button,
+  Flex,
+  Image,
+  Grid,
+  GridItem,
+  IconButton,
+  Tooltip,
+} from "@chakra-ui/react";
 
 export default function Account() {
   return (
     <Box p={8} maxW={"5xl"} mx={"auto"}>
+      <Text fontSize="3xl" fontWeight="bold" mb={7}>
+        Account
+      </Text>
       {/* Header */}
-      <Box 
-        bg="white" 
-        borderRadius="md" 
-        p={6} 
+      <Box
+        bg="white"
+        borderRadius="md"
+        p={6}
         mb={8}
         color="black"
         boxShadow="md"
@@ -30,12 +33,8 @@ export default function Account() {
             borderRadius="full" 
             mr={4}
           /> */}
-          <Box color="black" >
-            <Text 
-              fontWeight="bold" 
-              fontSize="xl"
-              
-            >
+          <Box color="black">
+            <Text fontWeight="bold" fontSize="xl">
               Ebrahim Ali
             </Text>
             <Text color="gray.600">Student</Text>
@@ -45,21 +44,22 @@ export default function Account() {
       </Box>
 
       {/* Personal Information */}
-      <Box 
-        bg="white" 
-        borderRadius="md" 
-        p={6} 
+      <Box
+        bg="white"
+        borderRadius="md"
+        p={6}
         mb={8}
         color="black"
         boxShadow="md"
-
       >
         <Flex justify="space-between" mb={4}>
-          <Text fontWeight="bold" fontSize="lg">Personal Information</Text>
+          <Text fontWeight="bold" fontSize="lg">
+            Personal Information
+          </Text>
         </Flex>
 
-        <Grid 
-          templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }} 
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
           gap={4}
           color="black"
         >
@@ -87,25 +87,19 @@ export default function Account() {
             <Text>Grade</Text>
             <Text fontWeight="bold">9</Text>
           </GridItem>
-
         </Grid>
       </Box>
 
       {/* Address */}
-      <Box 
-        bg="white" 
-        borderRadius="md" 
-        p={6}
-        color="black"
-        boxShadow="md"
-
-      >
+      <Box bg="white" borderRadius="md" p={6} color="black" boxShadow="md">
         <Flex justify="space-between" mb={4}>
-          <Text fontWeight="bold" fontSize="lg">Address</Text>
+          <Text fontWeight="bold" fontSize="lg">
+            Address
+          </Text>
         </Flex>
 
-        <Grid 
-          templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }} 
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
           gap={4}
         >
           <GridItem>

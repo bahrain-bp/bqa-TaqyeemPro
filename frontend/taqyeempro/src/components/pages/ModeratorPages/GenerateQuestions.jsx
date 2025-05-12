@@ -37,6 +37,20 @@ export default function GenerateQuestions() {
   const [alertStatus, setAlertStatus] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
   const [selectedLang, setSelectedLang] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isDialogOpen) {
+      setSelectedSubject(null);
+      setSelectedGrade(null);
+      setSelectedSpecification(null);
+      setNumQuestions(10);
+      setIsLoading(false);
+      setAlertStatus(null);
+      setAlertMessage("");
+      setSelectedLang(null);
+    }
+  }, [isDialogOpen]);
 
   useEffect(() => {
     async function fetchSpecifications() {
@@ -68,81 +82,68 @@ export default function GenerateQuestions() {
     ],
   });
 
-  const subject = createListCollection({
-    items: [
-      { label: "Math", value: "Math" },
-      { label: "Arabic", value: "Arabic" },
-    ],
-  });
-
-  const grade = createListCollection({
-    items: [
-      { label: "Grade 9", value: "9" },
-      { label: "Grade 12", value: "12" },
-    ],
-  });
-
   const handleSubmit = async () => {
-  if (
-    !selectedSpecification ||
-    !selectedSubject ||
-    !selectedGrade ||
-    (selectedSubject === "Math" && !selectedLang)
-  ) {
-    setAlertStatus("error");
-    setAlertMessage("Please select all fields.");
-    return;
-  }
-
-  setIsLoading(true);
-  setAlertStatus(null);
-
-  const payload = {
-    file_key: selectedSpecification,
-    subject: selectedSubject,
-    grade: Number(selectedGrade),
-    quesions: numQuestions,
-    language: selectedSubject === "Math" ? selectedLang : null,
-  };
-
-  console.log(payload);
-
-  try {
-    const response = await fetch(
-      "https://kjww415dkc.execute-api.us-east-1.amazonaws.com/prod/invoke",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to generate questions");
+    if (
+      !selectedSpecification ||
+      !selectedSubject ||
+      !selectedGrade ||
+      (selectedSubject === "Math" && !selectedLang)
+    ) {
+      setAlertStatus("error");
+      setAlertMessage("Please select all fields.");
+      return;
     }
 
-    const data = await response.json();
+    setIsLoading(true);
+    setAlertStatus(null);
 
-    setAlertStatus("success");
-    setAlertMessage("Questions generated successfully!");
+    const payload = {
+      file_key: selectedSpecification,
+      subject: selectedSubject,
+      grade: Number(selectedGrade),
+      quesions: numQuestions,
+      language: selectedSubject === "Math" ? selectedLang : null,
+    };
 
-    // Optional: log the response
-    console.log("API response:", data);
-  } catch (error) {
-    console.error(error);
-    setAlertStatus("error");
-    setAlertMessage("Failed to generate questions.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+    console.log(payload);
 
+    try {
+      const response = await fetch(
+        "https://kjww415dkc.execute-api.us-east-1.amazonaws.com/prod/invokeFunction",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate questions");
+      }
+
+      const data = await response.json();
+
+      setAlertStatus("success");
+      setAlertMessage(
+        "Your request has been received! The questions are being generated and will appear shortly on the Generated Questions page."
+      );
+
+      // log the response
+      console.log("API response:", data);
+    } catch (error) {
+      console.error(error);
+      setAlertStatus("error");
+      setAlertMessage("Failed to generate questions.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <VStack alignItems="start">
-      <Dialog.Root>
+      <Dialog.Root onOpenChange={setIsDialogOpen} closeOnInteractOutside={false} >
         <Dialog.Trigger asChild>
           <Button
             w={"full"}
@@ -165,9 +166,10 @@ export default function GenerateQuestions() {
               <Dialog.Body>
                 <DataList.Root orientation="horizontal">
                   <p>
-                    This will upload the requirements for the AI to generate the
-                    specified number of questions based on the uploaded
-                    specifications.
+                    This will upload the requirements needed for the AI to
+                    generate the specified number of questions based on the
+                    provided specifications. Please note that this process may
+                    take some time.
                   </p>
                   <Stack gap="4">
                     {/* Alert message */}
@@ -192,15 +194,40 @@ export default function GenerateQuestions() {
                       </Alert.Root>
                     )}
 
-                    {/* Select Specification */}
                     <Field.Root>
                       <Select.Root
                         collection={specifications}
                         size="sm"
                         width="full"
-                        onValueChange={(e) =>
-                          setSelectedSpecification(e?.value?.[0])
-                        }
+                        onValueChange={(e) => {
+                          const spec = e?.value?.[0];
+                          setSelectedSpecification(spec);
+
+                          if (spec) {
+                            const match = spec.match(
+                              /^G(\d+)-([A-Za-z]+)-.*\.[A-Za-z0-9]+$/i
+                            );
+                            if (match) {
+                              const grade = match[1];
+                              const subject = match[2];
+
+                              setSelectedGrade(grade);
+                              setSelectedSubject(
+                                subject.charAt(0).toUpperCase() +
+                                  subject.slice(1)
+                              );
+                            } else {
+                              setSelectedGrade(null);
+                              setSelectedSubject(null);
+                            }
+
+                            if (/Math/i.test(spec)) {
+                              setSelectedLang(null);
+                            } else {
+                              setSelectedLang(null);
+                            }
+                          }
+                        }}
                         disabled={isLoading}
                       >
                         <Select.HiddenSelect />
@@ -216,72 +243,6 @@ export default function GenerateQuestions() {
                         <Select.Positioner>
                           <Select.Content>
                             {specifications.items.map((item) => (
-                              <Select.Item item={item} key={item.value}>
-                                {item.label}
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Select.Root>
-                    </Field.Root>
-
-                    {/* Select Grade */}
-                    <Field.Root>
-                      <Select.Root
-                        collection={grade}
-                        size="sm"
-                        width="full"
-                        onValueChange={(e) => setSelectedGrade(e?.value?.[0])}
-                        disabled={isLoading}
-                      >
-                        <Select.HiddenSelect />
-                        <Select.Label>Grade</Select.Label>
-                        <Select.Control bg={"white"}>
-                          <Select.Trigger>
-                            <Select.ValueText placeholder="Select Grade" />
-                          </Select.Trigger>
-                          <Select.IndicatorGroup>
-                            <Select.Indicator />
-                          </Select.IndicatorGroup>
-                        </Select.Control>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {grade.items.map((item) => (
-                              <Select.Item item={item} key={item.value}>
-                                {item.label}
-                                <Select.ItemIndicator />
-                              </Select.Item>
-                            ))}
-                          </Select.Content>
-                        </Select.Positioner>
-                      </Select.Root>
-                    </Field.Root>
-
-                    {/* Select Subject */}
-                    <Field.Root>
-                      <Select.Root
-                        collection={subject}
-                        size="sm"
-                        width="full"
-                        onValueChange={(e) => {
-                          setSelectedSubject(e.value[0]);
-                        }}
-                        disabled={isLoading}
-                      >
-                        <Select.HiddenSelect />
-                        <Select.Label>Subject</Select.Label>
-                        <Select.Control bg={"white"}>
-                          <Select.Trigger>
-                            <Select.ValueText placeholder="Select Subject" />
-                          </Select.Trigger>
-                          <Select.IndicatorGroup>
-                            <Select.Indicator />
-                          </Select.IndicatorGroup>
-                        </Select.Control>
-                        <Select.Positioner>
-                          <Select.Content>
-                            {subject.items.map((item) => (
                               <Select.Item item={item} key={item.value}>
                                 {item.label}
                                 <Select.ItemIndicator />
@@ -328,12 +289,12 @@ export default function GenerateQuestions() {
 
                     {/* Number of Questions */}
                     <Field.Root>
-                      <Field.Label>Number of Questions (10 to 50)</Field.Label>
+                      <Field.Label>Number of Questions (10 to 15)</Field.Label>
                       <NumberInput.Root
-                        defaultValue="10"
+                        defaultValue={10}
                         width="full"
                         min={10}
-                        max={50}
+                        max={15}
                         onChange={(value) => setNumQuestions(value)}
                         disabled={isLoading}
                       >
@@ -359,7 +320,7 @@ export default function GenerateQuestions() {
                 </Button>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
-                <CloseButton size="sm" />
+                <CloseButton size="sm" onClick={() => setIsDialogOpen(false)} />
               </Dialog.CloseTrigger>
             </Dialog.Content>
           </Dialog.Positioner>
