@@ -7,7 +7,7 @@ import re
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ExamQuestions')
+table = dynamodb.Table('ExamQuestionstesting')
 
 
 def lambda_bedrock(event, context):
