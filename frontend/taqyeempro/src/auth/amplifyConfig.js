@@ -3,6 +3,7 @@ export const getConfigByRole = (role) => {
     return {
       Auth: {
         Cognito: {
+          region: "us-east-1",
           userPoolId: 'us-east-1_47NVNWV8G', // Pool ID
           userPoolClientId: '15ufc1evo8egl0heekd34r3kqn', // App Client ID
           loginWith: {
@@ -15,17 +16,22 @@ export const getConfigByRole = (role) => {
     };
   }
 
-  return {
-    Auth: {
-      Cognito: {
-        userPoolId: 'us-east-1_BbzxcR7Pb',
-        userPoolClientId: '6ep9c58fkorog0bf587dit7qpb',
-        loginWith: {
-          username: false,
-          email: true,
-          phone: false,
+  if (role === 'moderator') {
+    return {
+      Auth: {
+        Cognito: {
+          region: "us-east-1",
+          userPoolId: 'us-east-1_BbzxcR7Pb',
+          userPoolClientId: '6ep9c58fkorog0bf587dit7qpb',
+          loginWith: {
+            username: false,
+            email: true,
+            phone: false,
+          },
         },
       },
-    },
-  };  
+    };  
+  }
+
+  return {};
 };

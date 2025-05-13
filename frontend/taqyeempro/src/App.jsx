@@ -5,12 +5,13 @@ import StudentRoutes from "./routes/StudentRoutes";
 import ModeratorRoutes from "./routes/ModeratorRoutes";
 
 function App() {
+  const role = sessionStorage.getItem("userRole"); // 'student' or 'moderator'  
 
   return (
     <>
-        <NonUserRoutes/>
-      {/* <StudentRoutes/> */}
-      {/* <ModeratorRoutes/> */}
+      {role === "student" && <StudentRoutes />}
+      {role === "moderator" && <ModeratorRoutes />}
+      {!role && <NonUserRoutes />}
     </>
   );
 }
