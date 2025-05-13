@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { MdEdit } from "react-icons/md";
 import EditQuestion from "./EditQuestion";
 import { useParams } from "react-router-dom";
+import { MathJax, MathJaxContext } from 'better-react-mathjax';
 
 export default function QuestionsList() {
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -67,9 +68,14 @@ export default function QuestionsList() {
               onClick={() => setIsEditOpen(true)}
             >
               <Flex justify="space-between" mb={2}>
-                <Text fontWeight="bold" fontSize="lg">
-                  Q{idx + 1}. {q.questionText} ({q.questionType})
-                </Text>
+
+<Text fontWeight="bold" fontSize="lg">
+  Q{idx + 1}.{" "}
+  {q.questionText?.split(q.equation)[0]}
+  <MathJax inline>{"\\(" + q.equation + "\\)"}</MathJax>
+  {q.questionText?.split(q.equation)[1]}
+  {" "}({q.questionType})
+</Text>
                 <Flex gap={3} align="center">
                   <Text
                     fontSize="sm"

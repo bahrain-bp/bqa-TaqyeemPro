@@ -1,18 +1,25 @@
 import "./App.css";
-import { Button, Stack } from "@chakra-ui/react"
+import { MathJaxContext } from "better-react-mathjax";
 import NonUserRoutes from "./routes/NonUserRoutes";
 import StudentRoutes from "./routes/StudentRoutes";
 import ModeratorRoutes from "./routes/ModeratorRoutes";
 
 function App() {
-  const role = sessionStorage.getItem("userRole"); // 'student' or 'moderator'  
+  const role = sessionStorage.getItem("userRole"); // 'student' or 'moderator'
+
+  const mathJaxConfig = {
+    loader: { load: ["[tex]/ams"] },
+    tex: {
+      packages: { "[+]": ["ams"] }
+    }
+  };
 
   return (
-    <>
-      {role === "student" && <StudentRoutes />}
-      {role === "moderator" && <ModeratorRoutes />}
-      {!role && <NonUserRoutes />}
-    </>
+    <MathJaxContext config={mathJaxConfig}>
+      {<ModeratorRoutes />}
+      {/* {role === "student" && <StudentRoutes />} */}
+      {/* {!role && <NonUserRoutes />} */}
+    </MathJaxContext>
   );
 }
 
