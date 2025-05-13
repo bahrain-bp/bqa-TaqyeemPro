@@ -221,11 +221,11 @@ export default function GenerateQuestions() {
                               setSelectedSubject(null);
                             }
 
-                            if (/Math/i.test(spec)) {
-                              setSelectedLang(null);
-                            } else {
-                              setSelectedLang(null);
-                            }
+                            // if (/Math/i.test(spec)) {
+                            //   setSelectedLang(null);
+                            // } else {
+                            //   setSelectedLang(null);
+                            // }
                           }
                         }}
                         disabled={isLoading}

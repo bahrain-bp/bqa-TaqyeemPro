@@ -7,12 +7,13 @@ import { IoMdAdd } from "react-icons/io";
 export default function Users() {
   // Sample data
   const columns = [
-    { field: "id", headerName: "No.", width: 100 },
-    { field: "firstName", headerName: "First Name", width: 180 },
-    { field: "lastName", headerName: "Last Name", width: 180 },
-    { field: "email", headerName: "Email", width: 300 },
-    { field: "type", headerName: "Type", width: 250 },
-    { field: "action", headerName: "Action", width: 100},
+    { field: "id", headerName: "No.", width: 65 },
+    { field: "firstName", headerName: "First Name", width: 150 },
+    { field: "lastName", headerName: "Last Name", width: 150 },
+    { field: "email", headerName: "Email", width: 270 },
+    { field: "school", headerName: "School", width: 270 },
+    { field: "type", headerName: "Type", width: 140 },
+    { field: "action", headerName: "Action", width: 70},
   ];
 
   const rows = [
@@ -43,7 +44,7 @@ export default function Users() {
   ];
 
   return (
-    <Box maxW="6xl" mx="auto" mt={12} px={4}>
+    <Box maxW="6xl" mx="auto" mt={3} px={4}>
       <Flex justify="space-between" align="center" mb={7}>
         <Text fontSize="3xl" fontWeight="bold">
           System Users
