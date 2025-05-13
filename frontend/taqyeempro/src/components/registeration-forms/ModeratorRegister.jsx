@@ -16,12 +16,16 @@ import {
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRegisterLogic } from "../../Logic/Register";
+import { useNavigate } from "react-router-dom";
+
 
 export default function ModeratorRegister({ role }) {
+  const navigate = useNavigate();
+
   const {
     step, message, code,
-    setCode, signUpUser, confirmUser, signInUser,
-    setFormData, email, password
+    setCode, signUpUser, confirmUser, 
+    setFormData
   } = useRegisterLogic(role); // Use the passed role = 'moderator'
 
   const {
@@ -184,18 +188,15 @@ export default function ModeratorRegister({ role }) {
             size="lg"
             bg="white"
           />
-          <Button colorScheme="blue" w="full" onClick={confirmUser}>
+          <Button
+            colorScheme="blue"
+            w="full"
+            onClick={async () => {
+              await confirmUser();
+              setTimeout(() => navigate("/login"), 400); // Wait 1.5s
+            }}
+          >
             Confirm
-          </Button>
-        </VStack>
-      )}
-
-      {step === 'signin' && (
-        <VStack spacing={4} w="full">
-          <Input name="email" value={email} readOnly bg="white" />
-          <Input name="password" type="password" value={password} readOnly bg="white" />
-          <Button colorScheme="green" w="full" onClick={signInUser}>
-            Sign In
           </Button>
         </VStack>
       )}
