@@ -183,8 +183,6 @@ def lambda_bedrock(event, context):
         # Call Nova Pro model on Bedrock
         bedrock_runtime = boto3.client("bedrock-runtime", region_name="us-east-1")
 
-        lambda_client = boto3.client('lambda')
-
         body = {
             "messages": [
                 {
