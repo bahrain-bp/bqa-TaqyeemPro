@@ -15,6 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { loginUser } from "@/Logic/Login";
+import { useNavigate } from "react-router-dom"; 
+
 
 export default function Login() {
   const {
@@ -25,7 +28,7 @@ export default function Login() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      role: "",
+      role: "student",
       email: "",
       password: "",
     },
@@ -33,9 +36,22 @@ export default function Login() {
 
   const selectedRole = watch("role");
 
-  const onSubmit = (data) => {
-    console.log("Submitted data:", data);
+  const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
+    const role = selectedRole;
+    const { email, password } = data;
+    const result = await loginUser(role, email, password);
+  
+    if (result.success) {
+      console.log("Signed in:", result.user);
+      navigate("/");
+      window.location.reload(); // reload so App.jsx will re-read sessionStorage
+    } else {
+      alert(`Login error: ${result.message}`);
+    }
   };
+
   return (
     <Box display="flex" alignItems="center" justifyContent="center" px={6}>
       <Box p={10} rounded="xl" w={{ base: "100%", sm: "400px" }}>

@@ -60,7 +60,7 @@ export default function Register() {
         </VStack>
 
         {/* Render form based on the selected role */}
-        {selectedRole == "student" ? <StudentRegister/> : <ModeratorRegister/>}
+        {selectedRole === "student" ? (<StudentRegister role="student" />) : (<ModeratorRegister role="moderator" />)}
 
         {/* OR Separator */}
         <HStack m={5}>

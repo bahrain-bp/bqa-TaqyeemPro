@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Flex, HStack, Link, Button, Text } from "@chakra-ui/react";
 
 export default function NonUserNavBar() {
+
   return (
     <div className="w-full h-30">
       <Box
