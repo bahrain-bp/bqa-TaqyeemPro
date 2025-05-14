@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function GeneratedQuestions() {
   return (
-    <Box maxW="6xl" mx="auto" mt={12} px={4}>
+    <Box maxW="6xl" mx="auto" mt={3} px={4}>
       <Text fontSize="3xl" fontWeight="bold" mb={7}>
         Generated Questions
       </Text>

@@ -14,7 +14,16 @@ export default function Footer() {
   const footerTextSize = useBreakpointValue({ base: "sm", md: "md" });
 
   return (
-    <Box as="footer" bg="white" py={8} width="100%" mt="auto">
+    <Box
+      as="footer"
+      bg="white"
+      py={8}
+      width="100%"
+      mt="auto"
+      position="absolute"
+      bottom={0}
+      left={0}
+    >
       <Flex direction="column" align="center" justify="center">
         {/* Logo in the center */}
         <HStack spacing={3} align="center" mb={5}>
@@ -35,7 +44,7 @@ export default function Footer() {
           <Link
             href="/"
             fontSize="lg"
-            mx={10} 
+            mx={10}
             _hover={{ textDecoration: "underline" }}
           >
             Home
@@ -43,7 +52,7 @@ export default function Footer() {
           <Link
             href="/about"
             fontSize="lg"
-            mx={10} 
+            mx={10}
             _hover={{ textDecoration: "underline" }}
           >
             About Us
@@ -51,7 +60,7 @@ export default function Footer() {
           <Link
             href="/contact"
             fontSize="lg"
-            mx={10} 
+            mx={10}
             _hover={{ textDecoration: "underline" }}
           >
             Contact Us
@@ -59,7 +68,7 @@ export default function Footer() {
           <Link
             href="/terms"
             fontSize="lg"
-            mx={10} 
+            mx={10}
             _hover={{ textDecoration: "underline" }}
           >
             Terms
