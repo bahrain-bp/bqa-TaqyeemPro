@@ -4,6 +4,13 @@ import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "@/components/ui/provider";
 import { BrowserRouter } from "react-router-dom";
+import { Amplify } from 'aws-amplify';
+import { getConfigByRole } from './auth/amplifyConfig';
+
+const role = sessionStorage.getItem('userRole');
+if (role) {
+  Amplify.configure(getConfigByRole(role));
+}
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
