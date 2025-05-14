@@ -24,8 +24,31 @@ import {
 } from "react-icons/ai";
 import { RiBookShelfLine } from "react-icons/ri";
 import { FiUpload } from "react-icons/fi";
+import { signOut } from 'aws-amplify/auth';
+import { Amplify } from 'aws-amplify';
+import { getConfigByRole } from '@/auth/amplifyConfig'; 
+import { useNavigate } from "react-router-dom";
+
 
 export default function ModeratorNavBar() {
+  const navigate = useNavigate(); 
+
+  const handleSignOut = async () => {
+    try {
+      // retrieve the role from the session
+      const role = sessionStorage.getItem('userRole');
+      // Map to the user pool
+      Amplify.configure(getConfigByRole(role)); 
+      await signOut();
+
+      sessionStorage.removeItem("userRole");
+      alert("Signed out successfully.");
+      window.location.reload(); // <-- force App to reload and show NonUserRoutes
+    } catch (err) {
+      console.error("Sign out error:", err);
+    }
+  };    
+  
   return (
     <div className="w-full h-20">
       <Box as="nav" p={4}>
@@ -216,6 +239,7 @@ export default function ModeratorNavBar() {
                           fontWeight="bold"
                           colorPalette="red"
                           w="full"
+                          onClick={handleSignOut}
                         >
                           <AiOutlineLogout size={20} />
                           Logout
