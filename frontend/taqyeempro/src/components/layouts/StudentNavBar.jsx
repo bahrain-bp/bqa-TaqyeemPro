@@ -41,6 +41,7 @@ export default function StudentNavBar() {
     
       sessionStorage.removeItem("userRole");
       alert("Signed out successfully.");
+      navigate("/login");
       window.location.reload(); // <-- force App to reload and show NonUserRoutes
       } catch (err) {
         console.error("Sign out error:", err);
