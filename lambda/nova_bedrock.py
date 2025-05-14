@@ -8,7 +8,7 @@ from decimal import Decimal
 import datetime
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('ExamQuestionstesting')
+table = dynamodb.Table('ExamQuestions')
 
 
 def lambda_bedrock(event, context):
