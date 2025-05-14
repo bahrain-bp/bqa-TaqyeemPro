@@ -21,43 +21,40 @@ def handler(event, context):
     try:
         body = json.loads(event['body'])
 
-        question_id = body.get('questionId')
-        if not question_id:
-            return {
-                'statusCode': 400,
-                'headers': headers,
-                'body': json.dumps({'error': 'Missing questionId'})
-            }
+        question_id = body.get('QuestionId')
+        subject_grade = body.get('Subject_grade')
 
-        # Common fields
+        # All expected fields from request
         update_data = {
+            'answerText': body.get('answerText', ''),
+            'approved': body.get('approved', False),
+            'equation': body.get('equation', ''),
+            'grade': body.get('grade', ''),
+            'language': body.get('language', ''),
+            'mark': body.get('mark', 1),
+            'option1': body.get('option1', ''),
+            'option2': body.get('option2', ''),
+            'option3': body.get('option3', ''),
+            'option4': body.get('option4', ''),
             'questionText': body.get('questionText', ''),
             'questionType': body.get('questionType', ''),
             'skillType': body.get('skillType', ''),
-            'mark': body.get('mark', 1),
-            'answerText': body.get('answerText', ''),
-            'approved': body.get('approved', False)
+            'subject': body.get('subject', ''),
         }
 
-        # Type-specific fields
-        if update_data['questionType'] == 'MCQ':
-            update_data.update({
-                'option1': body.get('option1', ''),
-                'option2': body.get('option2', ''),
-                'option3': body.get('option3', ''),
-                'option4': body.get('option4', '')
-            })
-        elif update_data['questionType'] == 'T/F':
-            update_data['options'] = ["True", "False"]
-
-        # Build the update expression
-        update_expr = "SET " + ", ".join(f"{k}=:{k}" for k in update_data.keys())
-        expr_values = {f":{k}": v for k, v in update_data.items()}
+        # Build the update expression with ExpressionAttributeNames to support fields with spaces
+        update_expr = "SET " + ", ".join(f"#{k.replace(' ', '')} = :{k.replace(' ', '')}" for k in update_data)
+        expr_names = {f"#{k.replace(' ', '')}": k for k in update_data}
+        expr_values = {f":{k.replace(' ', '')}": v for k, v in update_data.items()}
 
         # Update the item in DynamoDB
         table.update_item(
-            Key={'QuestionId': question_id},
+            Key={
+                'Subject_grade': subject_grade,
+                'QuestionId': question_id
+            },
             UpdateExpression=update_expr,
+            ExpressionAttributeNames=expr_names,
             ExpressionAttributeValues=expr_values
         )
 

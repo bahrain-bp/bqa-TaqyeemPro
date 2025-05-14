@@ -143,7 +143,10 @@ export default function GenerateQuestions() {
 
   return (
     <VStack alignItems="start">
-      <Dialog.Root onOpenChange={setIsDialogOpen} closeOnInteractOutside={false} >
+      <Dialog.Root
+        onOpenChange={setIsDialogOpen}
+        closeOnInteractOutside={false}
+      >
         <Dialog.Trigger asChild>
           <Button
             w={"full"}
@@ -314,9 +317,17 @@ export default function GenerateQuestions() {
                   onClick={handleSubmit}
                   isLoading={isLoading}
                   disabled={isLoading}
-                  spinnerPlacement="start"
                 >
-                  {isLoading ? "Generating..." : "Start Generating"}
+                  {isLoading ? (
+                    <>
+                      <HStack spacing={2}>
+                        <Spinner size="sm" />
+                        <span>Sending Request...</span>
+                      </HStack>
+                    </>
+                  ) : (
+                    "Start Generating"
+                  )}
                 </Button>
               </Dialog.Footer>
               <Dialog.CloseTrigger asChild>
