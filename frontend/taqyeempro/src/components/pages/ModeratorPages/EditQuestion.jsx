@@ -18,6 +18,8 @@ import {
   createListCollection,
   Text,
   Textarea,
+  Spinner,
+  Alert,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { FaCircle, FaRegCircle } from "react-icons/fa";
@@ -27,6 +29,7 @@ export default function EditQuestion({
   onClose,
   questionData,
   questionId,
+  onQuestionUpdate,
 }) {
   const [answers, setAnswers] = useState(["", "", "", ""]);
   const [questionType, setQuestionType] = useState("");
@@ -35,6 +38,10 @@ export default function EditQuestion({
   const [questionText, setQuestionText] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState("");
   const answerLabels = ["A", "B", "C", "D"];
+  const [isLoading, setIsLoading] = useState(false);
+  const [approve, setApproved] = useState(false);
+  const [alertStatus, setAlertStatus] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const marks = createListCollection({
     items: [
@@ -67,6 +74,7 @@ export default function EditQuestion({
   }, [questionData]);
 
   const handleSave = async (approvedStatus) => {
+    setIsLoading(true);
     const updatedQuestion = {
       ...questionData,
       questionText,
@@ -92,7 +100,7 @@ export default function EditQuestion({
       updatedQuestion.option3 = null;
       updatedQuestion.option4 = null;
     }
-    console.log(updatedQuestion);
+
     try {
       const response = await fetch(
         "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/update-question",
@@ -104,15 +112,25 @@ export default function EditQuestion({
       );
 
       if (response.ok) {
-        alert("Question updated successfully!");
-        onClose();
+        setAlertStatus("success");
+        setAlertMessage("Question updated successfully!");
+        // onClose();
+
+        if (onQuestionUpdate) {
+          onQuestionUpdate({
+            ...updatedQuestion,
+            // include updated fields if backend doesn't return full object
+          });
+        }
       } else {
-        console.error("Failed to update question");
-        alert("Update failed.");
+        setAlertStatus("error");
+        setAlertMessage("Failed to update question");
       }
     } catch (err) {
       console.error("Error:", err);
       alert("Something went wrong.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -125,8 +143,37 @@ export default function EditQuestion({
             <Dialog.Header>
               <Dialog.Title>Question {questionId}</Dialog.Title>
             </Dialog.Header>
+            {alertStatus && (
+              <Alert.Root
+                colorPalette={alertStatus === "error" ? "red" : "green"}
+                variant="solid"
+                w={"90%"}
+                mx={"auto"}
+              >
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title>
+                    {alertStatus === "error" ? "Error" : "Success"}
+                  </Alert.Title>
+                  <Alert.Description>{alertMessage}</Alert.Description>
+                </Alert.Content>
+                <CloseButton
+                  pos="relative"
+                  top="-2"
+                  insetEnd="-2"
+                  onClick={() => setAlertStatus(null)}
+                />
+              </Alert.Root>
+            )}
             <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" onClick={onClose} />
+              <CloseButton
+                size="sm"
+                onClick={() => {
+                  onClose();
+                  setAlertMessage(null);
+                  setAlertStatus(null);
+                }}
+              />
             </Dialog.CloseTrigger>
             <Dialog.Body pb="4" w="full">
               <Flex w="full" gap={6}>
@@ -145,6 +192,7 @@ export default function EditQuestion({
                       value={questionType}
                       readOnly
                       bg={"white"}
+                      disabled={isLoading}
                     />
                   </Field.Root>
                   <Field.Root>
@@ -153,6 +201,7 @@ export default function EditQuestion({
                       size={"sm"}
                       width={"full"}
                       value={questionSkill}
+                      disabled={isLoading}
                       onChange={(e) => setQuestionSkill(e.target.value)}
                       bg={"white"}
                     />
@@ -163,6 +212,7 @@ export default function EditQuestion({
                       size="sm"
                       width="full"
                       defaultValue={mark}
+                      disabled={isLoading}
                       onValueChange={(e) => setMark(e?.value?.[0])}
                     >
                       <Select.HiddenSelect />
@@ -194,6 +244,7 @@ export default function EditQuestion({
                     <Textarea
                       placeholder="Question"
                       value={questionText}
+                      disabled={isLoading}
                       onChange={(e) => setQuestionText(e.target.value)}
                       mb={5}
                     />
@@ -210,6 +261,7 @@ export default function EditQuestion({
                                 flex={1}
                                 placeholder="Answer"
                                 pl={9}
+                                disabled={isLoading}
                                 value={answers[index]}
                                 onChange={(e) => {
                                   const updated = [...answers];
@@ -220,6 +272,7 @@ export default function EditQuestion({
                               <Button
                                 bg="ghost"
                                 variant="outline"
+                                disabled={isLoading}
                                 onClick={() => setCorrectAnswer(answers[index])}
                               >
                                 {correctAnswer === answers[index] ? (
@@ -240,11 +293,18 @@ export default function EditQuestion({
                         <Field.Root w="full">
                           <InputGroup>
                             <Group attached w={"full"}>
-                              <Input w="full" flex={1} readOnly value={value} />
+                              <Input
+                                w="full"
+                                flex={1}
+                                readOnly
+                                value={value}
+                                disabled={isLoading}
+                              />
                               <Button
                                 bg="ghost"
                                 variant="outline"
                                 onClick={() => setCorrectAnswer(value)}
+                                disabled={isLoading}
                               >
                                 {correctAnswer === value ? (
                                   <FaCircle color="green" />
@@ -269,6 +329,7 @@ export default function EditQuestion({
                               pl={20}
                               placeholder="Correct answer"
                               value={correctAnswer}
+                              disabled={isLoading}
                               onChange={(e) => setCorrectAnswer(e.target.value)}
                             />
                           </Group>
@@ -286,23 +347,47 @@ export default function EditQuestion({
                   colorPalette={"green"}
                   w={"1/2"}
                   h={12}
+                  isLoading={isLoading}
+                  disabled={isLoading}
                   onClick={async () => {
+                    setApproved(true);
                     await handleSave(true);
-                    onClose();
                   }}
+                  spinnerPlacement="start"
                 >
-                  Approve
+                  {isLoading && approve === true ? (
+                    <>
+                      <HStack spacing={2}>
+                        <Spinner size="sm" />
+                        <span>Approving...</span>
+                      </HStack>
+                    </>
+                  ) : (
+                    "Approve"
+                  )}
                 </Button>
                 <Button
                   colorPalette={"red"}
                   w={"1/2"}
                   h={12}
+                  isLoading={isLoading}
+                  disabled={isLoading}
                   onClick={async () => {
+                    setApproved(false);
                     await handleSave(false);
-                    onClose();
                   }}
+                  spinnerPlacement="start"
                 >
-                  Decline
+                  {isLoading && approve === false ? (
+                    <>
+                      <HStack spacing={2}>
+                        <Spinner size="sm" />
+                        <span>Declining...</span>
+                      </HStack>
+                    </>
+                  ) : (
+                    "Decline"
+                  )}
                 </Button>
               </Flex>
             </Dialog.Footer>

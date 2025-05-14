@@ -60,6 +60,21 @@ export default function QuestionsList() {
       });
   }, [gradeNumber]);
 
+  const handleQuestionUpdate = (updatedQuestion) => {
+  setQuestions((prev) =>
+    prev.map((q) =>
+      q.QuestionId === updatedQuestion.QuestionId ? updatedQuestion : q
+    )
+  );
+
+  setFilteredQuestions((prev) =>
+    prev.map((q) =>
+      q.QuestionId === updatedQuestion.QuestionId ? updatedQuestion : q
+    )
+  );
+};
+
+
   return (
     <Box maxW="6xl" mx="auto" mt={3} px={4} pb={12}>
       <EditQuestion
@@ -67,6 +82,7 @@ export default function QuestionsList() {
         onClose={() => setIsEditOpen(false)}
         questionData={isEditOpen ? selectedQuestion : null}
         questionId={selectedQuestionId}
+        onQuestionUpdate={handleQuestionUpdate}
       />
 
       <Flex justify="space-between" align="center" mb={7} gap={4} wrap="wrap">
