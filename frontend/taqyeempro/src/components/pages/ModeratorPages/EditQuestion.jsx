@@ -16,19 +16,26 @@ import {
   Group,
   Select,
   createListCollection,
+  Text,
+  Textarea,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
-import { LuCircle, LuUpload } from "react-icons/lu";
+import { useEffect, useRef, useState } from "react";
+import { FaCircle, FaRegCircle } from "react-icons/fa";
 
-export default function EditQuestion({ isOpen, onClose }) {
-  const ref = useRef(null);
-  const questionTypes = createListCollection({
-    items: [
-      { label: "Multiple Choice", value: "mc" },
-      { label: "True Or False", value: "tof" },
-      { label: "Short Answer", value: "sa" },
-    ],
-  });
+export default function EditQuestion({
+  isOpen,
+  onClose,
+  questionData,
+  questionId,
+}) {
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [questionType, setQuestionType] = useState("");
+  const [questionSkill, setQuestionSkill] = useState("");
+  const [mark, setMark] = useState("");
+  const [questionText, setQuestionText] = useState("");
+  const [correctAnswer, setCorrectAnswer] = useState("");
+  const answerLabels = ["A", "B", "C", "D"];
+
   const marks = createListCollection({
     items: [
       { label: "1", value: "1" },
@@ -36,7 +43,71 @@ export default function EditQuestion({ isOpen, onClose }) {
       { label: "3", value: "3" },
     ],
   });
-  const [selectedAnswer, setSelectedAnswer] = useState("");
+
+  useEffect(() => {
+    console.log(questionData);
+    if (questionData) {
+      const isMCQ = questionData.questionType === "MCQ";
+      const mcqOptions = isMCQ
+        ? [
+            questionData.option1 || "",
+            questionData.option2 || "",
+            questionData.option3 || "",
+            questionData.option4 || "",
+          ]
+        : [];
+
+      setAnswers(isMCQ ? mcqOptions : questionData.options || ["", "", "", ""]);
+      setQuestionType(questionData.questionType || "");
+      setQuestionSkill(questionData.skillType || "");
+      setMark(String(questionData.mark || ""));
+      setQuestionText(questionData.questionText || "");
+      setCorrectAnswer(questionData.answerText || "");
+    }
+  }, [questionData]);
+
+  const handleSave = async (approvedStatus) => {
+    const updatedQuestion = {
+      questionId,
+      questionText,
+      questionType,
+      skillType: questionSkill,
+      mark: Number(mark),
+      answerText: correctAnswer,
+      approved: approvedStatus,
+    };
+
+    if (questionType === "MCQ") {
+      updatedQuestion.option1 = answers[0];
+      updatedQuestion.option2 = answers[1];
+      updatedQuestion.option3 = answers[2];
+      updatedQuestion.option4 = answers[3];
+    } else if (questionType === "T/F") {
+      updatedQuestion.options = ["True", "False"];
+    }
+
+    try {
+      const response = await fetch(
+        "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/update-question",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedQuestion),
+        }
+      );
+
+      if (response.ok) {
+        alert("Question updated successfully!");
+        onClose();
+      } else {
+        console.error("Failed to update question");
+        alert("Update failed.");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Something went wrong.");
+    }
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(v) => !v && onClose()}>
@@ -45,57 +116,47 @@ export default function EditQuestion({ isOpen, onClose }) {
         <Dialog.Positioner>
           <Dialog.Content maxW="5xl" w="full">
             <Dialog.Header>
-              <Dialog.Title>Question 1</Dialog.Title>
+              <Dialog.Title>Question {questionId}</Dialog.Title>
             </Dialog.Header>
             <Dialog.CloseTrigger asChild>
               <CloseButton size="sm" onClick={onClose} />
             </Dialog.CloseTrigger>
             <Dialog.Body pb="4" w="full">
-              {" "}
-              {/* Make the dialog body wider */}
               <Flex w="full" gap={6}>
-                {" "}
-                {/* Flex container to align Box and Stack horizontally */}
                 <Box
-                  w="25%"
+                  w="28%"
                   p={5}
                   bg={"gray.50"}
                   borderRadius={"md"}
                   spaceY={4}
                 >
                   <Field.Root>
-                    <Select.Root
-                      collection={questionTypes}
-                      size="sm"
-                      width="full"
-                    >
-                      <Select.HiddenSelect />
-                      <Select.Label>Question Type</Select.Label>
-                      <Select.Control bg={"white"}>
-                        <Select.Trigger>
-                          <Select.ValueText placeholder="Select Type" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                          <Select.Indicator />
-                        </Select.IndicatorGroup>
-                      </Select.Control>
-                      <Select.Positioner>
-                        <Select.Content>
-                          {questionTypes.items.map((questionTypes) => (
-                            <Select.Item
-                              item={questionTypes}
-                              key={questionTypes.value}
-                            >
-                              {questionTypes.label}
-                              <Select.ItemIndicator />
-                            </Select.Item>
-                          ))}
-                        </Select.Content>
-                      </Select.Positioner>
-                    </Select.Root>
+                    <Text fontWeight={"medium"}>Question Type</Text>
+                    <Input
+                      size={"sm"}
+                      width={"full"}
+                      value={questionType}
+                      readOnly
+                      bg={"white"}
+                    />
                   </Field.Root>
                   <Field.Root>
-                    <Select.Root collection={marks} size="sm" width="full">
+                    <Text fontWeight={"medium"}>Skill</Text>
+                    <Input
+                      size={"sm"}
+                      width={"full"}
+                      defaultValue={questionSkill}
+                      bg={"white"}
+                    />
+                  </Field.Root>
+                  <Field.Root>
+                    <Select.Root
+                      collection={marks}
+                      size="sm"
+                      width="full"
+                      defaultValue={mark}
+                      onSelect={setMark}
+                    >
                       <Select.HiddenSelect />
                       <Select.Label>Mark</Select.Label>
                       <Select.Control bg={"white"}>
@@ -108,9 +169,9 @@ export default function EditQuestion({ isOpen, onClose }) {
                       </Select.Control>
                       <Select.Positioner>
                         <Select.Content>
-                          {marks.items.map((marks) => (
-                            <Select.Item item={marks} key={marks.value}>
-                              {marks.label}
+                          {marks.items.map((m) => (
+                            <Select.Item item={m} key={m.value}>
+                              {m.label}
                               <Select.ItemIndicator />
                             </Select.Item>
                           ))}
@@ -119,89 +180,93 @@ export default function EditQuestion({ isOpen, onClose }) {
                     </Select.Root>
                   </Field.Root>
                 </Box>
+
                 <Stack flex={1} gap="4" align={"center"}>
                   <Field.Root>
-                    <Input placeholder="Question" />
+                    <Textarea
+                      placeholder="Question"
+                      defaultValue={questionText}
+                      mb={5}
+                    />
                   </Field.Root>
-                  <Field.Root alignItems={"center"}>
-                    <FileUpload.Root alignItems="stretch" maxFiles={1}>
-                      <FileUpload.HiddenInput />
-                      <FileUpload.Dropzone>
-                        <Icon size="md" color="fg.muted">
-                          <LuUpload />
-                        </Icon>
-                        <FileUpload.DropzoneContent>
-                          <Box>Add or Insert Image</Box>
-                          <Box color="fg.muted">.png, .jpg up to 5MB</Box>
-                        </FileUpload.DropzoneContent>
-                      </FileUpload.Dropzone>
-                      <FileUpload.List />
-                    </FileUpload.Root>
-                  </Field.Root>
-                  <HStack spacing={4} align="start" w={"full"}>
-                    <Field.Root>
-                      <InputGroup startElement="A:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                    <Field.Root>
-                      <InputGroup startElement="B:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                  </HStack>
-                  <HStack spacing={4} align="start" w={"full"}>
-                    <Field.Root>
-                      <InputGroup startElement="C:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                    <Field.Root>
-                      <InputGroup startElement="D:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                  </HStack>
+
+                  {questionType == "MCQ" &&
+                    [0, 1, 2, 3].map((index) => (
+                      <HStack key={index} spacing={4} align="start" w={"full"}>
+                        <Field.Root w="full">
+                          <InputGroup startElement={`${answerLabels[index]}:`}>
+                            <Group attached w={"full"}>
+                              <Input
+                                w="full"
+                                flex={1}
+                                placeholder="Answer"
+                                pl={9}
+                                value={answers[index]}
+                                onChange={(e) => {
+                                  const updated = [...answers];
+                                  updated[index] = e.target.value;
+                                  setAnswers(updated);
+                                }}
+                              />
+                              <Button
+                                bg="ghost"
+                                variant="outline"
+                                onClick={() => setCorrectAnswer(answers[index])}
+                              >
+                                {correctAnswer === answers[index] ? (
+                                  <FaCircle color="green" />
+                                ) : (
+                                  <FaRegCircle color="grey" />
+                                )}
+                              </Button>
+                            </Group>
+                          </InputGroup>
+                        </Field.Root>
+                      </HStack>
+                    ))}
+
+                  {questionType === "T/F" &&
+                    ["True", "False"].map((value, index) => (
+                      <HStack key={value} spacing={4} align="start" w={"full"}>
+                        <Field.Root w="full">
+                          <InputGroup>
+                            <Group attached w={"full"}>
+                              <Input w="full" flex={1} readOnly value={value} />
+                              <Button
+                                bg="ghost"
+                                variant="outline"
+                                onClick={() => setCorrectAnswer(value)}
+                              >
+                                {correctAnswer === value ? (
+                                  <FaCircle color="green" />
+                                ) : (
+                                  <FaRegCircle color="grey" />
+                                )}
+                              </Button>
+                            </Group>
+                          </InputGroup>
+                        </Field.Root>
+                      </HStack>
+                    ))}
+
+                  {questionType === "Short Answer" && (
+                    <HStack spacing={4} align="start" w={"full"}>
+                      <Field.Root w="full">
+                        <InputGroup startElement={"Answer:"}>
+                          <Group attached w={"full"}>
+                            <Input
+                              w="full"
+                              flex={1}
+                              pl={20}
+                              placeholder="Correct answer"
+                              value={correctAnswer}
+                              onChange={(e) => setCorrectAnswer(e.target.value)}
+                            />
+                          </Group>
+                        </InputGroup>
+                      </Field.Root>
+                    </HStack>
+                  )}
                 </Stack>
               </Flex>
             </Dialog.Body>
@@ -210,13 +275,24 @@ export default function EditQuestion({ isOpen, onClose }) {
               <Flex w={"full"} gap={3} justify={"space-evenly"}>
                 <Button
                   colorPalette={"green"}
-                  onClick={onClose}
                   w={"1/2"}
                   h={12}
+                  onClick={async () => {
+                    await handleSave(true);
+                    onClose();
+                  }}
                 >
                   Approve
                 </Button>
-                <Button colorPalette={"red"} onClick={onClose} w={"1/2"} h={12}>
+                <Button
+                  colorPalette={"red"}
+                  w={"1/2"}
+                  h={12}
+                  onClick={async () => {
+                    await handleSave(false);
+                    onClose();
+                  }}
+                >
                   Decline
                 </Button>
               </Flex>

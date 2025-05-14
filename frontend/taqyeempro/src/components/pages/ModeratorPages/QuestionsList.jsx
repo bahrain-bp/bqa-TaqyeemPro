@@ -25,6 +25,8 @@ export default function QuestionsList() {
   const [loading, setLoading] = useState(true);
   const { gradeId } = useParams();
   const gradeNumber = parseInt(gradeId?.replace("m", ""));
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
 
   // Create a reference to the Q{idx + 1} text
   const qTextRefs = useRef([]);
@@ -60,7 +62,13 @@ export default function QuestionsList() {
 
   return (
     <Box maxW="6xl" mx="auto" mt={3} px={4} pb={12}>
-      <EditQuestion isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
+      <EditQuestion
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        questionData={isEditOpen ? selectedQuestion : null}
+        questionId={selectedQuestionId}
+      />
+
       <Flex justify="space-between" align="center" mb={7} gap={4} wrap="wrap">
         <Text fontSize="3xl" fontWeight="bold" color="gray.800">
           Maths for Grade {gradeNumber}
@@ -88,9 +96,7 @@ export default function QuestionsList() {
               <Popover.Positioner>
                 <Popover.Content>
                   <Popover.Arrow />
-                  <Popover.Body>
-                    Work in Progress 🙂
-                  </Popover.Body>
+                  <Popover.Body>Work in Progress 🙂</Popover.Body>
                 </Popover.Content>
               </Popover.Positioner>
             </Portal>
@@ -103,7 +109,7 @@ export default function QuestionsList() {
             <Spinner size="xl" />
           </Flex>
         ) : filteredQuestions.length === 0 ? (
-          <Text>No questions found for Grade {gradeNumber}.</Text>
+          <Text>No questions found</Text>
         ) : (
           filteredQuestions.map((q, idx) => (
             <Box
@@ -113,7 +119,11 @@ export default function QuestionsList() {
               p={6}
               bg="white"
               _hover={{ bg: "gray.50", cursor: "pointer" }}
-              onClick={() => setIsEditOpen(true)}
+              onClick={() => {
+                setSelectedQuestion(q);
+                setSelectedQuestionId(idx+1);
+                setIsEditOpen(true);
+              }}
             >
               <Flex justify="space-between" mb={2}>
                 <Flex>
