@@ -68,13 +68,12 @@ export default function EditQuestion({
 
   const handleSave = async (approvedStatus) => {
     const updatedQuestion = {
-      questionId,
+      ...questionData,
       questionText,
-      questionType,
+      approved: approvedStatus,
       skillType: questionSkill,
       mark: Number(mark),
       answerText: correctAnswer,
-      approved: approvedStatus,
     };
 
     if (questionType === "MCQ") {
@@ -83,9 +82,17 @@ export default function EditQuestion({
       updatedQuestion.option3 = answers[2];
       updatedQuestion.option4 = answers[3];
     } else if (questionType === "T/F") {
-      updatedQuestion.options = ["True", "False"];
+      updatedQuestion.option1 = "True";
+      updatedQuestion.option2 = "False";
+      updatedQuestion.option3 = null;
+      updatedQuestion.option4 = null;
+    } else if (questionType === "Short Answer") {
+      updatedQuestion.option1 = null;
+      updatedQuestion.option2 = null;
+      updatedQuestion.option3 = null;
+      updatedQuestion.option4 = null;
     }
-
+    console.log(updatedQuestion);
     try {
       const response = await fetch(
         "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/update-question",
@@ -145,7 +152,8 @@ export default function EditQuestion({
                     <Input
                       size={"sm"}
                       width={"full"}
-                      defaultValue={questionSkill}
+                      value={questionSkill}
+                      onChange={(e) => setQuestionSkill(e.target.value)}
                       bg={"white"}
                     />
                   </Field.Root>
@@ -155,7 +163,7 @@ export default function EditQuestion({
                       size="sm"
                       width="full"
                       defaultValue={mark}
-                      onSelect={setMark}
+                      onValueChange={(e) => setMark(e?.value?.[0])}
                     >
                       <Select.HiddenSelect />
                       <Select.Label>Mark</Select.Label>
@@ -185,7 +193,8 @@ export default function EditQuestion({
                   <Field.Root>
                     <Textarea
                       placeholder="Question"
-                      defaultValue={questionText}
+                      value={questionText}
+                      onChange={(e) => setQuestionText(e.target.value)}
                       mb={5}
                     />
                   </Field.Root>
