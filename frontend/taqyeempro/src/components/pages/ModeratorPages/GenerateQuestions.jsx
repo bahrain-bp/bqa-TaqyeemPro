@@ -38,6 +38,8 @@ export default function GenerateQuestions() {
   const [alertMessage, setAlertMessage] = useState("");
   const [selectedLang, setSelectedLang] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCooldown, setIsCooldown] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
 
   useEffect(() => {
     if (!isDialogOpen) {
@@ -138,6 +140,19 @@ export default function GenerateQuestions() {
       setAlertMessage("Failed to generate questions.");
     } finally {
       setIsLoading(false);
+      setIsCooldown(true);
+      setTimeLeft(60);
+
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setIsCooldown(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
   };
 
@@ -316,15 +331,15 @@ export default function GenerateQuestions() {
                   h={"12"}
                   onClick={handleSubmit}
                   isLoading={isLoading}
-                  disabled={isLoading}
+                  disabled={isLoading || isCooldown}
                 >
                   {isLoading ? (
-                    <>
-                      <HStack spacing={2}>
-                        <Spinner size="sm" />
-                        <span>Sending Request...</span>
-                      </HStack>
-                    </>
+                    <HStack spacing={2}>
+                      <Spinner size="sm" />
+                      <span>Sending Request...</span>
+                    </HStack>
+                  ) : isCooldown ? (
+                    `Please wait ${timeLeft}s`
                   ) : (
                     "Start Generating"
                   )}

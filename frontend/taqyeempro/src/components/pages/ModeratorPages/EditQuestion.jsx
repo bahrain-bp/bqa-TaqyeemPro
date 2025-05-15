@@ -54,7 +54,7 @@ export default function EditQuestion({
   useEffect(() => {
     console.log(questionData);
     if (questionData) {
-      const isMCQ = questionData.questionType === "MCQ";
+      const isMCQ = questionData.questionType === "MCQ" || "اختيار من متعدد";
       const mcqOptions = isMCQ
         ? [
             questionData.option1 || "",
@@ -84,17 +84,20 @@ export default function EditQuestion({
       answerText: correctAnswer,
     };
 
-    if (questionType === "MCQ") {
+    if (questionType === "MCQ" || questionType === "اختيار من متعدد") {
       updatedQuestion.option1 = answers[0];
       updatedQuestion.option2 = answers[1];
       updatedQuestion.option3 = answers[2];
       updatedQuestion.option4 = answers[3];
-    } else if (questionType === "T/F") {
+    } else if (questionType === "True or False" || questionType === "صح او خطأ") {
       updatedQuestion.option1 = "True";
       updatedQuestion.option2 = "False";
       updatedQuestion.option3 = null;
       updatedQuestion.option4 = null;
-    } else if (questionType === "Short Answer") {
+    } else if (
+      questionType === "Short Answer" ||
+      questionType === "إجابة قصيرة"
+    ) {
       updatedQuestion.option1 = null;
       updatedQuestion.option2 = null;
       updatedQuestion.option3 = null;
@@ -250,7 +253,8 @@ export default function EditQuestion({
                     />
                   </Field.Root>
 
-                  {questionType == "MCQ" &&
+                  {(questionType === "MCQ" ||
+                    questionType === "اختيار من متعدد") &&
                     [0, 1, 2, 3].map((index) => (
                       <HStack key={index} spacing={4} align="start" w={"full"}>
                         <Field.Root w="full">
@@ -287,7 +291,7 @@ export default function EditQuestion({
                       </HStack>
                     ))}
 
-                  {questionType === "T/F" &&
+                  {(questionType === "True or False" || questionType === "صح او خطأ") &&
                     ["True", "False"].map((value, index) => (
                       <HStack key={value} spacing={4} align="start" w={"full"}>
                         <Field.Root w="full">
@@ -318,7 +322,8 @@ export default function EditQuestion({
                       </HStack>
                     ))}
 
-                  {questionType === "Short Answer" && (
+                  {(questionType === "Short Answer" ||
+                    questionType === "إجابة قصيرة") && (
                     <HStack spacing={4} align="start" w={"full"}>
                       <Field.Root w="full">
                         <InputGroup startElement={"Answer:"}>

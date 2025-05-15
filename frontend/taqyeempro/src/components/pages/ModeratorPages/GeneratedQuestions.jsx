@@ -12,8 +12,8 @@ export default function GeneratedQuestions() {
 
       {/* Content */}
       <Stack gap={3}>
-        {/* subject 1 */}
-        <Link to="/generated-questions/m9">
+        {/* Math g9 english */}
+        <Link to="/generated-questions/math-9-english">
           <Box
             bg="white"
             borderWidth="1px"
@@ -25,7 +25,7 @@ export default function GeneratedQuestions() {
           >
             <Flex align="center" justify="space-between">
               <Text fontWeight="bold" fontSize="lg" color="gray.700">
-                Maths for Grade 9
+                Maths for Grade 9 - English
               </Text>
               <Flex align="center" gap={4}>
                 <LuArrowRight />
@@ -34,8 +34,8 @@ export default function GeneratedQuestions() {
           </Box>
         </Link>
 
-        {/* subject 2 */}
-        <Link to="/generated-questions/m12">
+        {/* Math grade 9 arabic */}
+        <Link to="/generated-questions/math-9-arabic">
           <Box
             bg="white"
             borderWidth="1px"
@@ -47,7 +47,7 @@ export default function GeneratedQuestions() {
           >
             <Flex align="center" justify="space-between">
               <Text fontWeight="bold" fontSize="lg" color="gray.700">
-                Maths for Grade 12
+                Maths for Grade 9 - Arabic
               </Text>
               <Flex align="center" gap={4}>
                 <LuArrowRight />
@@ -55,7 +55,50 @@ export default function GeneratedQuestions() {
             </Flex>
           </Box>
         </Link>
-        
+
+        {/* math grade 12 englsih */}
+        <Link to="/generated-questions/math-12-english">
+          <Box
+            bg="white"
+            borderWidth="1px"
+            borderRadius="md"
+            boxShadow="sm"
+            p={6}
+            py={8}
+            _hover={{ bg: "gray.50", cursor: "pointer" }}
+          >
+            <Flex align="center" justify="space-between">
+              <Text fontWeight="bold" fontSize="lg" color="gray.700">
+                Maths for Grade 12 - English
+              </Text>
+              <Flex align="center" gap={4}>
+                <LuArrowRight />
+              </Flex>
+            </Flex>
+          </Box>
+        </Link>
+
+        {/* Math grade 12 arabic */}
+        <Link to="/generated-questions/math-12-arabic">
+          <Box
+            bg="white"
+            borderWidth="1px"
+            borderRadius="md"
+            boxShadow="sm"
+            p={6}
+            py={8}
+            _hover={{ bg: "gray.50", cursor: "pointer" }}
+          >
+            <Flex align="center" justify="space-between">
+              <Text fontWeight="bold" fontSize="lg" color="gray.700">
+                Maths for Grade 12 - Arabic
+              </Text>
+              <Flex align="center" gap={4}>
+                <LuArrowRight />
+              </Flex>
+            </Flex>
+          </Box>
+        </Link>
       </Stack>
     </Box>
   );
