@@ -16,7 +16,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { MdEdit } from "react-icons/md";
 import EditQuestion from "./EditQuestion";
 import { useParams } from "react-router-dom";
-import { AiOutlineFilter } from "react-icons/ai";
+import { AiOutlineFilter, AiOutlineSortAscending, AiOutlineSortDescending } from "react-icons/ai";
 import { LuSearch } from "react-icons/lu";
 import { DivideCircle } from "lucide-react";
 
@@ -189,7 +189,7 @@ export default function QuestionsList() {
           <Popover.Root>
             <Popover.Trigger asChild>
               <Button colorPalette={"red"} size={"md"} _hover={{ bg: "black" }}>
-                <AiOutlineFilter /> Filter
+                <AiOutlineSortDescending /> Sort
               </Button>
             </Popover.Trigger>
             <Portal>
@@ -237,9 +237,9 @@ export default function QuestionsList() {
                         justifyContent="flex-start"
                         colorPalette="red"
                         onClick={() => setSortOption("default")}
-                        _hover={{ bg: "black"}}
+                        _hover={{ bg: "black" }}
                       >
-                        Clear Filter
+                        Clear Sort
                       </Button>
                     </VStack>
                   </Popover.Body>
@@ -303,18 +303,22 @@ export default function QuestionsList() {
               {/* Additional Information */}
               <Flex
                 mt={2}
-                gap={4}
                 ml={2}
+                w={"60%"}
+                justify="space-between"
                 style={{
                   marginLeft: (qTextRefs.current[idx]?.offsetWidth || 0) + 8,
                 }}
               >
                 {" "}
                 <Text fontSize="sm" color="gray.600">
-                  Skill: {q.skillType}
+                  Skill:{" "}
+                  {q.skillType.length > 15
+                    ? `${q.skillType.slice(0, 15)}...`
+                    : q.skillType}
                 </Text>
                 <Text fontSize="sm" color="gray.500">
-                  Question Type: {q.questionType}
+                  Type: {q.questionType}
                 </Text>
                 <Text fontSize="sm" color="gray.500">
                   Mark: {q.mark}

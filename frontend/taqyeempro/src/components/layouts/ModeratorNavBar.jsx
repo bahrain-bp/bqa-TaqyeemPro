@@ -76,7 +76,8 @@ export default function ModeratorNavBar() {
 
           {/* Right Side: Login Button */}
           <HStack>
-            <Drawer.Root>
+            {/* Notification */}
+            {/* <Drawer.Root>
               <Drawer.Trigger asChild>
                 <Button
                   variant="plain"
@@ -126,7 +127,7 @@ export default function ModeratorNavBar() {
                   </Drawer.Content>
                 </Drawer.Positioner>
               </Portal>
-            </Drawer.Root>
+            </Drawer.Root> */}
 
             <Drawer.Root>
               <Drawer.Trigger asChild>

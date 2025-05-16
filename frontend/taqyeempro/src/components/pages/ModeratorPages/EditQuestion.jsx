@@ -20,6 +20,7 @@ import {
   Textarea,
   Spinner,
   Alert,
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { FaCircle, FaRegCircle } from "react-icons/fa";
@@ -89,7 +90,10 @@ export default function EditQuestion({
       updatedQuestion.option2 = answers[1];
       updatedQuestion.option3 = answers[2];
       updatedQuestion.option4 = answers[3];
-    } else if (questionType === "True or False" || questionType === "صح او خطأ") {
+    } else if (
+      questionType === "True or False" ||
+      questionType === "صح او خطأ"
+    ) {
       updatedQuestion.option1 = "True";
       updatedQuestion.option2 = "False";
       updatedQuestion.option3 = null;
@@ -115,9 +119,9 @@ export default function EditQuestion({
       );
 
       if (response.ok) {
-        setAlertStatus("success");
-        setAlertMessage("Question updated successfully!");
-        // onClose();
+        // setAlertStatus("success");
+        // setAlertMessage("Question updated successfully!");
+        onClose();
 
         if (onQuestionUpdate) {
           onQuestionUpdate({
@@ -142,9 +146,11 @@ export default function EditQuestion({
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content maxW="5xl" w="full">
+          <Dialog.Content maxW="2xl" w="full">
             <Dialog.Header>
-              <Dialog.Title>Question {questionId}</Dialog.Title>
+              <Dialog.Title>
+                Question {questionId} - {questionType}
+              </Dialog.Title>
             </Dialog.Header>
             {alertStatus && (
               <Alert.Root
@@ -179,25 +185,8 @@ export default function EditQuestion({
               />
             </Dialog.CloseTrigger>
             <Dialog.Body pb="4" w="full">
-              <Flex w="full" gap={6}>
-                <Box
-                  w="28%"
-                  p={5}
-                  bg={"gray.50"}
-                  borderRadius={"md"}
-                  spaceY={4}
-                >
-                  <Field.Root>
-                    <Text fontWeight={"medium"}>Question Type</Text>
-                    <Input
-                      size={"sm"}
-                      width={"full"}
-                      value={questionType}
-                      readOnly
-                      bg={"white"}
-                      disabled={isLoading}
-                    />
-                  </Field.Root>
+              <Box w="full" borderRadius={"md"} mb={5}>
+                <HStack spaceX={2}>
                   <Field.Root>
                     <Text fontWeight={"medium"}>Skill</Text>
                     <Input
@@ -240,63 +229,85 @@ export default function EditQuestion({
                       </Select.Positioner>
                     </Select.Root>
                   </Field.Root>
-                </Box>
+                </HStack>
+              </Box>
 
-                <Stack flex={1} gap="4" align={"center"}>
-                  <Field.Root>
-                    <Textarea
-                      placeholder="Question"
-                      value={questionText}
-                      disabled={isLoading}
-                      onChange={(e) => setQuestionText(e.target.value)}
-                      mb={5}
-                    />
-                  </Field.Root>
+              <Stack flex={1} gap="4" align={"center"}>
+                <Field.Root>
+                  <Text fontWeight={"medium"}>Question</Text>
+                  <Textarea
+                    placeholder="Question"
+                    value={questionText}
+                    disabled={isLoading}
+                    mb={2}
+                    onChange={(e) => setQuestionText(e.target.value)}
+                    h={32}
+                  />
+                </Field.Root>
 
-                  {(questionType === "MCQ" ||
-                    questionType === "اختيار من متعدد") &&
-                    [0, 1, 2, 3].map((index) => (
-                      <HStack key={index} spacing={4} align="start" w={"full"}>
-                        <Field.Root w="full">
-                          <InputGroup startElement={`${answerLabels[index]}:`}>
-                            <Group attached w={"full"}>
-                              <Input
-                                w="full"
-                                flex={1}
-                                placeholder="Answer"
-                                pl={9}
-                                disabled={isLoading}
-                                value={answers[index]}
-                                onChange={(e) => {
-                                  const updated = [...answers];
-                                  updated[index] = e.target.value;
-                                  setAnswers(updated);
-                                }}
-                              />
-                              <Button
-                                bg="ghost"
-                                variant="outline"
-                                disabled={isLoading}
-                                onClick={() => setCorrectAnswer(answers[index])}
-                              >
-                                {correctAnswer === answers[index] ? (
-                                  <FaCircle color="green" />
-                                ) : (
-                                  <FaRegCircle color="grey" />
-                                )}
-                              </Button>
-                            </Group>
-                          </InputGroup>
-                        </Field.Root>
+                {(questionType === "MCQ" ||
+                  questionType === "اختيار من متعدد") && (
+                  <VStack spacing={4} w="full" align="start" mb={2}>
+                    <Text fontWeight={"medium"}>Options</Text>
+                    {[0, 2].map((rowStartIndex) => (
+                      <HStack
+                        key={rowStartIndex}
+                        spacing={4}
+                        w="full"
+                        align="start" 
+                        spaceX={2}
+                      >
+                        {[rowStartIndex, rowStartIndex + 1].map((index) => (
+                          <Field.Root key={index} w="full">
+                            <InputGroup
+                              startElement={`${answerLabels[index]}:`}
+                            >
+                              <Group attached w="full">
+                                <Input
+                                  w="full"
+                                  flex={1}
+                                  placeholder="Answer"
+                                  pl={9}
+                                  disabled={isLoading}
+                                  value={answers[index]}
+                                  onChange={(e) => {
+                                    const updated = [...answers];
+                                    updated[index] = e.target.value;
+                                    setAnswers(updated);
+                                  }}
+                                />
+                                <Button
+                                  bg="ghost"
+                                  variant="outline"
+                                  disabled={isLoading}
+                                  onClick={() =>
+                                    setCorrectAnswer(answers[index])
+                                  }
+                                >
+                                  {correctAnswer === answers[index] ? (
+                                    <FaCircle color="green" />
+                                  ) : (
+                                    <FaRegCircle color="grey" />
+                                  )}
+                                </Button>
+                              </Group>
+                            </InputGroup>
+                          </Field.Root>
+                        ))}
                       </HStack>
                     ))}
+                  </VStack>
+                )}
 
-                  {(questionType === "True or False" || questionType === "صح او خطأ") &&
-                    ["True", "False"].map((value, index) => (
-                      <HStack key={value} spacing={4} align="start" w={"full"}>
-                        <Field.Root w="full">
+                {(questionType === "True or False" ||
+                  questionType === "صح او خطأ") && (
+                  <VStack spacing={4} w="full" align="start" mb={2}>
+                    <Text fontWeight={"medium"}>Options</Text>
+                    <HStack spacing={4} w="full" spaceX={2}>
+                      {["True", "False"].map((value) => (
+                        <Field.Root key={value} w="full">
                           <InputGroup>
-                            <Group attached w={"full"}>
+                            <Group attached w="full">
                               <Input
                                 w="full"
                                 flex={1}
@@ -319,31 +330,33 @@ export default function EditQuestion({
                             </Group>
                           </InputGroup>
                         </Field.Root>
-                      </HStack>
-                    ))}
-
-                  {(questionType === "Short Answer" ||
-                    questionType === "إجابة قصيرة") && (
-                    <HStack spacing={4} align="start" w={"full"}>
-                      <Field.Root w="full">
-                        <InputGroup startElement={"Answer:"}>
-                          <Group attached w={"full"}>
-                            <Input
-                              w="full"
-                              flex={1}
-                              pl={20}
-                              placeholder="Correct answer"
-                              value={correctAnswer}
-                              disabled={isLoading}
-                              onChange={(e) => setCorrectAnswer(e.target.value)}
-                            />
-                          </Group>
-                        </InputGroup>
-                      </Field.Root>
+                      ))}
                     </HStack>
-                  )}
-                </Stack>
-              </Flex>
+                  </VStack>
+                )}
+
+                {(questionType === "Short Answer" ||
+                  questionType === "إجابة قصيرة") && (
+                  <HStack spacing={4} align="start" w={"full"}>
+                    <Field.Root w="full">
+                      <Text fontWeight={"medium"}>Answer</Text>
+                      <InputGroup>
+                        <Group attached w={"full"}>
+                          <Input
+                            w="full"
+                            flex={1}
+                            placeholder="Correct answer"
+                            value={correctAnswer}
+                            disabled={isLoading}
+                            mb={3}
+                            onChange={(e) => setCorrectAnswer(e.target.value)}
+                          />
+                        </Group>
+                      </InputGroup>
+                    </Field.Root>
+                  </HStack>
+                )}
+              </Stack>
             </Dialog.Body>
 
             <Dialog.Footer>

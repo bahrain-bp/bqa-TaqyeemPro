@@ -74,7 +74,8 @@ export default function StudentNavBar() {
 
           {/* Right Side: Login Button */}
           <HStack>
-            <Drawer.Root>
+            {/* Notifications            */}
+            {/* <Drawer.Root>
               <Drawer.Trigger asChild>
                 <Button
                   variant="plain"
@@ -124,7 +125,7 @@ export default function StudentNavBar() {
                   </Drawer.Content>
                 </Drawer.Positioner>
               </Portal>
-            </Drawer.Root>
+            </Drawer.Root> */}
 
             <Button
               colorPalette="red"
