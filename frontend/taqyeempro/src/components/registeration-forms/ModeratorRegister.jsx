@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Heading,
@@ -12,21 +12,21 @@ import {
   Select,
   createListCollection,
   Field,
+  Spinner,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useRegisterLogic } from "../../Logic/Register";
 import { useNavigate } from "react-router-dom";
 
-
 export default function ModeratorRegister({ role }) {
   const navigate = useNavigate();
+  const [alertStatus, setAlertStatus] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    step, message, code,
-    setCode, signUpUser, confirmUser, 
-    setFormData
-  } = useRegisterLogic(role); // Use the passed role = 'moderator'
+  const { step, message, code, setCode, signUpUser, confirmUser, setFormData } =
+    useRegisterLogic(role); // Use the passed role = 'moderator'
 
   const {
     register,
@@ -52,16 +52,19 @@ export default function ModeratorRegister({ role }) {
     ],
   });
 
-  const handleSignupSubmit = (data) => {
+  const handleSignupSubmit = async (data) => {
+    setIsLoading(true); // Start loading
     setFormData(data);
-    signUpUser(data); // Send data to Cognito using the moderator pool
+    await signUpUser(data); // Await it to manage loading properly
+    setIsLoading(false); // Stop loading after process
   };
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
-      {step === 'signup' && (
+      {step === "signup" && (
         <form onSubmit={handleSubmit(handleSignupSubmit)}>
           <VStack spacing={4}>
+            {message && <Text color="red">{message}</Text>}
             {/* First Name and Last Name */}
             <HStack spacing={4} w="full">
               <Field.Root invalid={!!errors.firstName}>
@@ -69,7 +72,11 @@ export default function ModeratorRegister({ role }) {
                   placeholder="First Name"
                   size="lg"
                   bg="white"
-                  {...register("firstName", { required: "First name is required" })}
+                  disabled={isLoading}
+                  css={{ "--focus-color": "red" }}
+                  {...register("firstName", {
+                    required: "First name is required",
+                  })}
                 />
                 <Field.ErrorText>{errors.firstName?.message}</Field.ErrorText>
               </Field.Root>
@@ -78,7 +85,11 @@ export default function ModeratorRegister({ role }) {
                   placeholder="Last Name"
                   size="lg"
                   bg="white"
-                  {...register("lastName", { required: "Last name is required" })}
+                  disabled={isLoading}
+                  css={{ "--focus-color": "red" }}
+                  {...register("lastName", {
+                    required: "Last name is required",
+                  })}
                 />
                 <Field.ErrorText>{errors.lastName?.message}</Field.ErrorText>
               </Field.Root>
@@ -90,6 +101,8 @@ export default function ModeratorRegister({ role }) {
                 collection={genderList}
                 size="lg"
                 width="full"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 {...register("gender", { required: "Gender is required" })}
                 onValueChange={(e) => setValue("gender", e.value)}
               >
@@ -113,7 +126,9 @@ export default function ModeratorRegister({ role }) {
                   </Select.Content>
                 </Select.Positioner>
               </Select.Root>
-              <Field.ErrorText>{errors.gender?.message || "Gender is required"}</Field.ErrorText>
+              <Field.ErrorText>
+                {errors.gender?.message || "Gender is required"}
+              </Field.ErrorText>
             </Field.Root>
 
             {/* Date of Birth */}
@@ -121,8 +136,12 @@ export default function ModeratorRegister({ role }) {
               <Input
                 type="date"
                 size="lg"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 bg="white"
-                {...register("dateOfBirth", { required: "Date of birth is required" })}
+                {...register("dateOfBirth", {
+                  required: "Date of birth is required",
+                })}
               />
               <Field.ErrorText>{errors.dateOfBirth?.message}</Field.ErrorText>
             </Field.Root>
@@ -132,9 +151,13 @@ export default function ModeratorRegister({ role }) {
               <Input
                 type="tel"
                 size="lg"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 bg="white"
                 placeholder="Phone Number"
-                {...register("phoneNumber", { required: "Phone number is required" })}
+                {...register("phoneNumber", {
+                  required: "Phone number is required",
+                })}
               />
               <Field.ErrorText>{errors.phoneNumber?.message}</Field.ErrorText>
             </Field.Root>
@@ -144,6 +167,8 @@ export default function ModeratorRegister({ role }) {
               <Input
                 type="email"
                 size="lg"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 bg="white"
                 placeholder="Email"
                 {...register("email", { required: "Email is required" })}
@@ -155,7 +180,9 @@ export default function ModeratorRegister({ role }) {
             <Field.Root invalid={!!errors.password} w="full">
               <Input
                 type="password"
+                disabled={isLoading}
                 size="lg"
+                css={{ "--focus-color": "red" }}
                 bg="white"
                 placeholder="Password"
                 {...register("password", { required: "Password is required" })}
@@ -171,14 +198,22 @@ export default function ModeratorRegister({ role }) {
               size="lg"
               w="full"
               _hover={{ bg: "black" }}
+              disabled={isLoading}
             >
-              Register
+              {isLoading ? (
+                <HStack spacing={2}>
+                  <Spinner size="sm" />
+                  <span>Registering...</span>
+                </HStack>
+              ) : (
+                "Register"
+              )}
             </Button>
           </VStack>
         </form>
       )}
 
-      {step === 'confirm' && (
+      {step === "confirm" && (
         <VStack spacing={4} w="full">
           <Input
             name="code"
@@ -189,8 +224,10 @@ export default function ModeratorRegister({ role }) {
             bg="white"
           />
           <Button
-            colorScheme="blue"
+            colorPalette="red"
             w="full"
+            color="white"
+            size="lg"
             onClick={async () => {
               await confirmUser();
               setTimeout(() => navigate("/login"), 400); // Wait 1.5s
@@ -200,12 +237,6 @@ export default function ModeratorRegister({ role }) {
           </Button>
         </VStack>
       )}
-
-      {message && (
-        <Box mt={4} p={2} color="gray.700" textAlign="center">
-          {message}
-        </Box>
-      )}
-      </Box>
+    </Box>
   );
 }

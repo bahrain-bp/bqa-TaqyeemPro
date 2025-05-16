@@ -43,7 +43,7 @@ export default function Register() {
             defaultValue="student"
             onChange={(value) => setSelectedRole(value.target.defaultValue)}
             value={selectedRole}
-          >
+          > 
             <HStack gap="6">
               <RadioGroup.Item value="student">
                 <RadioGroup.ItemHiddenInput />

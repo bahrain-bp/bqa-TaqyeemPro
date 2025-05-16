@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Heading,
@@ -7,50 +7,87 @@ import {
   Image,
   VStack,
   Container,
-} from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+} from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const MotionBox = motion(Box);
+const MotionHeading = motion(Heading);
+const MotionImage = motion(Image);
+const MotionButton = motion(Button);
 
 export default function Home() {
   return (
-    <Box py={12}>
-      {/* Top Section */}
+    <Box
+      py={12}
+      bgGradient="linear(to-br, red.50, white)"
+      minH="100vh"
+      overflow="hidden"
+    >
       <Container maxW="container.lg" textAlign="center">
-        <VStack spacing={6}>
-          <Heading as="h1" size="7xl" fontWeight="bold" color="gray.700">
+        <VStack spacing={10}>
+          <MotionHeading
+            as="h1"
+            size="6xl"
+            fontWeight="extrabold"
+            initial={{ opacity: 0, y: -40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             Welcome to Taqyeem Pro
-          </Heading>
-          <Button
+          </MotionHeading>
+
+          <MotionText
+            fontSize="lg"
+            color="gray.600"
+            maxW="600px"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            A smarter way to evaluate, track, and grow.
+          </MotionText>
+
+          <MotionButton
             as={Link}
             to="/login"
-            colorPalette="red"
-            size="2xl"
-            m={9}
-            px={14}
-            boxShadow={"lg"}
-            _hover={{ bg: 'black' }}
+            size="3xl"
+            w="xs"
+            px={10}
+            py={6}
+            mt={5}
+            fontSize="xl"
+            bg="red.500"
+            color="white"
+            rounded="md"
+            boxShadow="lg"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            _hover={{ bg: "black" }}
+            
+            objectFit="contain"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
           >
             Get Started
-          </Button>
-          <Image
-            src="/Students.png" 
-            alt="Hero"
-            borderRadius="lg"
-            maxH="11/12"
+          </MotionButton>
+
+          <MotionImage
+            src="/Students.png"
+            alt="Students Illustration"
+            borderRadius="2xl"
+            maxH="full"
+            mt={10}
             objectFit="contain"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.3 }}
           />
         </VStack>
       </Container>
-
-      {/* About Section
-      <Box mt={24} textAlign="center" px={6}>
-        <Heading as="h2" size="xl" color="black" mb={4}>
-          About Us
-        </Heading>
-        <Text fontSize="lg" color="gray.600" maxW="800px" mx="auto">
-          Taqyeem Pro is a modern evaluation platform helping individuals and organizations collect, analyze,
-          and respond to structured feedback. We're dedicated to simplicity, clarity, and insightful data.
-        </Text>
-      </Box> */}
     </Box>
   );
 }
+
+const MotionText = motion(Text);
