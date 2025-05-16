@@ -5,15 +5,22 @@ import {
   Heading,
   Text,
   VStack,
+  HStack,
   Input,
   Textarea,
   Button,
-  SimpleGrid,
   Icon,
+  SimpleGrid,
+  Stack,
   Alert,
+  Image,
 } from "@chakra-ui/react";
+import {
+  AiOutlineMail,
+  AiOutlinePhone,
+  AiOutlineEnvironment,
+} from "react-icons/ai";
 import { motion } from "framer-motion";
-import { AiOutlineMail, AiOutlinePhone, AiOutlineEnvironment } from "react-icons/ai";
 
 const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
@@ -23,83 +30,206 @@ export default function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    e.target.reset();
+    alert("email sent");
   };
 
   return (
-    <Box py={12} bgGradient="linear(to-br, red.50, white)">
-      <Container maxW="container.lg">
-        <VStack spacing={12} align="start">
-          {/* Heading Section */}
-          <MotionBox
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            w="full"
-          >
-            <MotionHeading fontSize={["3xl", "4xl", "5xl"]} fontWeight="bold" color="gray.700">
+    <Box py={5} pb={20}>
+      <Container maxW="7xl">
+        {/* Contact Header */}
+        <MotionBox
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <VStack spacing={4} mb={10} textAlign="center">
+            <MotionHeading
+              fontSize={["3xl", "4xl", "5xl"]}
+              fontWeight="bold"
+              color="gray.700"
+              mb={4}
+            >
               Contact Us
             </MotionHeading>
-            <MotionText fontSize="lg" color="gray.600" mt={2}>
-              Have a question, suggestion, or need support? We’d love to hear from you.
+            <MotionText fontSize="lg" color="gray.600">
+              Email, call, or complete the form to learn how Snappy can solve
+              your messaging problem.
             </MotionText>
-          </MotionBox>
+            <Text color="red.500" fontWeight="semibold">
+              info@taqypeempro.bh | 3873-3857
+            </Text>
+          </VStack>
+        </MotionBox>
 
-          {/* Contact Info & Form */}
-          <SimpleGrid columns={[1, null, 2]} spacing={10} w="full">
-            {/* Contact Information */}
-            <VStack align="start" spacing={6}>
+        <MotionBox
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          {/* Main Contact Info + Form */}
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} mb={16}>
+            {/* Contact Info */}
+            <VStack align="start" spacing={6} maxW={"80%"} my={"auto"}>
               <Box>
-                <Icon as={AiOutlineMail} boxSize={6} color="red.500" />
-                <Text mt={1} fontSize="md" color="gray.600">
-                  support@taqyeempro.com
+                <Text fontWeight="bold" mb={1}>
+                  Customer Support
+                </Text>
+                <Text color="gray.600">
+                  Our support team is available around the clock to address any
+                  concerns or queries you may have.
                 </Text>
               </Box>
+              <br />
               <Box>
-                <Icon as={AiOutlinePhone} boxSize={6} color="red.500" />
-                <Text mt={1} fontSize="md" color="gray.600">
-                  +973-1234-5678
+                <Text fontWeight="bold" mb={1}>
+                  Feedback and Suggestions
+                </Text>
+                <Text color="gray.600">
+                  We value your feedback and are always open to improving your
+                  Snappy experience.
                 </Text>
               </Box>
+              <br />
               <Box>
-                <Icon as={AiOutlineEnvironment} boxSize={6} color="red.500" />
-                <Text mt={1} fontSize="md" color="gray.600">
-                  Manama, Bahrain
+                <Text fontWeight="bold" mb={1}>
+                  Media Inquiries
+                </Text>
+                <Text color="gray.600">
+                  For media-related collaborations, contact media@taqyeempro.bh
                 </Text>
               </Box>
-              <Text fontSize="sm" color="gray.500">
-                Available: Sun–Thu | 9AM–4PM
-              </Text>
             </VStack>
 
             {/* Contact Form */}
-            <Box as="form" onSubmit={handleSubmit} bg="white" p={6} borderRadius="lg" boxShadow="md">
-              <VStack spacing={4}>
-                <Input placeholder="Your name" name="name" required />
-                <Input type="email" placeholder="you@example.com" name="email" required />
-                <Input placeholder="Subject (optional)" name="subject" />
-                <Textarea placeholder="Write your message here..." rows={5} name="message" required />
-                <Button
-                  type="submit"
-                  colorScheme="red"
-                  size="lg"
-                  width="full"
-                  _hover={{ bg: "black", color: "white" }}
-                >
-                  Send Message
-                </Button>
-                {submitted && (
-                  <Alert status="success" borderRadius="md" mt={4}>
-                    
-                    Message sent! We'll get back to you as soon as possible.
-                  </Alert>
-                )}
-              </VStack>
+            <Box bg="white" p={8} borderRadius="xl" boxShadow="sm">
+              <form onSubmit={handleSubmit}>
+                <VStack spacing={4}>
+                  <Input placeholder="Full name" name="name" required />
+                  <Input
+                    type="email"
+                    placeholder="Email address"
+                    name="email"
+                    required
+                  />
+                  <Input placeholder="Phone number" name="phone" />
+                  <Textarea
+                    placeholder="How can we help?"
+                    rows={4}
+                    name="message"
+                    required
+                  />
+                  <Button type="submit" colorPalette="red" w="full">
+                    Submit
+                  </Button>
+                  {submitted && (
+                    <Alert status="success" borderRadius="md">
+                      Message sent successfully!
+                    </Alert>
+                  )}
+                </VStack>
+                <Text fontSize="xs" color="gray.500" mt={2} textAlign="center">
+                  By contacting us, you agree to our Terms of Service & Privacy
+                  Policy.
+                </Text>
+              </form>
             </Box>
           </SimpleGrid>
-        </VStack>
+        </MotionBox>
+
+        {/* Location Info */}
+        <MotionBox
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <SimpleGrid
+            mt={20}
+            columns={{ base: 1, md: 2 }}
+            spacing={10}
+            alignItems="center"
+          >
+            <Box
+              w="full"
+              h="300px"
+              bg="gray.200"
+              borderRadius="md"
+              backgroundImage="url('/location.png')"
+              backgroundSize="cover"
+              backgroundPosition="center"
+            />
+
+            {/* Address */}
+            <VStack align="start" spacing={3} ml={16}>
+              <Text fontSize="xl" fontWeight="bold">
+                Our Location
+              </Text>
+              <Text fontSize="md" color="gray.600">
+                <b>TaqyeempPro Inc.</b>
+                <br />
+                123 Tech Boulevard, Suite 456
+                <br />
+                Manama, 12345
+                <br />
+                Bahrain
+              </Text>
+            </VStack>
+          </SimpleGrid>
+        </MotionBox>
+        {/* FAQ
+        <Box mt={20}>
+          <Heading size="lg" mb={6}>
+            FAQ
+          </Heading>
+          <Accordion allowToggle>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    What makes Snappy different from other messaging apps?
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Snappy is built with speed, privacy, and modern collaboration in
+                mind.
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    How secure are my conversations on Snappy?
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                We use end-to-end encryption to ensure all your conversations
+                remain private and secure.
+              </AccordionPanel>
+            </AccordionItem>
+
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Can I personalize my Snappy experience?
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                Yes, you can customize themes, notification settings, and more
+                to suit your preferences.
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Box> */}
       </Container>
     </Box>
   );
