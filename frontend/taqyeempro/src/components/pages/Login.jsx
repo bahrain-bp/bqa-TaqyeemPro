@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Heading,
@@ -12,12 +12,14 @@ import {
   RadioGroup,
   Stack,
   Field,
+  Alert,
+  CloseButton,
+  Spinner,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loginUser } from "@/Logic/Login";
-import { useNavigate } from "react-router-dom"; 
-
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const {
@@ -35,21 +37,31 @@ export default function Login() {
   });
 
   const selectedRole = watch("role");
+  const [alertStatus, setAlertStatus] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
+    setIsLoading(true); // Start loading
+
     const role = selectedRole;
     const { email, password } = data;
     const result = await loginUser(role, email, password);
-  
+
     if (result.success) {
       console.log("Signed in:", result.user);
+      setAlertStatus("success");
+      setAlertMessage("Login successful!");
       navigate("/");
-      window.location.reload(); // reload so App.jsx will re-read sessionStorage
+      window.location.reload();
     } else {
-      alert(`Login error: ${result.message}`);
+      setAlertStatus("error");
+      setAlertMessage(result.message);
     }
+
+    setIsLoading(false); // Stop loading
   };
 
   return (
@@ -87,6 +99,11 @@ export default function Login() {
               </RadioGroup.Item>
             </HStack>
           </RadioGroup.Root>
+          {alertStatus && (
+            <Text color={"red"} textAlign={"left"}>
+              {alertMessage}
+            </Text>
+          )}
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack w={"sm"} maxW={"xs"}>
@@ -95,6 +112,7 @@ export default function Login() {
                   placeholder="Email"
                   bg={"white"}
                   size={"lg"}
+                  disabled={isLoading}
                   css={{ "--focus-color": "red" }}
                   {...register("email", {
                     required: "Email is required",
@@ -106,6 +124,7 @@ export default function Login() {
                 <Input
                   type="password"
                   placeholder="Password"
+                  disabled={isLoading}
                   bg={"white"}
                   size={"lg"}
                   css={{ "--focus-color": "red" }}
@@ -122,8 +141,16 @@ export default function Login() {
                 size="lg"
                 w="full"
                 _hover={{ bg: "black" }}
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? (
+                  <HStack spacing={2}>
+                    <Spinner size="sm" />
+                    <span>Loging in...</span>
+                  </HStack>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </Stack>
           </form>

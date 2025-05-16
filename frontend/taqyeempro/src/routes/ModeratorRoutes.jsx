@@ -21,7 +21,7 @@ export default function ModeratorRoutes() {
           <Route path="reports" element={<Reports />} />
           <Route path="exams" element={<Exams />} />
           <Route path="generated-questions" element={<GeneratedQuestions />} />
-          <Route path="generated-questions/:gradeId" element={<QuestionsList />} />
+          <Route path="generated-questions/:subjectGradeLang" element={<QuestionsList />} />
           <Route path="*" element={<NotFound/>} />
         </Route>
       </Routes>

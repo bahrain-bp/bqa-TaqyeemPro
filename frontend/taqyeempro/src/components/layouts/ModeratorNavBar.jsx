@@ -42,8 +42,7 @@ export default function ModeratorNavBar() {
       await signOut();
 
       sessionStorage.removeItem("userRole");
-      alert("Signed out successfully.");
-      navigate("/login");
+      navigate("/");
       window.location.reload(); // <-- force App to reload and show NonUserRoutes
     } catch (err) {
       console.error("Sign out error:", err);
@@ -76,7 +75,8 @@ export default function ModeratorNavBar() {
 
           {/* Right Side: Login Button */}
           <HStack>
-            <Drawer.Root>
+            {/* Notification */}
+            {/* <Drawer.Root>
               <Drawer.Trigger asChild>
                 <Button
                   variant="plain"
@@ -126,7 +126,7 @@ export default function ModeratorNavBar() {
                   </Drawer.Content>
                 </Drawer.Positioner>
               </Portal>
-            </Drawer.Root>
+            </Drawer.Root> */}
 
             <Drawer.Root>
               <Drawer.Trigger asChild>
@@ -188,7 +188,7 @@ export default function ModeratorNavBar() {
                           fontWeight="bold"
                           w="full"
                           as="a"
-                          href="/reports"
+                          // href="/reports"
                         >
                           <AiOutlineBook size={20} />
                           Reports
@@ -201,7 +201,7 @@ export default function ModeratorNavBar() {
                           fontWeight="bold"
                           w="full"
                           as="a"
-                          href="/exams"
+                          // href="/exams"
                         >
                           <RiBookShelfLine size={20} />
                           Exams
