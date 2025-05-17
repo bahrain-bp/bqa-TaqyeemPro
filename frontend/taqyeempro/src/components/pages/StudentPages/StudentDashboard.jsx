@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -12,9 +12,39 @@ import {
   Button,
   Badge,
   Progress,
+  Spinner,
 } from "@chakra-ui/react";
+import { fetchUserAttributes, getCurrentUser } from "@aws-amplify/auth";
 
 export default function StudentDashboard() {
+  const [userAttributes, setUserAttributes] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAttributes = async () => {
+      try {
+        const user = await getCurrentUser();
+        const attributes = await fetchUserAttributes();
+
+        setUserAttributes(attributes);
+      } catch (error) {
+        console.error("Error fetching user attributes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttributes();
+  }, []);
+
+  if (loading) {
+    return (
+      <Flex justifyContent="center" alignItems="center">
+        <Spinner size="lg" />
+      </Flex>
+    );
+  }
+
   // ✅ بيانات الامتحانات القادمة
   const upcomingExams = [
     {
@@ -56,22 +86,22 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <Box pt="100px" px={5} bg="gray.50" minH="100vh">
+    <Box pt="100px" px={5} minH="100vh">
       {/* Welcome Header */}
       <Box mb={10} textAlign="center">
         <Heading as="h1" size="xl" color="blue.800">
-          Welcome, Ebrahim
+          Welcome, {userAttributes.given_name}
         </Heading>
         <Text fontSize="lg" color="gray.600">
           Track your exams and progress
         </Text>
       </Box>
 
-
-
       {/* BQA Footer Note */}
       <Box mt={20} textAlign="center" color="gray.500" fontSize="sm">
-        <Text>هيئة جودة التعليم والتدريب | Education & Training Quality Authority</Text>
+        <Text>
+          هيئة جودة التعليم والتدريب | Education & Training Quality Authority
+        </Text>
         <Text>Kingdom of Bahrain - مملكة البحرين</Text>
       </Box>
     </Box>

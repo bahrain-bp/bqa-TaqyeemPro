@@ -194,6 +194,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/about"
                         >
                           <AiOutlineInfoCircle size={20} />
                           About Us
@@ -205,6 +207,8 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
+                          as="a"
+                          href="/contact"
                         >
                           <AiOutlinePhone size={20} /> Contact Us
                         </Button>

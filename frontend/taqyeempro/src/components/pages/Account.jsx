@@ -1,18 +1,11 @@
-import {
-  Box,
-  Text,
-  Flex,
-  Grid,
-  GridItem,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Grid, GridItem, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { fetchUserAttributes, getCurrentUser } from '@aws-amplify/auth';
+import { fetchUserAttributes, getCurrentUser } from "@aws-amplify/auth";
 
 export default function Account() {
   const [userAttributes, setUserAttributes] = useState({});
   const [loading, setLoading] = useState(true);
   const [schoolName, setSchoolName] = useState("");
-
 
   useEffect(() => {
     const fetchAttributes = async () => {
@@ -23,19 +16,22 @@ export default function Account() {
         setUserAttributes(attributes);
 
         // Load school list from public folder
-        const res = await fetch('/bahrain_schools_list.json');
+        const res = await fetch("/bahrain_schools_list.json");
         const schoolList = await res.json();
 
         // Get schoolId from Cognito attributes
         const schoolId = attributes["custom:school"];
 
         // Find the matching school name
-        const matched = schoolList.find(s => String(s.id) === String(schoolId));
+        const matched = schoolList.find(
+          (s) => String(s.id) === String(schoolId)
+        );
         setSchoolName(matched?.name || "");
       } catch (error) {
         console.error("Error fetching user attributes:", error);
       } finally {
         setLoading(false);
+        console.log(userAttributes);
       }
     };
 
@@ -43,7 +39,11 @@ export default function Account() {
   }, []);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Flex justifyContent="center" alignItems="center">
+        <Spinner size="lg" />
+      </Flex>
+    );
   }
 
   return (
@@ -53,7 +53,14 @@ export default function Account() {
       </Text>
 
       {/* Header */}
-      <Box bg="white" borderRadius="md" p={6} mb={8} color="black" boxShadow="md">
+      <Box
+        bg="white"
+        borderRadius="md"
+        p={6}
+        mb={8}
+        color="black"
+        boxShadow="md"
+      >
         <Flex align="center">
           <Box color="black">
             <Text fontWeight="bold" fontSize="xl">
@@ -62,22 +69,30 @@ export default function Account() {
             <Text color="gray.600">
               {userAttributes["custom:school"] ? "Student" : "Moderator"}
             </Text>
-            <Text color="gray.600">
-              {schoolName}
-            </Text>
+            <Text color="gray.600">{schoolName}</Text>
           </Box>
         </Flex>
       </Box>
 
       {/* Personal Information */}
-      <Box bg="white" borderRadius="md" p={6} mb={8} color="black" boxShadow="md">
+      <Box
+        bg="white"
+        borderRadius="md"
+        p={6}
+        mb={8}
+        color="black"
+        boxShadow="md"
+      >
         <Flex justify="space-between" mb={4}>
           <Text fontWeight="bold" fontSize="lg">
             Personal Information
           </Text>
         </Flex>
 
-        <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }} gap={4}>
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+          gap={4}
+        >
           <GridItem>
             <Text>First Name</Text>
             <Text fontWeight="bold">{userAttributes.given_name}</Text>

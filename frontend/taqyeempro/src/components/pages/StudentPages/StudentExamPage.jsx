@@ -46,7 +46,7 @@ export default function ExamPage() {
   }, [timeLeft]);
 
   return (
-    <Box bg="white" minH="100vh" px={{ base: 8, lg: 24 }}>
+    <Box minH="100vh" px={{ base: 8, lg: 24 }}>
       {/* Page Heading */}
       <Flex mt={12} mb={8} borderBottom="2px solid #E6E6E6" pb={4}>
         <Text
