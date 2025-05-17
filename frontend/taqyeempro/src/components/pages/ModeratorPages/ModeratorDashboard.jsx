@@ -68,7 +68,7 @@ export default function ModeratorDashboard() {
               Total Exams
             </Heading>
             <Heading py={3} fontSize={38} fontWeight="bold" my={2}>
-              4.2K
+              3
             </Heading>
           </Box>
 
@@ -86,7 +86,7 @@ export default function ModeratorDashboard() {
               Total Students
             </Heading>
             <Heading py={3} fontSize={38} fontWeight="bold" my={2}>
-              8K
+              15
             </Heading>
           </Box>
         </VStack>
