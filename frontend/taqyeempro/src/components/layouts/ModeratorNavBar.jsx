@@ -213,8 +213,8 @@ export default function ModeratorNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
-                          as="a"
-                          href="/users"
+                          // as="a"
+                          // href="/users"
                         >
                           <AiOutlineUsergroupAdd size={20} />
                           Users

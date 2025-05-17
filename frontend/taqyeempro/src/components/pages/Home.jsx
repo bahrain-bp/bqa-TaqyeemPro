@@ -45,7 +45,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            A smarter way to evaluate, track, and grow.
+            A smarter way to test, learn, and grow.
           </MotionText>
 
           <MotionButton

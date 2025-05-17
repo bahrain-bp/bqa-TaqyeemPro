@@ -51,10 +51,14 @@ export default function GenerateQuestions() {
       setAlertStatus(null);
       setAlertMessage("");
       setSelectedLang(null);
+      setSpecItems([]);
+
     }
   }, [isDialogOpen]);
 
   useEffect(() => {
+    if (!isDialogOpen) return;
+
     async function fetchSpecifications() {
       try {
         const response = await fetch(
@@ -74,7 +78,7 @@ export default function GenerateQuestions() {
     }
 
     fetchSpecifications();
-  }, []);
+  }, [isDialogOpen]);
 
   const specifications = createListCollection({ items: specItems });
   const language = createListCollection({
