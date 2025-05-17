@@ -43,7 +43,7 @@ export default function ModeratorNavBar() {
 
       sessionStorage.removeItem("userRole");
       navigate("/");
-      window.location.reload(); // <-- force App to reload and show NonUserRoutes
+      window.location.reload(); 
     } catch (err) {
       console.error("Sign out error:", err);
     }
