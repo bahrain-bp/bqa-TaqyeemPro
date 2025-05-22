@@ -52,7 +52,6 @@ export default function GenerateQuestions() {
       setAlertMessage("");
       setSelectedLang(null);
       setSpecItems([]);
-
     }
   }, [isDialogOpen]);
 
