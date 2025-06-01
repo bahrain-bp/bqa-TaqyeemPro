@@ -75,7 +75,7 @@ export default function QuestionsList() {
   <MathJax inline>{"\\(" + q.equation + "\\)"}</MathJax>
   {q.questionText?.split(q.equation)[1]}
   {" "}({q.questionType})
-</Text>
+</Text>Setup-CDK-for-infrastructure
                 <Flex gap={3} align="center">
                   <Text
                     fontSize="sm"
