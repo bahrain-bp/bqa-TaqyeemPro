@@ -21,7 +21,13 @@ import {
 } from "chart.js";
 import UploadSpecifications from "./UploadSpecifications";
 import GenerateQuestions from "./GenerateQuestions";
-import { FaBook, FaCheck, FaQuestion, FaTimes, FaUserGraduate } from "react-icons/fa";
+import {
+  FaBook,
+  FaCheck,
+  FaQuestion,
+  FaTimes,
+  FaUserGraduate,
+} from "react-icons/fa";
 
 // Register chart elements
 ChartJS.register(
@@ -88,12 +94,55 @@ export default function ModeratorDashboard() {
     subjectCounts[subject] = (subjectCounts[subject] || 0) + 1;
   });
 
-  const subjectPieData = {
-    labels: Object.keys(subjectCounts),
+  // const subjectPieData = {
+  //   labels: Object.keys(subjectCounts),
+  //   datasets: [
+  //     {
+  //       data: Object.values(subjectCounts),
+  //       backgroundColor: ["#3182CE", "#38A169", "#ED8936", "#D53F8C"],
+  //     },
+  //   ],
+  // };
+
+  const skillCounts = {};
+  questions.forEach((q) => {
+    const skill = q.skillType || "Unknown";
+    skillCounts[skill] = (skillCounts[skill] || 0) + 1;
+  });
+
+  const questionTypeCounts = {};
+  questions.forEach((q) => {
+    const type = q.questionType || "Unknown";
+    questionTypeCounts[type] = (questionTypeCounts[type] || 0) + 1;
+  });
+
+  const skillPieData = {
+    labels: Object.keys(questionTypeCounts),
     datasets: [
       {
-        data: Object.values(subjectCounts),
-        backgroundColor: ["#3182CE", "#38A169", "#ED8936", "#D53F8C"],
+        label: "Number of questions",
+        data: Object.values(questionTypeCounts),
+        backgroundColor: [
+          "#3182CE",
+          "#38A169",
+          "#ED8936",
+          "#D53F8C",
+          "#805AD5",
+          "#E53E3E",
+          "#2B6CB0",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const skillBarData = {
+    labels: Object.keys(skillCounts),
+    datasets: [
+      {
+        label: "Number of Questions",
+        data: Object.values(skillCounts),
+        backgroundColor: "#38A169",
       },
     ],
   };
@@ -217,11 +266,11 @@ export default function ModeratorDashboard() {
             <HStack justify="center" mb={2}>
               <FaBook />
               <Text fontSize="lg" fontWeight="bold" color="gray.600">
-                Subjects Covered
+                Skills Covered
               </Text>
             </HStack>
             <Heading fontSize="3xl">
-              {loading ? "..." : Object.keys(subjectCounts).length}
+              {loading ? "..." : Object.keys(skillCounts).length}
             </Heading>
           </Box>
         </SimpleGrid>
@@ -247,15 +296,15 @@ export default function ModeratorDashboard() {
           textAlign="center"
         >
           <Heading fontSize={24} fontWeight="bold" color="gray.600">
-            Question Breakdown
+            Skills Breakdown
           </Heading>
           <Box display="flex" justifyContent="center" mt={4}>
             {loading ? (
               <Heading size="md" mt={4}>
-                Loading...
+                ...
               </Heading>
             ) : (
-              <Bar data={gradeBarData} />
+              <Bar data={skillBarData} />
             )}
           </Box>
         </Box>
@@ -268,7 +317,7 @@ export default function ModeratorDashboard() {
           p={7}
         >
           <Heading fontSize={24} fontWeight="bold" color="gray.600">
-            Question Breakdown
+            Question By Type
           </Heading>
           <Box display="flex" justifyContent="center" height={"xs"} mt={4}>
             {loading ? (
@@ -276,7 +325,7 @@ export default function ModeratorDashboard() {
                 Loading...
               </Heading>
             ) : (
-              <Pie data={pieData} />
+              <Pie data={skillPieData} />
             )}
           </Box>
         </Box>

@@ -47,8 +47,8 @@ export default function UploadSpecifications() {
   const subjects = createListCollection({
     items: [
       { label: "Maths", value: "Math" },
-      { label: "Arabic", value: "Arabic" },
-      { label: "English", value: "English" },
+      // { label: "Arabic", value: "Arabic" },
+      // { label: "English", value: "English" },
     ],
   });
 

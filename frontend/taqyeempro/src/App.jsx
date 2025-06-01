@@ -5,7 +5,7 @@ import StudentRoutes from "./routes/StudentRoutes";
 import ModeratorRoutes from "./routes/ModeratorRoutes";
 
 function App() {
-  const role = sessionStorage.getItem("userRole"); // 'student' or 'moderator'  
+  const role = sessionStorage.getItem("userRole");  
 
   return (
     <>
