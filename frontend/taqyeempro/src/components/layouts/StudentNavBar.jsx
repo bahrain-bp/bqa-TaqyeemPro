@@ -40,7 +40,7 @@ export default function StudentNavBar() {
       await signOut();
     
       sessionStorage.removeItem("userRole");
-      alert("Signed out successfully.");
+      navigate("/");
       window.location.reload(); // <-- force App to reload and show NonUserRoutes
       } catch (err) {
         console.error("Sign out error:", err);
@@ -73,7 +73,8 @@ export default function StudentNavBar() {
 
           {/* Right Side: Login Button */}
           <HStack>
-            <Drawer.Root>
+            {/* Notifications            */}
+            {/* <Drawer.Root>
               <Drawer.Trigger asChild>
                 <Button
                   variant="plain"
@@ -123,7 +124,7 @@ export default function StudentNavBar() {
                   </Drawer.Content>
                 </Drawer.Positioner>
               </Portal>
-            </Drawer.Root>
+            </Drawer.Root> */}
 
             <Button
               colorPalette="red"
@@ -193,8 +194,6 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
-                          as="a"
-                          href="/AboutUsPage"
                         >
                           <AiOutlineInfoCircle size={20} />
                           About Us
@@ -206,8 +205,6 @@ export default function StudentNavBar() {
                           textAlign="left"
                           fontWeight="bold"
                           w="full"
-                          as="a"
-                          href="/ContactUsPage"
                         >
                           <AiOutlinePhone size={20} /> Contact Us
                         </Button>

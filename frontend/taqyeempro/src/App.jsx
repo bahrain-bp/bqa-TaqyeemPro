@@ -5,21 +5,20 @@ import StudentRoutes from "./routes/StudentRoutes";
 import ModeratorRoutes from "./routes/ModeratorRoutes";
 
 function App() {
-  const role = sessionStorage.getItem("userRole"); // 'student' or 'moderator'
-
-  const mathJaxConfig = {
-    loader: { load: ["[tex]/ams"] },
-    tex: {
-      packages: { "[+]": ["ams"] }
-    }
-  };
+  const role = sessionStorage.getItem("userRole"); // 'student' or 'moderator'  
 
   return (
-    <MathJaxContext config={mathJaxConfig}>
-      {<ModeratorRoutes />}
-      {/* {role === "student" && <StudentRoutes />} */}
-      {/* {!role && <NonUserRoutes />} */}
-    </MathJaxContext>
+    <>
+<<<<<<<<< Temporary merge branch 1
+      <NonUserRoutes/>
+      {/* <StudentRoutes/> */}
+      {/*<ModeratorRoutes/>*/}
+=========
+      {role === "student" && <StudentRoutes />}
+      {role === "moderator" && <ModeratorRoutes />}
+      {!role && <NonUserRoutes />}
+>>>>>>>>> Temporary merge branch 2
+    </>
   );
 }
 

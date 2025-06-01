@@ -8,16 +8,21 @@ import {
   Select,
   Field,
   createListCollection,
+  Text,
+  Spinner,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useRegisterLogic } from "../../Logic/Register";
+import { useNavigate } from "react-router-dom";
 
 export default function StudentRegister({ role }) {
-  const {
-    step, message, code,
-    setCode, signUpUser, confirmUser, signInUser,
-    setFormData, email, password
-  } = useRegisterLogic(role); //Use the passed role = 'student'
+  const navigate = useNavigate();
+  const [alertStatus, setAlertStatus] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { step, message, code, setCode, signUpUser, confirmUser, setFormData } =
+    useRegisterLogic(role); 
 
   const {
     register,
@@ -37,7 +42,9 @@ export default function StudentRegister({ role }) {
     },
   });
 
-  const [schoolsList, setSchoolsList] = useState(createListCollection({ items: [] }));
+  const [schoolsList, setSchoolsList] = useState(
+    createListCollection({ items: [] })
+  );
 
   useEffect(() => {
     fetch("/bahrain_schools_list.json")
@@ -66,16 +73,22 @@ export default function StudentRegister({ role }) {
     ],
   });
 
-  const handleSignupSubmit = (data) => {
-    setFormData(data);
-    signUpUser(data);
+  const handleSignupSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      setFormData(data);
+      await signUpUser(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
-      {step === 'signup' && (
+      {step === "signup" && (
         <form onSubmit={handleSubmit(handleSignupSubmit)}>
           <VStack spacing={4} w="full">
+            {message && <Text color="red">{message}</Text>}
             <HStack spacing={4} w="full">
               <Field.Root invalid={!!errors.firstName}>
                 <Input
@@ -83,7 +96,11 @@ export default function StudentRegister({ role }) {
                   placeholder="First Name"
                   size="lg"
                   bg="white"
-                  {...register("firstName", { required: "First name is required" })}
+                  disabled={isLoading}
+                  css={{ "--focus-color": "red" }}
+                  {...register("firstName", {
+                    required: "First name is required",
+                  })}
                 />
                 <Field.ErrorText>{errors.firstName?.message}</Field.ErrorText>
               </Field.Root>
@@ -93,7 +110,11 @@ export default function StudentRegister({ role }) {
                   placeholder="Last Name"
                   size="lg"
                   bg="white"
-                  {...register("lastName", { required: "Last name is required" })}
+                  disabled={isLoading}
+                  css={{ "--focus-color": "red" }}
+                  {...register("lastName", {
+                    required: "Last name is required",
+                  })}
                 />
                 <Field.ErrorText>{errors.lastName?.message}</Field.ErrorText>
               </Field.Root>
@@ -104,9 +125,13 @@ export default function StudentRegister({ role }) {
                 collection={genderList}
                 size="lg"
                 width="full"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 onValueChange={(e) => setValue("gender", e.value)}
               >
-                <Select.HiddenSelect {...register("gender", { required: "Gender is required" })} />
+                <Select.HiddenSelect
+                  {...register("gender", { required: "Gender is required" })}
+                />
                 <Select.Control bg="white">
                   <Select.Trigger>
                     <Select.ValueText placeholder="Gender" />
@@ -132,7 +157,11 @@ export default function StudentRegister({ role }) {
                 type="date"
                 size="lg"
                 bg="white"
-                {...register("dateOfBirth", { required: "Date of birth is required" })}
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
+                {...register("dateOfBirth", {
+                  required: "Date of birth is required",
+                })}
               />
               <Field.ErrorText>{errors.dateOfBirth?.message}</Field.ErrorText>
             </Field.Root>
@@ -141,10 +170,14 @@ export default function StudentRegister({ role }) {
               <Select.Root
                 collection={gradesList}
                 size="lg"
+                css={{ "--focus-color": "red" }}
                 width="full"
+                disabled={isLoading}
                 onValueChange={(e) => setValue("grade", e.value)}
               >
-                <Select.HiddenSelect {...register("grade", { required: "Grade is required" })} />
+                <Select.HiddenSelect
+                  {...register("grade", { required: "Grade is required" })}
+                />
                 <Select.Control bg="white">
                   <Select.Trigger>
                     <Select.ValueText placeholder="Grade" />
@@ -169,12 +202,18 @@ export default function StudentRegister({ role }) {
                 collection={schoolsList}
                 size="lg"
                 width="full"
+                disabled={isLoading}
                 onValueChange={(e) => setValue("schoolId", e.value)}
               >
-                <Select.HiddenSelect {...register("schoolId", { required: "School is required" })} />
+                <Select.HiddenSelect
+                  {...register("schoolId", { required: "School is required" })}
+                />
                 <Select.Control bg="white">
                   <Select.Trigger>
-                    <Select.ValueText placeholder="School" />
+                    <Select.ValueText
+                      placeholder="School"
+                      css={{ "--focus-color": "red" }}
+                    />
                   </Select.Trigger>
                 </Select.Control>
                 <Select.Positioner>
@@ -197,6 +236,8 @@ export default function StudentRegister({ role }) {
                 type="email"
                 size="lg"
                 bg="white"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 placeholder="Email"
                 {...register("email", { required: "Email is required" })}
               />
@@ -209,6 +250,8 @@ export default function StudentRegister({ role }) {
                 type="password"
                 size="lg"
                 bg="white"
+                disabled={isLoading}
+                css={{ "--focus-color": "red" }}
                 placeholder="Password"
                 {...register("password", { required: "Password is required" })}
               />
@@ -217,19 +260,27 @@ export default function StudentRegister({ role }) {
 
             <Button
               bg="red.500"
+              type="submit"
               color="white"
               size="lg"
               w="full"
-              type="submit"
               _hover={{ bg: "black" }}
+              disabled={isLoading}
             >
-              Register
+              {isLoading ? (
+                <HStack spacing={2}>
+                  <Spinner size="sm" />
+                  <span>Registering...</span>
+                </HStack>
+              ) : (
+                "Register"
+              )}
             </Button>
           </VStack>
         </form>
       )}
 
-      {step === 'confirm' && (
+      {step === "confirm" && (
         <VStack spacing={4} w="full">
           <Input
             name="code"
@@ -239,26 +290,19 @@ export default function StudentRegister({ role }) {
             size="lg"
             bg="white"
           />
-          <Button colorScheme="blue" w="full" onClick={confirmUser}>
+          <Button
+            colorPalette="red"
+            w="full"
+            color="white"
+              size="lg"
+            onClick={async () => {
+              await confirmUser();
+              setTimeout(() => navigate("/login"), 400); // Wait 1.5s
+            }}
+          >
             Confirm
           </Button>
         </VStack>
-      )}
-
-      {step === 'signin' && (
-        <VStack spacing={4} w="full">
-          <Input name="email" value={email} readOnly bg="white" />
-          <Input name="password" type="password" value={password} readOnly bg="white" />
-          <Button colorScheme="green" w="full" onClick={signInUser}>
-            Sign In
-          </Button>
-        </VStack>
-      )}
-
-      {message && (
-        <Box mt={4} p={2} color="gray.700" textAlign="center">
-          {message}
-        </Box>
       )}
     </Box>
   );

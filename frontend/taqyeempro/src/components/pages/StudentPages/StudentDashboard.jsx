@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Flex,
@@ -9,100 +9,72 @@ import {
   HStack,
   Link,
   SimpleGrid,
-} from '@chakra-ui/react';
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Button,
+  Badge,
+  Progress,
+} from "@chakra-ui/react";
 
-export default function HomePage() {
+export default function StudentDashboard() {
+  // ✅ بيانات الامتحانات القادمة
+  const upcomingExams = [
+    {
+      id: 1,
+      name: "Mathematics Final",
+      date: "May 5, 2025",
+      duration: "1.5 hours",
+      status: "Scheduled",
+      progress: 0,
+    },
+    {
+      id: 2,
+      name: "Science Quiz",
+      date: "May 8, 2025",
+      duration: "45 minutes",
+      status: "Scheduled",
+      progress: 0,
+    },
+  ];
+
+  // ✅ بيانات النتائج الأخيرة
+  const recentResults = [
+    {
+      id: 1,
+      name: "History Midterm",
+      date: "April 20, 2025",
+      score: 82,
+      total: 100,
+      status: "Passed",
+    },
+    {
+      id: 2,
+      name: "English Grammar Test",
+      date: "April 15, 2025",
+      score: 65,
+      total: 100,
+      status: "Needs Improvement",
+    },
+  ];
+
   return (
-    <Box bg="white" minH="100vh" px={8} display="flex" flexDirection="column">
+    <Box pt="100px" px={5} bg="gray.50" minH="100vh">
+      {/* Welcome Header */}
+      <Box mb={10} textAlign="center">
+        <Heading as="h1" size="xl" color="blue.800">
+          Welcome, Ebrahim
+        </Heading>
+        <Text fontSize="lg" color="gray.600">
+          Track your exams and progress
+        </Text>
+      </Box>
 
 
-      {/* Main Content Area */}
-      <Flex direction="column" flexGrow={1} mb={8}>
-        {/* Hero Section */}
-        <VStack 
-          spacing={12} 
-          mt={12} 
-          maxW="container.xl" 
-          mx="auto"
-        >
-          {/* Welcome Message */}
-          <Text 
-            fontSize={{ base: "3xl", md: "5xl" }} 
-            color="#EE3944" 
-            textAlign="center"
-          >
-            Welcome, Kamo in TaqyeemPro
-          </Text>
 
-          {/* Get Started Button */}
-          <Button 
-            bg="#D42121" 
-            color="white"
-            margin={20} 
-            px={20} 
-            py={10} 
-            fontSize={20}
-            borderRadius="lg"
-            _hover={{ bg: "#C41F1F" }}
-            as="a"
-            href="/StudentExamCard"
-          >
-            Get Started
-          </Button>
-
-          {/* BQA Logo */}
-          <Image 
-            src="/HomeLogo.png" 
-            alt="BQA Logo" 
-            // boxSize="20rem" 
-            marginTop={100}
-            width={959}
-            height={504}
-            mb={4}
-          />
-        </VStack>
-
-        {/* Content Sections */}
-        <SimpleGrid 
-          columns={{ base: 1, md: 2 }} 
-          spacing={12} 
-          mt={12} 
-          maxW="container.xl" 
-          mx="auto"
-        >
-          {/* Left Column */}
-          <VStack align="flex-start" spacing={6} padding={200}>
-            {/* What We Believe */}
-            <Text 
-              fontWeight="bold" 
-              textTransform="uppercase" 
-              mb={2}
-            >
-              WHAT WE BELIEVE
-            </Text>
-            <Text color="gray.600">
-              We believe every student deserves smart evaluation - where AI-powered assessments provide fair, instant feedback and personalized learning paths. Just like Bahrain's BQA ensures quality education standards, we ensure your progress is measured meaningfully to unlock your full potential.
-            </Text>
-
-            {/* About Us */}
-            <Text 
-              fontWeight="bold" 
-              textTransform="uppercase" 
-              mt={8} 
-              mb={2}
-            >
-              ABOUT US
-            </Text>
-            <Text color="gray.600">
-              TaqyeemPro is proudly aligned with Bahrain's Education & Training Quality Authority (BQA) - the independent body ensuring excellence in education through rigorous evaluations, standardized testing, and quality certifications across all institutions, helping students like you achieve recognized, future-ready qualifications.
-            </Text>
-          </VStack>
-
-        </SimpleGrid>
-      </Flex>
-
-      {/* Footer Section - Always at the bottom */}
-      <Box mt="auto" textAlign="center" py={6} color="gray.500" fontSize="sm">
+      {/* BQA Footer Note */}
+      <Box mt={20} textAlign="center" color="gray.500" fontSize="sm">
         <Text>هيئة جودة التعليم والتدريب | Education & Training Quality Authority</Text>
         <Text>Kingdom of Bahrain - مملكة البحرين</Text>
       </Box>

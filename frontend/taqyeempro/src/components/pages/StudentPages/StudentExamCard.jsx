@@ -3,7 +3,7 @@
 
   export default function StudentExamCard () {
     return (
-      <Box bg="white" minH="100vh" px={{ base: 8, lg: 24 }}>
+      <Box minH="100vh" px={{ base: 8, lg: 24 }}>
         {/* Header */}
 
 

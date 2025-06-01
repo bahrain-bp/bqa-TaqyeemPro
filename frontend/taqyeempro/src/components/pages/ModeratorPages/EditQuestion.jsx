@@ -16,19 +16,34 @@ import {
   Group,
   Select,
   createListCollection,
+  Text,
+  Textarea,
+  Spinner,
+  Alert,
+  VStack,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
-import { LuCircle, LuUpload } from "react-icons/lu";
+import { useEffect, useRef, useState } from "react";
+import { FaCircle, FaRegCircle } from "react-icons/fa";
 
-export default function EditQuestion({ isOpen, onClose }) {
-  const ref = useRef(null);
-  const questionTypes = createListCollection({
-    items: [
-      { label: "Multiple Choice", value: "mc" },
-      { label: "True Or False", value: "tof" },
-      { label: "Short Answer", value: "sa" },
-    ],
-  });
+export default function EditQuestion({
+  isOpen,
+  onClose,
+  questionData,
+  questionId,
+  onQuestionUpdate,
+}) {
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [questionType, setQuestionType] = useState("");
+  const [questionSkill, setQuestionSkill] = useState("");
+  const [mark, setMark] = useState("");
+  const [questionText, setQuestionText] = useState("");
+  const [correctAnswer, setCorrectAnswer] = useState("");
+  const answerLabels = ["A", "B", "C", "D"];
+  const [isLoading, setIsLoading] = useState(false);
+  const [approve, setApproved] = useState(false);
+  const [alertStatus, setAlertStatus] = useState(null);
+  const [alertMessage, setAlertMessage] = useState("");
+
   const marks = createListCollection({
     items: [
       { label: "1", value: "1" },
@@ -36,66 +51,162 @@ export default function EditQuestion({ isOpen, onClose }) {
       { label: "3", value: "3" },
     ],
   });
-  const [selectedAnswer, setSelectedAnswer] = useState("");
+
+  useEffect(() => {
+    console.log(questionData);
+    if (questionData) {
+      const isMCQ = questionData.questionType === "MCQ" || "اختيار من متعدد";
+      const mcqOptions = isMCQ
+        ? [
+            questionData.option1 || "",
+            questionData.option2 || "",
+            questionData.option3 || "",
+            questionData.option4 || "",
+          ]
+        : [];
+
+      setAnswers(isMCQ ? mcqOptions : questionData.options || ["", "", "", ""]);
+      setQuestionType(questionData.questionType || "");
+      setQuestionSkill(questionData.skillType || "");
+      setMark(String(questionData.mark || ""));
+      setQuestionText(questionData.questionText || "");
+      setCorrectAnswer(questionData.answerText || "");
+    }
+  }, [questionData]);
+
+  const handleSave = async (approvedStatus) => {
+    setIsLoading(true);
+    const updatedQuestion = {
+      ...questionData,
+      questionText,
+      approved: approvedStatus,
+      skillType: questionSkill,
+      mark: Number(mark),
+      answerText: correctAnswer,
+    };
+
+    if (questionType === "MCQ" || questionType === "اختيار من متعدد") {
+      updatedQuestion.option1 = answers[0];
+      updatedQuestion.option2 = answers[1];
+      updatedQuestion.option3 = answers[2];
+      updatedQuestion.option4 = answers[3];
+    } else if (
+      questionType === "True or False" ||
+      questionType === "صح او خطأ"
+    ) {
+      updatedQuestion.option1 = "True";
+      updatedQuestion.option2 = "False";
+      updatedQuestion.option3 = null;
+      updatedQuestion.option4 = null;
+    } else if (
+      questionType === "Short Answer" ||
+      questionType === "إجابة قصيرة"
+    ) {
+      updatedQuestion.option1 = null;
+      updatedQuestion.option2 = null;
+      updatedQuestion.option3 = null;
+      updatedQuestion.option4 = null;
+    }
+
+    try {
+      const response = await fetch(
+        "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/update-question",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedQuestion),
+        }
+      );
+
+      if (response.ok) {
+        // setAlertStatus("success");
+        // setAlertMessage("Question updated successfully!");
+        onClose();
+
+        if (onQuestionUpdate) {
+          onQuestionUpdate({
+            ...updatedQuestion,
+            // include updated fields if backend doesn't return full object
+          });
+        }
+      } else {
+        setAlertStatus("error");
+        setAlertMessage("Failed to update question");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Something went wrong.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(v) => !v && onClose()}>
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content maxW="5xl" w="full">
+          <Dialog.Content maxW="2xl" w="full">
             <Dialog.Header>
-              <Dialog.Title>Question 1</Dialog.Title>
+              <Dialog.Title>
+                Question {questionId} - {questionType}
+              </Dialog.Title>
             </Dialog.Header>
+            {alertStatus && (
+              <Alert.Root
+                colorPalette={alertStatus === "error" ? "red" : "green"}
+                variant="solid"
+                w={"90%"}
+                mx={"auto"}
+              >
+                <Alert.Indicator />
+                <Alert.Content>
+                  <Alert.Title>
+                    {alertStatus === "error" ? "Error" : "Success"}
+                  </Alert.Title>
+                  <Alert.Description>{alertMessage}</Alert.Description>
+                </Alert.Content>
+                <CloseButton
+                  pos="relative"
+                  top="-2"
+                  insetEnd="-2"
+                  onClick={() => setAlertStatus(null)}
+                />
+              </Alert.Root>
+            )}
             <Dialog.CloseTrigger asChild>
-              <CloseButton size="sm" onClick={onClose} />
+              <CloseButton
+                size="sm"
+                onClick={() => {
+                  onClose();
+                  setAlertMessage(null);
+                  setAlertStatus(null);
+                }}
+              />
             </Dialog.CloseTrigger>
             <Dialog.Body pb="4" w="full">
-              {" "}
-              {/* Make the dialog body wider */}
-              <Flex w="full" gap={6}>
-                {" "}
-                {/* Flex container to align Box and Stack horizontally */}
-                <Box
-                  w="25%"
-                  p={5}
-                  bg={"gray.50"}
-                  borderRadius={"md"}
-                  spaceY={4}
-                >
+              <Box w="full" borderRadius={"md"} mb={5}>
+                <HStack spaceX={2}>
                   <Field.Root>
-                    <Select.Root
-                      collection={questionTypes}
-                      size="sm"
-                      width="full"
-                    >
-                      <Select.HiddenSelect />
-                      <Select.Label>Question Type</Select.Label>
-                      <Select.Control bg={"white"}>
-                        <Select.Trigger>
-                          <Select.ValueText placeholder="Select Type" />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                          <Select.Indicator />
-                        </Select.IndicatorGroup>
-                      </Select.Control>
-                      <Select.Positioner>
-                        <Select.Content>
-                          {questionTypes.items.map((questionTypes) => (
-                            <Select.Item
-                              item={questionTypes}
-                              key={questionTypes.value}
-                            >
-                              {questionTypes.label}
-                              <Select.ItemIndicator />
-                            </Select.Item>
-                          ))}
-                        </Select.Content>
-                      </Select.Positioner>
-                    </Select.Root>
+                    <Text fontWeight={"medium"}>Skill</Text>
+                    <Input
+                      size={"sm"}
+                      width={"full"}
+                      value={questionSkill}
+                      disabled={isLoading}
+                      onChange={(e) => setQuestionSkill(e.target.value)}
+                      bg={"white"}
+                    />
                   </Field.Root>
                   <Field.Root>
-                    <Select.Root collection={marks} size="sm" width="full">
+                    <Select.Root
+                      collection={marks}
+                      size="sm"
+                      width="full"
+                      defaultValue={mark}
+                      disabled={isLoading}
+                      onValueChange={(e) => setMark(e?.value?.[0])}
+                    >
                       <Select.HiddenSelect />
                       <Select.Label>Mark</Select.Label>
                       <Select.Control bg={"white"}>
@@ -108,9 +219,9 @@ export default function EditQuestion({ isOpen, onClose }) {
                       </Select.Control>
                       <Select.Positioner>
                         <Select.Content>
-                          {marks.items.map((marks) => (
-                            <Select.Item item={marks} key={marks.value}>
-                              {marks.label}
+                          {marks.items.map((m) => (
+                            <Select.Item item={m} key={m.value}>
+                              {m.label}
                               <Select.ItemIndicator />
                             </Select.Item>
                           ))}
@@ -118,106 +229,183 @@ export default function EditQuestion({ isOpen, onClose }) {
                       </Select.Positioner>
                     </Select.Root>
                   </Field.Root>
-                </Box>
-                <Stack flex={1} gap="4" align={"center"}>
-                  <Field.Root>
-                    <Input placeholder="Question" />
-                  </Field.Root>
-                  <Field.Root alignItems={"center"}>
-                    <FileUpload.Root alignItems="stretch" maxFiles={1}>
-                      <FileUpload.HiddenInput />
-                      <FileUpload.Dropzone>
-                        <Icon size="md" color="fg.muted">
-                          <LuUpload />
-                        </Icon>
-                        <FileUpload.DropzoneContent>
-                          <Box>Add or Insert Image</Box>
-                          <Box color="fg.muted">.png, .jpg up to 5MB</Box>
-                        </FileUpload.DropzoneContent>
-                      </FileUpload.Dropzone>
-                      <FileUpload.List />
-                    </FileUpload.Root>
-                  </Field.Root>
+                </HStack>
+              </Box>
+
+              <Stack flex={1} gap="4" align={"center"}>
+                <Field.Root>
+                  <Text fontWeight={"medium"}>Question</Text>
+                  <Textarea
+                    placeholder="Question"
+                    value={questionText}
+                    disabled={isLoading}
+                    mb={2}
+                    onChange={(e) => setQuestionText(e.target.value)}
+                    h={32}
+                  />
+                </Field.Root>
+
+                {(questionType === "MCQ" ||
+                  questionType === "اختيار من متعدد") && (
+                  <VStack spacing={4} w="full" align="start" mb={2}>
+                    <Text fontWeight={"medium"}>Options</Text>
+                    {[0, 2].map((rowStartIndex) => (
+                      <HStack
+                        key={rowStartIndex}
+                        spacing={4}
+                        w="full"
+                        align="start" 
+                        spaceX={2}
+                      >
+                        {[rowStartIndex, rowStartIndex + 1].map((index) => (
+                          <Field.Root key={index} w="full">
+                            <InputGroup
+                              startElement={`${answerLabels[index]}:`}
+                            >
+                              <Group attached w="full">
+                                <Input
+                                  w="full"
+                                  flex={1}
+                                  placeholder="Answer"
+                                  pl={9}
+                                  disabled={isLoading}
+                                  value={answers[index]}
+                                  onChange={(e) => {
+                                    const updated = [...answers];
+                                    updated[index] = e.target.value;
+                                    setAnswers(updated);
+                                  }}
+                                />
+                                <Button
+                                  bg="ghost"
+                                  variant="outline"
+                                  disabled={isLoading}
+                                  onClick={() =>
+                                    setCorrectAnswer(answers[index])
+                                  }
+                                >
+                                  {correctAnswer === answers[index] ? (
+                                    <FaCircle color="green" />
+                                  ) : (
+                                    <FaRegCircle color="grey" />
+                                  )}
+                                </Button>
+                              </Group>
+                            </InputGroup>
+                          </Field.Root>
+                        ))}
+                      </HStack>
+                    ))}
+                  </VStack>
+                )}
+
+                {(questionType === "True or False" ||
+                  questionType === "صح او خطأ") && (
+                  <VStack spacing={4} w="full" align="start" mb={2}>
+                    <Text fontWeight={"medium"}>Options</Text>
+                    <HStack spacing={4} w="full" spaceX={2}>
+                      {["True", "False"].map((value) => (
+                        <Field.Root key={value} w="full">
+                          <InputGroup>
+                            <Group attached w="full">
+                              <Input
+                                w="full"
+                                flex={1}
+                                readOnly
+                                value={value}
+                                disabled={isLoading}
+                              />
+                              <Button
+                                bg="ghost"
+                                variant="outline"
+                                onClick={() => setCorrectAnswer(value)}
+                                disabled={isLoading}
+                              >
+                                {correctAnswer === value ? (
+                                  <FaCircle color="green" />
+                                ) : (
+                                  <FaRegCircle color="grey" />
+                                )}
+                              </Button>
+                            </Group>
+                          </InputGroup>
+                        </Field.Root>
+                      ))}
+                    </HStack>
+                  </VStack>
+                )}
+
+                {(questionType === "Short Answer" ||
+                  questionType === "إجابة قصيرة") && (
                   <HStack spacing={4} align="start" w={"full"}>
-                    <Field.Root>
-                      <InputGroup startElement="A:">
+                    <Field.Root w="full">
+                      <Text fontWeight={"medium"}>Answer</Text>
+                      <InputGroup>
                         <Group attached w={"full"}>
                           <Input
-                            w={"full"}
+                            w="full"
                             flex={1}
-                            placeholder="Answer"
-                            pl={9}
+                            placeholder="Correct answer"
+                            value={correctAnswer}
+                            disabled={isLoading}
+                            mb={3}
+                            onChange={(e) => setCorrectAnswer(e.target.value)}
                           />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                    <Field.Root>
-                      <InputGroup startElement="B:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
                         </Group>
                       </InputGroup>
                     </Field.Root>
                   </HStack>
-                  <HStack spacing={4} align="start" w={"full"}>
-                    <Field.Root>
-                      <InputGroup startElement="C:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                    <Field.Root>
-                      <InputGroup startElement="D:">
-                        <Group attached w={"full"}>
-                          <Input
-                            w={"full"}
-                            flex={1}
-                            placeholder="Answer"
-                            pl={9}
-                          />
-                          <Button bg="ghost" variant="outline">
-                            <LuCircle />
-                          </Button>
-                        </Group>
-                      </InputGroup>
-                    </Field.Root>
-                  </HStack>
-                </Stack>
-              </Flex>
+                )}
+              </Stack>
             </Dialog.Body>
 
             <Dialog.Footer>
               <Flex w={"full"} gap={3} justify={"space-evenly"}>
                 <Button
                   colorPalette={"green"}
-                  onClick={onClose}
                   w={"1/2"}
                   h={12}
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setApproved(true);
+                    await handleSave(true);
+                  }}
+                  spinnerPlacement="start"
                 >
-                  Approve
+                  {isLoading && approve === true ? (
+                    <>
+                      <HStack spacing={2}>
+                        <Spinner size="sm" />
+                        <span>Approving...</span>
+                      </HStack>
+                    </>
+                  ) : (
+                    "Approve"
+                  )}
                 </Button>
-                <Button colorPalette={"red"} onClick={onClose} w={"1/2"} h={12}>
-                  Decline
+                <Button
+                  colorPalette={"red"}
+                  w={"1/2"}
+                  h={12}
+                  isLoading={isLoading}
+                  disabled={isLoading}
+                  onClick={async () => {
+                    setApproved(false);
+                    await handleSave(false);
+                  }}
+                  spinnerPlacement="start"
+                >
+                  {isLoading && approve === false ? (
+                    <>
+                      <HStack spacing={2}>
+                        <Spinner size="sm" />
+                        <span>Declining...</span>
+                      </HStack>
+                    </>
+                  ) : (
+                    "Decline"
+                  )}
                 </Button>
               </Flex>
             </Dialog.Footer>

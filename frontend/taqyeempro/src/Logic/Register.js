@@ -72,22 +72,22 @@ export function useRegisterLogic(role) {
     }
   };
 
-  const signInUser = async () => {
-    try {
-      Amplify.configure(getConfigByRole(role));
-      const user = await signIn({
-        username: formData.email,
-        password: formData.password
-      });
-      setMessage(`Signed in as ${formData.firstName}`);
-    } catch (err) {
-      setMessage(`Sign in error: ${err.message}`);
-    }
-  };
+  // const signInUser = async () => {
+  //   try {
+  //     Amplify.configure(getConfigByRole(role));
+  //     const user = await signIn({
+  //       username: formData.email,
+  //       password: formData.password
+  //     });
+  //     setMessage(`Signed in as ${formData.firstName}`);
+  //   } catch (err) {
+  //     setMessage(`Sign in error: ${err.message}`);
+  //   }
+  // };
 
   return {
     step, message, code, formData,
     setCode, handleChange, setFormData,
-    signUpUser, confirmUser, signInUser
+    signUpUser, confirmUser
   };
 }
