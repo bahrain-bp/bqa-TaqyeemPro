@@ -6,7 +6,11 @@ import StudentExamCard from "@/components/pages/StudentPages/StudentExamCard";
 import StudentExamPage from "@/components/pages/StudentPages/StudentExamPage";
 import StudentConfirmationPage from "@/components/pages/StudentPages/StudentConfirmationPage";
 import StudentQuitPage from "@/components/pages/StudentPages/StudentQuitPage";
+// import ContactUsPage from "@/components/pages/ContactUsPage";
+// import AboutUsPage from "@/components/pages/AboutUsPage";
 
+import About from "@/components/pages/About";
+import ContactUs from "@/components/pages/ContactUs";
 
 
 import React from "react";
@@ -26,8 +30,8 @@ export default function StudentRoutes() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="account" element={<Account />} />
-          <Route path="AboutUsPage" element={<AboutUsPage />} />
-          <Route path="ContactUsPage" element={<ContactUsPage />} />
+          {/* <Route path="AboutUsPage" element={<AboutUsPage />} />
+          <Route path="ContactUsPage" element={<ContactUsPage />} /> */}
           <Route path="*" element={<NotFound/>} />
         </Route>
       </Routes>

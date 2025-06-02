@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Flex,
@@ -13,10 +12,12 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
-  Button,
   Badge,
   Progress,
+  Heading, // ✅ Add this line
 } from "@chakra-ui/react";
+
+
 
 export default function StudentDashboard() {
   // ✅ بيانات الامتحانات القادمة

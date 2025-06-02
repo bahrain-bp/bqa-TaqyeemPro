@@ -9,15 +9,13 @@ function App() {
 
   return (
     <>
-<<<<<<<<< Temporary merge branch 1
-      <NonUserRoutes/>
+      {/* <NonUserRoutes/> */}
       {/* <StudentRoutes/> */}
       {/*<ModeratorRoutes/>*/}
-=========
+
       {role === "student" && <StudentRoutes />}
       {role === "moderator" && <ModeratorRoutes />}
       {!role && <NonUserRoutes />}
->>>>>>>>> Temporary merge branch 2
     </>
   );
 }
