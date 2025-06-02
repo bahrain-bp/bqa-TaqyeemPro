@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Stack, Text, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Stack,
+  Text,
+  Spinner,
+  Badge,
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { LuArrowRight } from "react-icons/lu";
@@ -17,22 +25,34 @@ export default function Exams() {
       examId: "1",
       title: "Maths Final Exam",
       description: "Covers algebra, geometry, and statistics",
-      grade: "Grade 9",
-      subject: "Mathematics",
+      grade: 12,
+      subject: "Math",
+      active: true,
+      duration: "1 hour",
+      language: "English",
+      questions: ["rWIdB_Q10", "QS08d_Q2", "rWIdB_Q1"]
     },
     {
       examId: "2",
       title: "English Midterm",
       description: "Focus on grammar, reading comprehension",
-      grade: "Grade 10",
-      subject: "English Language",
+      grade: 12,
+      subject: "Math",
+      active: false,
+      duration: "2 hours",
+      language: "English",
+      questions: ["QS08d_Q2", "QS08d_Q4", "icXW3_Q1"]
     },
     {
       examId: "3",
       title: "Science Quiz",
       description: "Basic concepts of physics and chemistry",
-      grade: "Grade 8",
-      subject: "Science",
+      grade: 9,
+      subject: "Math",
+      active: true,
+      duration: "3 hours",
+      language: "English",
+      questions: ["icXW3_Q3", "icXW3_Q8", "rWIdB_Q1"]
     },
   ];
 
@@ -63,7 +83,8 @@ export default function Exams() {
           setSelectedExam(null);
         }}
         isEdit={isEdit}
-        exam={selectedExam}
+        examData={selectedExam}
+        
       />
 
       <Flex justify="space-between" align="center" mb={7}>
@@ -109,9 +130,33 @@ export default function Exams() {
               >
                 <Flex align="center" justify="space-between">
                   <Text fontWeight="bold" fontSize="lg" color="gray.700">
-                    {exam.title} - {exam.grade}
+                    {exam.title} - Grade {exam.grade}
                   </Text>
                   <Flex align="center" gap={4}>
+                    {exam.active ? (
+                      <Badge
+                        colorPalette="green"
+                        variant="solid"
+                        borderRadius="full"
+                        px={4}
+                        py={2}
+                        fontSize="0.8em"
+                      >
+                        Active
+                      </Badge>
+                    ) : (
+                      <Badge
+                        colorPalette="red"
+                        variant="solid"
+                        borderRadius="full"
+                        px={4}
+                        py={2}
+                        fontSize="0.8em"
+                      >
+                        Not Active
+                      </Badge>
+                    )}
+
                     <LuArrowRight />
                   </Flex>
                 </Flex>
