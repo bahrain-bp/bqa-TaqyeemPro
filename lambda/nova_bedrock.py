@@ -210,7 +210,7 @@ def lambda_bedrock(event, context):
                 "answerText": q.get("answerText", ""),
                 "mark": Decimal("1"),
                 "approved": False,
-                "skillType": q.get("skillType", ""),
+                "skillType": q.get("skillType", "").lower(),
                 "equation": q.get("equation", "").replace('\\', '\\\\')
             }
 
