@@ -25,9 +25,9 @@ export default function Exams() {
       examId: "1",
       title: "Maths Final Exam",
       description: "Covers algebra, geometry, and statistics",
-      grade: 12,
+      grade: "12",
       subject: "Math",
-      active: true,
+      active: "yes",
       duration: "1 hour",
       language: "English",
       questions: ["rWIdB_Q10", "QS08d_Q2", "rWIdB_Q1"]
@@ -36,9 +36,9 @@ export default function Exams() {
       examId: "2",
       title: "English Midterm",
       description: "Focus on grammar, reading comprehension",
-      grade: 12,
+      grade: "12",
       subject: "Math",
-      active: false,
+      active: "no",
       duration: "2 hours",
       language: "English",
       questions: ["QS08d_Q2", "QS08d_Q4", "icXW3_Q1"]
@@ -47,9 +47,9 @@ export default function Exams() {
       examId: "3",
       title: "Science Quiz",
       description: "Basic concepts of physics and chemistry",
-      grade: 9,
+      grade: "9",
       subject: "Math",
-      active: true,
+      active: "yes",
       duration: "3 hours",
       language: "English",
       questions: ["icXW3_Q3", "icXW3_Q8", "rWIdB_Q1"]
@@ -133,7 +133,7 @@ export default function Exams() {
                     {exam.title} - Grade {exam.grade}
                   </Text>
                   <Flex align="center" gap={4}>
-                    {exam.active ? (
+                    {exam.active == "yes" ? (
                       <Badge
                         colorPalette="green"
                         variant="solid"

@@ -28,7 +28,6 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   const [duration, setDuration] = useState("");
   const [active, setActive] = useState("");
   const [questions, setQuestions] = useState([]);
-  const [selectedQuestionIds, setSelectedQuestionIds] = useState([]);
 
   const subjectOptions = createListCollection({
     items: [{ label: "Math", value: "Math" }],
@@ -36,8 +35,8 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
 
   const gradeOptions = createListCollection({
     items: [
-      { label: "Grade 9", value: 9 },
-      { label: "Grade 12", value: 12 },
+      { label: "Grade 9", value: "9" },
+      { label: "Grade 12", value: "12" },
     ],
   });
 
@@ -62,6 +61,10 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
       { label: "No", value: "no" },
     ],
   });
+
+  useEffect(() => {
+    console.log("examData:", examData);
+  }, [examData]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -93,10 +96,29 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }, [isOpen]);
 
   useEffect(() => {
-    if (isEdit && examData?.questions?.length > 0) {
-      setSelectedQuestionIds(examData.questions);
+    if (examData) {
+      setExamTitle(examData.title || "");
+      setExamDescription(examData.description || "");
+      setSubject(examData.subject || "");
+      setLanguage(examData.language || "");
+      setDuration(examData.duration || "");
+      setActive(examData.active || "");
+      setGrade(examData.grade || "");
     }
-  }, [isEdit, examData]);
+  }, [examData]);
+
+  useEffect(() => {
+    // Log after states update
+    console.log("Updated form data:", {
+      examTitle,
+      examDescription,
+      subject,
+      language,
+      duration,
+      active,
+      grade,
+    });
+  }, [examTitle, examDescription, subject, language, duration, active, grade]);
 
   const columns = [
     { field: "id", headerName: "No.", width: 70 },
@@ -174,74 +196,180 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
                   />
                 </Field.Root>
 
-                {[{
-                  label: "Subject",
-                  options: subjectOptions,
-                  value: subject,
-                  setter: setSubject
-                }, {
-                  label: "Grade",
-                  options: gradeOptions,
-                  value: grade,
-                  setter: setGrade
-                }, {
-                  label: "Language",
-                  options: languageOptions,
-                  value: language,
-                  setter: setLanguage
-                }, {
-                  label: "Duration",
-                  options: durationOptions,
-                  value: duration,
-                  setter: setDuration
-                }, {
-                  label: "Active",
-                  options: activeOptions,
-                  value: active,
-                  setter: setActive
-                }].map(({ label, options, value, setter }) => (
-                  <Field.Root key={label}>
-                    <Select.Root
-                      collection={options}
-                      size="sm"
-                      width="full"
-                      defaultValue={value}
-                      disabled={isLoading}
-                      onValueChange={(e) => setter(e?.value?.[0])}
-                    >
-                      <Select.HiddenSelect />
-                      <Select.Label>{label}</Select.Label>
-                      <Select.Control bg="white">
-                        <Select.Trigger>
-                          <Select.ValueText placeholder={`Select ${label}`} />
-                        </Select.Trigger>
-                        <Select.IndicatorGroup>
-                          <Select.Indicator />
-                        </Select.IndicatorGroup>
-                      </Select.Control>
-                      <Select.Positioner>
-                        <Select.Content>
-                          {options.items.map((item) => (
-                            <Select.Item item={item} key={item.value}>
-                              {item.label}
-                              <Select.ItemIndicator />
-                            </Select.Item>
-                          ))}
-                        </Select.Content>
-                      </Select.Positioner>
-                    </Select.Root>
-                  </Field.Root>
-                ))}
+                <Field.Root>
+                  <Select.Root
+                    collection={subjectOptions}
+                    size="sm"
+                    width="full"
+                    defaultValue={subject}
+                    disabled={isLoading}
+                    onValueChange={(e) => setSubject(e?.value?.[0])}
+                  >
+                    <Select.HiddenSelect />
+                    <Select.Label>Subject</Select.Label>
+                    <Select.Control bg="white">
+                      <Select.Trigger>
+                        <Select.ValueText placeholder={`Select Subject`} />
+                      </Select.Trigger>
+                      <Select.IndicatorGroup>
+                        <Select.Indicator />
+                      </Select.IndicatorGroup>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        {subjectOptions.items.map((item) => (
+                          <Select.Item item={item} key={item.value}>
+                            {item.label}
+                            <Select.ItemIndicator />
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field.Root>
+                <Field.Root>
+                  <Select.Root
+                    collection={gradeOptions}
+                    size="sm"
+                    width="full"
+                    defaultValue={grade}
+                    disabled={isLoading}
+                    onValueChange={(e) => {
+                      console.log("onValueChange param:", e.value?.[0]);
+                      setGrade(e?.value?.[0]);
+                    }}
+                  >
+                    <Select.HiddenSelect />
+                    <Select.Label>Grade</Select.Label>
+                    <Select.Control bg="white">
+                      <Select.Trigger>
+                        <Select.ValueText placeholder={`Select Grade`} />
+                      </Select.Trigger>
+                      <Select.IndicatorGroup>
+                        <Select.Indicator />
+                      </Select.IndicatorGroup>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        {gradeOptions.items.map((item) => (
+                          <Select.Item item={item} key={item.value}>
+                            {item.label}
+                            <Select.ItemIndicator />
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field.Root>
+                <Field.Root>
+                  <Select.Root
+                    collection={languageOptions}
+                    size="sm"
+                    width="full"
+                    defaultValue={language}
+                    disabled={isLoading}
+                    onValueChange={(e) => setLanguage(e?.value?.[0])}
+                  >
+                    <Select.HiddenSelect />
+                    <Select.Label>Language</Select.Label>
+                    <Select.Control bg="white">
+                      <Select.Trigger>
+                        <Select.ValueText placeholder={`Select Language`} />
+                      </Select.Trigger>
+                      <Select.IndicatorGroup>
+                        <Select.Indicator />
+                      </Select.IndicatorGroup>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        {languageOptions.items.map((item) => (
+                          <Select.Item item={item} key={item.value}>
+                            {item.label}
+                            <Select.ItemIndicator />
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field.Root>
+                <Field.Root>
+                  <Select.Root
+                    collection={durationOptions}
+                    size="sm"
+                    width="full"
+                    defaultValue={duration}
+                    disabled={isLoading}
+                    onValueChange={(e) => setDuration(e?.value?.[0])}
+                  >
+                    <Select.HiddenSelect />
+                    <Select.Label>Duration</Select.Label>
+                    <Select.Control bg="white">
+                      <Select.Trigger>
+                        <Select.ValueText placeholder={`Select Duration`} />
+                      </Select.Trigger>
+                      <Select.IndicatorGroup>
+                        <Select.Indicator />
+                      </Select.IndicatorGroup>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        {durationOptions.items.map((item) => (
+                          <Select.Item item={item} key={item.value}>
+                            {item.label}
+                            <Select.ItemIndicator />
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field.Root>
+                <Field.Root>
+                  <Select.Root
+                    collection={activeOptions}
+                    size="sm"
+                    width="full"
+                    defaultValue={active}
+                    disabled={isLoading}
+                    onValueChange={(e) => setActive(e?.value?.[0])}
+                  >
+                    <Select.HiddenSelect />
+                    <Select.Label>Active</Select.Label>
+                    <Select.Control bg="white">
+                      <Select.Trigger>
+                        <Select.ValueText placeholder={`Is Active?`} />
+                      </Select.Trigger>
+                      <Select.IndicatorGroup>
+                        <Select.Indicator />
+                      </Select.IndicatorGroup>
+                    </Select.Control>
+                    <Select.Positioner>
+                      <Select.Content>
+                        {activeOptions.items.map((item) => (
+                          <Select.Item item={item} key={item.value}>
+                            {item.label}
+                            <Select.ItemIndicator />
+                          </Select.Item>
+                        ))}
+                      </Select.Content>
+                    </Select.Positioner>
+                  </Select.Root>
+                </Field.Root>
 
                 <Field.Root>
                   <Box width="full">
-                    <Text fontWeight="medium" mb={2}>Questions</Text>
+                    <Text fontWeight="medium" mb={2}>
+                      Questions
+                    </Text>
                     <DataGrid
                       checkboxSelection
                       rows={rows}
                       columns={columns}
                       pageSize={5}
                       rowsPerPageOptions={[5, 10, 20]}
+                      sx={{
+                        zIndex: 50,
+                        position: "relative",
+                      }}
                     />
                   </Box>
                 </Field.Root>
