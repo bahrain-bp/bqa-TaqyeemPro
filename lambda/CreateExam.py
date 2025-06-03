@@ -11,13 +11,15 @@ def lambda_handler(event, context):
         # Parse request body
         body = json.loads(event.get('body', '{}'))
 
-        title = body.get('title', '').strip()
-        subject = body.get('subject', '').strip()
-        grade = int(body.get('grade', 0))
-        language = body.get('language', '').strip()
-        description = body.get('description', '').strip()
-        duration = int(body.get('duration', 0))
-        questions = body.get('questions', [])  #QuestionIds array
+        title = body.get('Exam Title', '').strip()
+        description = body.get('Exam Description', '').strip()
+        subject = body.get('Subject', '').strip()
+        grade = int(body.get('Grade', 0))
+        language = body.get('Language', '').strip()
+        active_input = body.get('Active', 'No').strip().lower()
+        is_active = active_input == 'yes'
+        duration = int(body.get('Duration', 0))
+        questions = body.get('Questions', [])
 
         # Basic validation
         if not title or not subject or not grade or not language or not questions:
@@ -32,15 +34,15 @@ def lambda_handler(event, context):
         # Create the exam record
         item = {
             "ExamId": examid,
-            "Title": title,
+            "Exam Title": title,
+            "Exam Description": description,
             "Subject": subject,
             "Grade": grade,
             "Language": language,
-            "Description": description,
             "Duration": duration,
+            "isActive": is_active,
             "Questions": questions,
-            "CreationDate": datetime.utcnow().isoformat(),
-            "isActive": True
+            "CreationDate": datetime.utcnow().isoformat() 
         }
 
         table.put_item(Item=item)
