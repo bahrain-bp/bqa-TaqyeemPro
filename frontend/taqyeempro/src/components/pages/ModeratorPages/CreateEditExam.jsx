@@ -50,9 +50,9 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
 
   const durationOptions = createListCollection({
     items: [
-      { label: "1 hour", value: "1h" },
-      { label: "2 hours", value: "2h" },
-      { label: "3 hours", value: "3h" },
+      { label: "1 hour", value: "1 hour" },
+      { label: "2 hours", value: "2 hours" },
+      { label: "3 hours", value: "3 hours" },
     ],
   });
 
@@ -250,7 +250,7 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
             <Dialog.Footer>
               <Flex w="full" gap={3} justify="space-evenly">
                 <Button
-                  colorScheme="green"
+                  colorPalette="green"
                   w="1/2"
                   h={12}
                   isLoading={isLoading}
