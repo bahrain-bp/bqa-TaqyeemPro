@@ -54,7 +54,7 @@ export default function Footer() {
             mx={10}
             _hover={{ textDecoration: "underline" }}
             as="a"
-            href="/AboutUsPage"
+            href="/AboutUs"
           >
             About Us
           </Link>
@@ -63,7 +63,7 @@ export default function Footer() {
             mx={10}
             _hover={{ textDecoration: "underline" }}
             as="a"
-            href="/ContactUsPage"
+            href="/ContactUs"
           >
             Contact Us
           </Link>
