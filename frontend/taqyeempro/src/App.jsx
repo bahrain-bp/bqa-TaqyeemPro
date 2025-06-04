@@ -10,12 +10,12 @@ function App() {
   return (
     <>
       {/* <NonUserRoutes/> */}
-      {/* <StudentRoutes/> */}
+      <StudentRoutes/>
       {/*<ModeratorRoutes/>*/}
 
-      {role === "student" && <StudentRoutes />}
+      {/* {role === "student" && <StudentRoutes />}
       {role === "moderator" && <ModeratorRoutes />}
-      {!role && <NonUserRoutes />}
+      {!role && <NonUserRoutes />} */}
     </>
   );
 }
