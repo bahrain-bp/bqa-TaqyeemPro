@@ -45,7 +45,7 @@ export default function ModeratorDashboard() {
 
   useEffect(() => {
     fetch(
-      "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/view-question"
+      "https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/view-question"
     )
       .then((res) => res.json())
       .then((data) => {

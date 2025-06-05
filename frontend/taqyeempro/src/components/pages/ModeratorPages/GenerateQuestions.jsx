@@ -61,7 +61,7 @@ export default function GenerateQuestions() {
     async function fetchSpecifications() {
       try {
         const response = await fetch(
-          "https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/list-files"
+          "https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/list-files"
         );
         const data = await response.json();
         const formatted = data.files
