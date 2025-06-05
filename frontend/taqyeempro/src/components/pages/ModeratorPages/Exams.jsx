@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { LuArrowRight } from "react-icons/lu";
 import CreateEditExam from "./CreateEditExam";
+import ViewExamModal from "./ViewExamModal";
 
 export default function Exams() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,59 +20,21 @@ export default function Exams() {
   const [selectedExam, setSelectedExam] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Dummy data for development
-  const dummyExams = [
-    {
-      examId: "1",
-      title: "Maths Final Exam",
-      description: "Covers algebra, geometry, and statistics",
-      grade: 12,
-      subject: "Math",
-      active: true,
-      duration: "1 hour",
-      language: "English",
-      questions: ["rWIdB_Q10", "QS08d_Q2", "rWIdB_Q1"]
-    },
-    {
-      examId: "2",
-      title: "English Midterm",
-      description: "Focus on grammar, reading comprehension",
-      grade: 12,
-      subject: "Math",
-      active: false,
-      duration: "2 hours",
-      language: "English",
-      questions: ["QS08d_Q2", "QS08d_Q4", "icXW3_Q1"]
-    },
-    {
-      examId: "3",
-      title: "Science Quiz",
-      description: "Basic concepts of physics and chemistry",
-      grade: 9,
-      subject: "Math",
-      active: true,
-      duration: "3 hours",
-      language: "English",
-      questions: ["icXW3_Q3", "icXW3_Q8", "rWIdB_Q1"]
-    },
-  ];
+  const [viewModalOpen, setViewModalOpen] = useState(false); 
+  const [viewedExam, setViewedExam] = useState(null); 
 
   useEffect(() => {
-    // Temporary dummy data usage
-    setExams(dummyExams);
-    setLoading(false);
-
-    // Uncomment this when API is ready
-    // fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/view-exams")
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setExams(data);
-    //     setLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.error("Error fetching exams:", err);
-    //     setLoading(false);
-    //   });
+    setLoading(true);
+    fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/view-all-exams")
+      .then((res) => res.json())
+      .then((data) => {
+        setExams(data.exams || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching exams:", err);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -84,7 +47,15 @@ export default function Exams() {
         }}
         isEdit={isEdit}
         examData={selectedExam}
-        
+      />
+
+      <ViewExamModal
+        isOpen={viewModalOpen}
+        onClose={() => {
+          setViewModalOpen(false);
+          setViewedExam(null);
+        }}
+        exam={viewedExam}
       />
 
       <Flex justify="space-between" align="center" mb={7}>
@@ -92,7 +63,7 @@ export default function Exams() {
           Exams List
         </Text>
         <Button
-          colorPalette={"red"}
+          colorPalette="red"
           _hover={{ bg: "black" }}
           onClick={() => {
             setIsEdit(false);
@@ -121,19 +92,14 @@ export default function Exams() {
                 boxShadow="sm"
                 p={6}
                 py={8}
-                _hover={{ bg: "gray.50", cursor: "pointer" }}
-                onClick={() => {
-                  setIsEdit(true);
-                  setSelectedExam(exam);
-                  setIsOpen(true);
-                }}
+                _hover={{ bg: "gray.50" }}
               >
                 <Flex align="center" justify="space-between">
                   <Text fontWeight="bold" fontSize="lg" color="gray.700">
-                    {exam.title} - Grade {exam.grade}
+                    {exam.examTitle} - Grade {exam.grade}
                   </Text>
                   <Flex align="center" gap={4}>
-                    {exam.active ? (
+                    {exam.isActive ? (
                       <Badge
                         colorPalette="green"
                         variant="solid"
@@ -156,15 +122,65 @@ export default function Exams() {
                         Not Active
                       </Badge>
                     )}
-
                     <LuArrowRight />
+                    <Button
+                      colorPalette="black"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setViewedExam(exam);
+                        setViewModalOpen(true);
+                      }}
+                    >
+                      View
+                    </Button>
+                    <Button
+                      colorPalette="blue"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsEdit(true);
+                        setSelectedExam(exam);
+                        setIsOpen(true);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      colorPalette="red"
+                      size="sm"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        if (!window.confirm("Are you sure you want to delete this exam?")) return;
+                        try {
+                          const res = await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/delete-exam", {
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ examId: exam.examId }),
+                          });
+                          const text = await res.text();
+                          const data = text ? JSON.parse(text) : {};
+                          if (res.ok) {
+                            alert(data.message || "Exam deleted successfully");
+                            window.location.reload();
+                          } else {
+                            alert(data.error || "Failed to delete exam");
+                          }
+                        } catch (err) {
+                          alert("Error deleting exam.");
+                          console.error(err);
+                        }
+                      }}
+                    >
+                      Delete
+                    </Button>
                   </Flex>
                 </Flex>
                 <Text mt={1} color="gray.600">
                   {exam.subject}
                 </Text>
                 <Text fontSize="sm" color="gray.500">
-                  {exam.description}
+                  {exam.examDescription}
                 </Text>
               </Box>
             ))

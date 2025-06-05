@@ -99,14 +99,14 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }, [isEdit, examData]);
 
   const columns = [
-    //{ field: "id", headerName: "No.", width: 70 },
-    { field: "no", headerName: "No.", width: 70 }, // change from 'id' to 'no'
-    { field: "questionText", headerName: "Question", flex: 1 },
-    { field: "subject", headerName: "Subject", width: 120 },
-    { field: "grade", headerName: "Grade", width: 100 },
-    { field: "language", headerName: "Language", width: 100 },
+    { field: "QuestionId", headerName: "Question ID", width: 120 },
+    { field: "answerText", headerName: "Answer", flex: 1 },
+    { field: "option1", headerName: "Option 1", flex: 1 },
+    { field: "option2", headerName: "Option 2", flex: 1 },
+    { field: "option3", headerName: "Option 3", flex: 1 },
+    { field: "option4", headerName: "Option 4", flex: 1 },
+    { field: "questionText", headerName: "Question Text", flex: 2 },
     { field: "questionType", headerName: "Type", width: 100 },
-    { field: "mark", headerName: "Mark", width: 80 },
     { field: "skillType", headerName: "Skill", flex: 1 },
   ];
 
@@ -118,13 +118,15 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   });
 
   const rows = filteredQuestions.map((q, index) => ({
-    id: q.QuestionId, // this stays for DataGrid tracking
-    no: index + 1, // this is just for visual display
-    subject: q.subject,
-    grade: q.grade,
-    language: q.language,
+    id: q.QuestionId, // DataGrid tracking
+    QuestionId: q.QuestionId,
+    answerText: q.answerText,
+    option1: q.option1,
+    option2: q.option2,
+    option3: q.option3,
+    option4: q.option4,
+    questionText: q.questionText,
     questionType: q.questionType,
-    mark: q.mark,
     skillType: q.skillType,
   }));
 
@@ -153,6 +155,7 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
     const result = await res.json();
     if (res.ok) {
       alert("Exam created successfully");
+      window.location.reload();
       onClose(); // close modal
     } else {
       alert(result.error || "Failed to create exam");
@@ -164,20 +167,20 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }
 };
 
-
   return (
     <Dialog.Root
       placement="center"
       motionPreset="slide-in-bottom"
       scrollBehavior="inside"
       open={isOpen}
-      size="xl"
+      size="6xl" // changed from "xl" to "6xl" for a larger dialog
       onOpenChange={(v) => !v && onClose()}
     >
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content>
+          <Dialog.Content maxW="90vw" minH="80vh" maxH="90vh" overflowX="auto">
+            {/* maxW and maxH ensure the dialog is much larger and can fit more records */}
             <Dialog.Header>
               <Dialog.Title>
                 {isEdit ? "Update Exam" : "Create New Exam"}
@@ -272,14 +275,15 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
                 ))}
 
                 <Field.Root>
-                  <Box width="full">
+                  <Box width="full" overflowX="auto">
                     <Text fontWeight="medium" mb={2}>Questions</Text>
                     <DataGrid
+                      autoHeight
                       checkboxSelection
                       rows={rows}
                       columns={columns}
-                      pageSize={5}
-                      rowsPerPageOptions={[5, 10, 20]}
+                      pageSize={rows.length || 5}
+                      rowsPerPageOptions={[5, 10, 20, 50, 100]}
                       onRowSelectionModelChange={(newSelection) => {
                         setSelectedQuestionIds(newSelection);
                       }}

@@ -98,7 +98,7 @@ export default function UploadSpecifications() {
 
     try {
       const response = await fetch(
-        `https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/get-upload-url`,
+        `https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/get-upload-url`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

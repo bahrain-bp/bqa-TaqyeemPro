@@ -26,15 +26,11 @@ def handler(event, context):
 
         # All expected fields from request (add/remove fields as needed)
         update_data = {
-            'examTitle': body.get('examTitle', ''),
-            'examDate': body.get('examDate', ''),
-            'duration': body.get('duration', ''),
-            'grade': body.get('grade', ''),
-            'subject': body.get('subject', ''),
-            'language': body.get('language', ''),
-            'totalMarks': body.get('totalMarks', 0),
-            'instructions': body.get('instructions', ''),
-            # Add more fields as needed
+            'title': body.get('examTitle', '').strip(),
+            'description': body.get('examDescription', '').strip(),
+            'active': body.get('active','').strip().lower(),
+            'duration': int(body.get('duration', 0)),
+            'questions': body.get('questions', [])
         }
 
         # Build the update expression
