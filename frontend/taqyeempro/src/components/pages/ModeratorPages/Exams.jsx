@@ -158,17 +158,17 @@ export default function Exams() {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ examId: exam.examId }),
                           });
-                          const text = await res.text();
-                          const data = text ? JSON.parse(text) : {};
                           if (res.ok) {
-                            alert(data.message || "Exam deleted successfully");
+                            alert("Exam created successfully");
                             window.location.reload();
+                            onClose(); // close modal
                           } else {
-                            alert(data.error || "Failed to delete exam");
+                            alert(result.error || "Failed to delete exam");
                           }
                         } catch (err) {
-                          alert("Error deleting exam.");
-                          console.error(err);
+                          window.location.reload();
+                        } finally {
+                          setIsLoading(false);
                         }
                       }}
                     >
