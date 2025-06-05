@@ -50,9 +50,9 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
 
   const durationOptions = createListCollection({
     items: [
-      { label: "1 hour", value: "1h" },
-      { label: "2 hours", value: "2h" },
-      { label: "3 hours", value: "3h" },
+      { label: "1 hour", value: 60 },
+      { label: "2 hours", value: 120 },
+      { label: "3 hours", value: 180 },
     ],
   });
 
@@ -89,6 +89,7 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
       setLanguage("");
       setDuration("");
       setActive("");
+      setSelectedQuestionIds([]); //////
     }
   }, [isOpen]);
 
@@ -99,7 +100,8 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }, [isEdit, examData]);
 
   const columns = [
-    { field: "id", headerName: "No.", width: 70 },
+    //{ field: "id", headerName: "No.", width: 70 },
+    { field: "no", headerName: "No.", width: 70 }, // change from 'id' to 'no'
     { field: "questionText", headerName: "Question", flex: 1 },
     { field: "subject", headerName: "Subject", width: 120 },
     { field: "grade", headerName: "Grade", width: 100 },
@@ -117,8 +119,8 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   });
 
   const rows = filteredQuestions.map((q, index) => ({
-    id: index + 1,
-    questionText: q.questionText,
+    id: q.QuestionId, // this stays for DataGrid tracking
+    no: index + 1, // this is just for visual display
     subject: q.subject,
     grade: q.grade,
     language: q.language,
@@ -126,6 +128,44 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
     mark: q.mark,
     skillType: q.skillType,
   }));
+
+  const handleSubmit = async () => {
+  const exam = {
+    examTitle,
+    examDescription,
+    subject,
+    grade: parseInt(grade),
+    language,
+    duration: parseInt(duration),
+    active,
+    questions: Array.from(selectedQuestionIds),
+  };
+
+  try {
+    setIsLoading(true);
+    console.log("Submitting exam:", exam);
+    const res = await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/create-exam", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(exam)
+    });
+    const result = await res.json();
+    console.log("Lambda response:", result);
+    if (res.ok) {
+      alert("Exam created successfully");
+      onClose(); // close modal
+    } else {
+      alert(result.error || "Failed to create exam");
+    }
+  } catch (err) {
+    console.error("Create exam error:", err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <Dialog.Root
@@ -242,6 +282,10 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
                       columns={columns}
                       pageSize={5}
                       rowsPerPageOptions={[5, 10, 20]}
+                      onRowSelectionModelChange={(newSelection) => {
+                        setSelectedQuestionIds(newSelection);
+                      }}
+                      selectionModel={selectedQuestionIds}
                     />
                   </Box>
                 </Field.Root>
@@ -255,6 +299,7 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
                   h={12}
                   isLoading={isLoading}
                   disabled={isLoading}
+                  onClick={handleSubmit}
                 >
                   {isLoading ? (
                     <HStack spacing={2}>
