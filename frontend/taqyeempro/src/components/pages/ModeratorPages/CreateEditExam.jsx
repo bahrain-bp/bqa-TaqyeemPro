@@ -89,7 +89,6 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
       setLanguage("");
       setDuration("");
       setActive("");
-      setSelectedQuestionIds([]); //////
     }
   }, [isOpen]);
 
@@ -130,6 +129,7 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }));
 
   const handleSubmit = async () => {
+  const idsArray = Array.from(selectedQuestionIds.ids);
   const exam = {
     examTitle,
     examDescription,
@@ -138,12 +138,11 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
     language,
     duration: parseInt(duration),
     active,
-    questions: Array.from(selectedQuestionIds),
+    questions: idsArray,
   };
 
   try {
     setIsLoading(true);
-    console.log("Submitting exam:", exam);
     const res = await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/create-exam", {
       method: "POST",
       headers: {
@@ -152,7 +151,6 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
       body: JSON.stringify(exam)
     });
     const result = await res.json();
-    console.log("Lambda response:", result);
     if (res.ok) {
       alert("Exam created successfully");
       onClose(); // close modal
