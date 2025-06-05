@@ -62,7 +62,7 @@ export default function Exams() {
     setLoading(false);
 
     // Uncomment this when API is ready
-    // fetch("https://ye12pw73we.execute-api.us-east-1.amazonaws.com/prod/view-exams")
+    // fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/view-exams")
     //   .then((res) => res.json())
     //   .then((data) => {
     //     setExams(data);
