@@ -2,7 +2,7 @@ import json
 import boto3
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('Exams')
+table = dynamodb.Table('GeneratedExams')
 
 def handler(event, context):
     headers = {
