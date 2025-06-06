@@ -47,6 +47,11 @@ export default function Exams() {
         }}
         isEdit={isEdit}
         examData={selectedExam}
+        // Add a callback to handle alerts and reloads after save
+        onActionComplete={(message, reload) => {
+          alert(message);
+          if (reload) window.location.reload();
+        }}
       />
 
       <ViewExamModal
@@ -159,16 +164,15 @@ export default function Exams() {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ examId: exam.examId }),
                           });
-                          const result = await res.json(); // Add this line
+                          const result = await res.json();
                           if (res.ok) {
-                            alert("Exam deleted successfully"); // Fix message
+                            alert("Exam deleted successfully");
                             window.location.reload();
                           } else {
                             alert(result.error || "Failed to delete exam");
-                            window.location.reload();
                           }
                         } catch (err) {
-                          console.error("Delete error:", err);
+                          alert("Delete error: " + err.message);
                           window.location.reload();
                         }
                       }}
