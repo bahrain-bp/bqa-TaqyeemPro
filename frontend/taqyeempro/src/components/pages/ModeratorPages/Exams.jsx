@@ -146,6 +146,7 @@ export default function Exams() {
                     >
                       Edit
                     </Button>
+
                     <Button
                       colorPalette="red"
                       size="sm"
@@ -158,17 +159,17 @@ export default function Exams() {
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ examId: exam.examId }),
                           });
+                          const result = await res.json(); // Add this line
                           if (res.ok) {
-                            alert("Exam created successfully");
+                            alert("Exam deleted successfully"); // Fix message
                             window.location.reload();
-                            onClose(); // close modal
                           } else {
                             alert(result.error || "Failed to delete exam");
+                            window.location.reload();
                           }
                         } catch (err) {
+                          console.error("Delete error:", err);
                           window.location.reload();
-                        } finally {
-                          setIsLoading(false);
                         }
                       }}
                     >

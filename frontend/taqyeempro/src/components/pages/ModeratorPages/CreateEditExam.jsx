@@ -81,7 +81,16 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }, []);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isEdit && examData) {
+      setExamTitle(examData.examTitle || "");
+      setExamDescription(examData.examDescription || "");
+      setSubject("");
+      setGrade("");
+      setLanguage("");
+      setDuration("");
+      setActive("");
+      setSelectedQuestionIds([]);
+    } else if (!isOpen) {
       setExamTitle("");
       setExamDescription("");
       setSubject("");
@@ -89,14 +98,9 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
       setLanguage("");
       setDuration("");
       setActive("");
+      setSelectedQuestionIds([]);
     }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (isEdit && examData?.questions?.length > 0) {
-      setSelectedQuestionIds(examData.questions);
-    }
-  }, [isEdit, examData]);
+  }, [isOpen, isEdit, examData]);
 
   const columns = [
     { field: "QuestionId", headerName: "Question ID", width: 120 },
@@ -131,41 +135,90 @@ export default function CreateEditExam({ isOpen, onClose, examData, isEdit }) {
   }));
 
   const handleSubmit = async () => {
-  const idsArray = Array.from(selectedQuestionIds.ids);
-  const exam = {
-    examTitle,
-    examDescription,
-    subject,
-    grade: parseInt(grade),
-    language,
-    duration: parseInt(duration),
-    active,
-    questions: idsArray,
-  };
-
-  try {
-    setIsLoading(true);
-    const res = await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/create-exam", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(exam)
-    });
-    const result = await res.json();
-    if (res.ok) {
-      alert("Exam created successfully");
-      window.location.reload();
-      onClose(); // close modal
-    } else {
-      alert(result.error || "Failed to create exam");
+    // Validation: all fields must not be empty
+    if (
+      !examTitle.trim() ||
+      !examDescription.trim() ||
+      !subject ||
+      !grade ||
+      !language ||
+      !duration ||
+      !active ||
+      !selectedQuestionIds ||
+      selectedQuestionIds.length === 0
+    ) {
+      alert("Please fill in all fields and select at least one question.");
+      return;
     }
-  } catch (err) {
-    console.error("Create exam error:", err);
-  } finally {
-    setIsLoading(false);
-  }
-};
+
+    const idsArray = Array.isArray(selectedQuestionIds)
+      ? selectedQuestionIds
+      : Array.from(selectedQuestionIds.ids || []);
+    const exam = {
+      examTitle,
+      examDescription,
+      subject,
+      grade: parseInt(grade),
+      language,
+      duration: parseInt(duration),
+      active,
+      questions: idsArray,
+    };
+
+    try {
+      setIsLoading(true);
+      let res, result;
+      if (isEdit && examData?.examId) {
+        // Create new exam (with new examId)
+        res = await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/create-exam", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(exam)
+        });
+        result = await res.json();
+        if (res.ok) {
+          // Delete old exam
+          await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/delete-exam", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ examId: examData.examId }),
+          });
+          alert("Exam updated successfully");
+          window.location.reload(); // Reload immediately after save in edit
+          // onClose(); // No need to call onClose after reload
+        } else {
+          alert(result.error || "Failed to update exam");
+          window.location.reload();
+        }
+      } else {
+        // Create exam
+        res = await fetch("https://knv1cln06e.execute-api.us-east-1.amazonaws.com/prod/create-exam", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(exam)
+        });
+        result = await res.json();
+        if (res.ok) {
+          alert("Exam created successfully");
+          window.location.reload();
+          onClose();
+        } else {
+          alert(result.error || "Failed to create exam");
+          window.location.reload();
+        }
+      }
+    } catch (err) {
+      console.error(isEdit ? "Update exam error:" : "Create exam error:", err);
+      window.location.reload();
+    } finally {
+      setIsLoading(false);
+      window.location.reload();
+    }
+  };
 
   return (
     <Dialog.Root
