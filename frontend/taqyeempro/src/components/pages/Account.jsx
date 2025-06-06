@@ -26,12 +26,12 @@ export default function Account() {
         const matched = schoolList.find(
           (s) => String(s.id) === String(schoolId)
         );
-        setSchoolName(matched?.name || "");
+        setSchoolName(matched?.name || "Unknown School");
       } catch (error) {
         console.error("Error fetching user attributes:", error);
       } finally {
         setLoading(false);
-        console.log(userAttributes);
+        console.log("User Attributes:", userAttributes);
       }
     };
 
@@ -95,19 +95,19 @@ export default function Account() {
         >
           <GridItem>
             <Text>First Name</Text>
-            <Text fontWeight="bold">{userAttributes.given_name}</Text>
+            <Text fontWeight="bold">{userAttributes.given_name || "N/A"}</Text>
           </GridItem>
           <GridItem>
             <Text>Last Name</Text>
-            <Text fontWeight="bold">{userAttributes.family_name}</Text>
+            <Text fontWeight="bold">{userAttributes.family_name || "N/A"}</Text>
           </GridItem>
           <GridItem>
             <Text>Date of Birth</Text>
-            <Text fontWeight="bold">{userAttributes.birthdate}</Text>
+            <Text fontWeight="bold">{userAttributes.birthdate || "N/A"}</Text>
           </GridItem>
           <GridItem>
             <Text>Email Address</Text>
-            <Text fontWeight="bold">{userAttributes.email}</Text>
+            <Text fontWeight="bold">{userAttributes.email || "N/A"}</Text>
           </GridItem>
           {userAttributes.phone_number && (
             <GridItem>
@@ -118,7 +118,7 @@ export default function Account() {
           {userAttributes["custom:grade"] && (
             <GridItem>
               <Text>Grade</Text>
-              <Text fontWeight="bold">{userAttributes["custom:grade"]}</Text>
+              <Text fontWeight="bold">{userAttributes["custom:grade"] || "N/A"}</Text>
             </GridItem>
           )}
         </Grid>
