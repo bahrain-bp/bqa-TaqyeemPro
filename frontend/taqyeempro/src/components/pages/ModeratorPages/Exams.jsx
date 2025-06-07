@@ -172,7 +172,6 @@ export default function Exams() {
                             alert(result.error || "Failed to delete exam");
                           }
                         } catch (err) {
-                          alert("Delete error: " + err.message);
                           window.location.reload();
                         }
                       }}
